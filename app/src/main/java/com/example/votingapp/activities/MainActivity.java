@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.example.votingapp.R;
 import com.example.votingapp.fragments.ElectionFragment;
+import com.example.votingapp.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
@@ -32,10 +33,10 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Fragment fragment = new ElectionFragment();
+                Fragment fragment = new Fragment();
                 switch (menuItem.getItemId()) {
                     case R.id.action_home:
-//                        fragment = new PostsFragment();
+                        fragment = new ElectionFragment();
                         break;
                     case R.id.action_representatives:
 //                        fragment = new ComposeFragment();
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 //                        fragment = new ComposeFragment();
                         break;
                     case R.id.action_profile:
-//                        fragment = new ProfileFragment(ParseUser.getCurrentUser());
+                        fragment = new ProfileFragment();
                         break;
                     default:
                         Log.i(TAG, "Error with the bottom navigation tabs");

@@ -1,6 +1,9 @@
 package com.example.votingapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Parcel;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.R;
+import com.example.votingapp.activities.ElectionDetailsActivity;
 import com.example.votingapp.models.Election;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -19,6 +25,7 @@ import java.util.List;
 // Note that we specify the custom ViewHolder which gives us access to our views
 public class ElectionsAdapter extends RecyclerView.Adapter<ElectionsAdapter.ViewHolder> {
 
+    private static final String TAG = "ElectionsAdapter";
     List<Election> elections;
     Context context;
 
@@ -45,7 +52,7 @@ public class ElectionsAdapter extends RecyclerView.Adapter<ElectionsAdapter.View
         return elections.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tvName;
         TextView tvElectionDay;
         TextView tvDistrict;
@@ -57,12 +64,27 @@ public class ElectionsAdapter extends RecyclerView.Adapter<ElectionsAdapter.View
             tvElectionDay = itemView.findViewById(R.id.tvElectionDay);
             tvDistrict = itemView.findViewById(R.id.tvDistrict);
 
+            itemView.setOnClickListener(this);
         }
 
         public void bind(Election election) {
             tvName.setText(election.getName());
             tvElectionDay.setText(election.getElectionDay());
             tvDistrict.setText(election.getDivision());
+        }
+
+        @Override
+        public void onClick(View view) {
+            Log.i(TAG, "onClick adapter item");
+            Integer position = getAdapterPosition();
+            // making sure the position is valid
+            if (position != RecyclerView.NO_POSITION) {
+                Election election = elections.get(position);
+                Intent intent = new Intent(context, ElectionDetailsActivity.class);
+                intent.putExtra(Election.class.getSimpleName(), Parcels.wrap(election));
+                context.startActivity(intent);
+            }
+
         }
     }
 }

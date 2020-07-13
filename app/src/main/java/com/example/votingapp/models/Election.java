@@ -11,11 +11,12 @@ import java.util.List;
 @Parcel
 public class Election {
 
-    public static final String ELECTION_QUERY = "https://www.googleapis.com/civicinfo/v2/elections";
+    public static final String ELECTION_URL = "https://www.googleapis.com/civicinfo/v2/elections";
+    public static final String VOTER_INFO_URL = "https://www.googleapis.com/civicinfo/v2/voterinfo";
 
     String name;
     String electionDay;
-    String id;
+    int id;
     String division;
 
     // no-arg, empty constructor required for Parceler
@@ -24,7 +25,7 @@ public class Election {
     public Election(JSONObject jsonObject) throws JSONException {
         name = jsonObject.getString("name");
         electionDay = jsonObject.getString("electionDay");
-        id = jsonObject.getString("id");
+        id = jsonObject.getInt("id");
         division = jsonObject.getString("ocdDivisionId");
     }
 
@@ -47,7 +48,7 @@ public class Election {
         return electionDay;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 

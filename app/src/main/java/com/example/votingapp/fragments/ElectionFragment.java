@@ -15,7 +15,7 @@ import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.votingapp.BuildConfig;
-import com.example.votingapp.Election;
+import com.example.votingapp.models.Election;
 import com.example.votingapp.R;
 
 import java.util.ArrayList;

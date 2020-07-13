@@ -1,4 +1,4 @@
-package com.example.votingapp;
+package com.example.votingapp.models;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -61,4 +61,7 @@ dependencies {
     // GLIDE TRANSFORMATIONS LIBRARY
     implementation 'jp.wasabeef:glide-transformations:4.1.0'
     implementation 'jp.co.cyberagent.android:gpuimage:2.0.4'
+
+    // RECYCLER VIEWS
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 }

@@ -21,10 +21,10 @@ public class LoginActivity extends AppCompatActivity {
 
     // Keys for user login
     public static final String KEY_NAME = "name";
-    public static final String KEY_ADD1 = "address_line_1";
-    public static final String KEY_CITY = "address_city";
-    public static final String KEY_STATE = "address_state";
-    public static final String KEY_ZIP = "address_zip";
+    public static final String KEY_ADD1 = "addressLine1";
+    public static final String KEY_CITY = "addressCity";
+    public static final String KEY_STATE = "addressState";
+    public static final String KEY_ZIP = "addressZip";
 
 
     private static final String TAG = "LoginActivity";

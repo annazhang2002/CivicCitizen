@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.votingapp.R;
+import com.parse.ParseUser;
 
 public class OpeningActivity extends AppCompatActivity {
 
@@ -17,6 +18,10 @@ public class OpeningActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (ParseUser.getCurrentUser() != null) {
+            goMainActivity();
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_opening);
 
@@ -44,6 +49,13 @@ public class OpeningActivity extends AppCompatActivity {
     public void fireIntent(String type) {
         Intent intent = new Intent(this, LoginActivity.class);
         intent.putExtra("type", type);
+        this.startActivity(intent);
+    }
+
+    public void goMainActivity() {
+        // navigate to the main activity
+        Intent intent = new Intent(this, MainActivity.class);
+//        intent.putExtra()
         this.startActivity(intent);
     }
 }

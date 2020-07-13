@@ -11,7 +11,7 @@ import java.util.List;
 @Parcel
 public class Election {
 
-    public static final String ELECTION_QUERY = "https://www.googleapis.com/civicinfo/v2/voterinfo";
+    public static final String ELECTION_QUERY = "https://www.googleapis.com/civicinfo/v2/elections";
 
     String name;
     String electionDay;

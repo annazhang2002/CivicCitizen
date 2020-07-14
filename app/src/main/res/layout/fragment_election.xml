@@ -1,12 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.ElectionFragment">
 
+    <TextView
+        android:id="@+id/tvNone"
+        android:layout_width="262dp"
+        android:layout_height="62dp"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="89dp"
+        android:gravity="center_horizontal"
+        android:text="There are no upcoming elections in your area! Click the button below to learn more about voting in your state"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="81dp" />
+
+    <Button
+        android:id="@+id/btnNone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="153dp"
+        android:layout_marginTop="150dp"
+        android:text="Learn more" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvElections"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
 </FrameLayout>

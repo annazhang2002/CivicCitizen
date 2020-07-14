@@ -13,11 +13,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.votingapp.BuildConfig;
+import com.example.votingapp.activities.MainActivity;
 import com.example.votingapp.adapters.ElectionsAdapter;
 import com.example.votingapp.models.Contest;
 import com.example.votingapp.models.Election;
@@ -41,6 +44,8 @@ public class ElectionFragment extends Fragment {
     AsyncHttpClient client;
     RecyclerView rvElections;
     ElectionsAdapter adapter;
+    Button btnGone;
+    TextView tvGone;
 
     private String apiKey = BuildConfig.GOOGLE_API_KEY;
 
@@ -67,12 +72,26 @@ public class ElectionFragment extends Fragment {
         client = new AsyncHttpClient();
         elections = new ArrayList<>();
         rvElections = view.findViewById(R.id.rvElections);
+        tvGone = view.findViewById(R.id.tvNone);
+        btnGone = view.findViewById(R.id.btnNone);
         adapter = new ElectionsAdapter(getContext(), elections);
         rvElections.setLayoutManager(new LinearLayoutManager(getContext()));
         rvElections.setAdapter(adapter);
         getElections();
 
-//        getVoterQuery();
+        if (elections.size() == 0) {
+            rvElections.setVisibility(View.GONE);
+            btnGone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MainActivity.goInfo();
+                }
+            });
+            ;
+        } else {
+            tvGone.setVisibility(View.GONE);
+            btnGone.setVisibility(View.GONE);
+        }
     }
 
     public void getElections() {

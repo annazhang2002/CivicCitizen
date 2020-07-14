@@ -2,12 +2,10 @@ package com.example.votingapp.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcel;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.R;
 import com.example.votingapp.models.Contest;
-import com.example.votingapp.models.Election;
+import com.example.votingapp.activities.ContestDetailActivity;
 
 import org.parceler.Parcels;
 
@@ -60,9 +58,9 @@ public class ContestAdapter extends RecyclerView.Adapter<ContestAdapter.ViewHold
         public ViewHolder(View itemView) {
             super(itemView);
 
-            tvTitle = itemView.findViewById(R.id.tvTitle);
+            tvTitle = itemView.findViewById(R.id.tvDistrict);
             tvLevel = itemView.findViewById(R.id.tvLevel);
-            tvDistrict = itemView.findViewById(R.id.tvDistrict);
+            tvDistrict = itemView.findViewById(R.id.tvTitle);
 
             itemView.setOnClickListener(this);
         }
@@ -71,19 +69,20 @@ public class ContestAdapter extends RecyclerView.Adapter<ContestAdapter.ViewHold
             tvTitle.setText(contest.getBallotTitle());
             tvLevel.setText(contest.getLevel());
             tvDistrict.setText(contest.getDistrict());
+
         }
 
         @Override
         public void onClick(View view) {
-//            Log.i(TAG, "onClick adapter item");
-//            Integer position = getAdapterPosition();
-//            // making sure the position is valid
-//            if (position != RecyclerView.NO_POSITION) {
-//                Contest election = contests.get(position);
-//                Intent intent = new Intent(context, ContestDetailsActivity.class);
-//                intent.putExtra(Contest.class.getSimpleName(), Parcels.wrap(election));
-//                context.startActivity(intent);
-//            }
+            Log.i(TAG, "onClick adapter item");
+            Integer position = getAdapterPosition();
+            // making sure the position is valid
+            if (position != RecyclerView.NO_POSITION) {
+                Contest contest = contests.get(position);
+                Intent intent = new Intent(context, ContestDetailActivity.class);
+                intent.putExtra(Contest.class.getSimpleName(), Parcels.wrap(contest));
+                context.startActivity(intent);
+            }
 
         }
     }

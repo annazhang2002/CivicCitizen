@@ -6,7 +6,7 @@
     android:background="@drawable/border">
 
     <TextView
-        android:id="@+id/tvTitle"
+        android:id="@+id/tvDistrict"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -26,10 +26,10 @@
         android:text="Level: Congressional" />
 
     <TextView
-        android:id="@+id/tvDistrict"
+        android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvTitle"
+        android:layout_below="@+id/tvDistrict"
         android:layout_alignParentStart="true"
         android:layout_marginStart="18dp"
         android:layout_marginTop="10dp"

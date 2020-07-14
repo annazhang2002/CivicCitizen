@@ -3,15 +3,20 @@ package com.example.votingapp.models;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Parcel
 public class Contest {
     String ballotTitle;
     String level;
     String district;
     List<Candidate> candidates;
+
+    public Contest() {
+    }
 
     public Contest(JSONObject json) {
         try {
@@ -50,34 +55,4 @@ public class Contest {
     }
 
 
-}
-
-class Candidate {
-    String name;
-    String party;
-
-    public Candidate(JSONObject json) {
-        try {
-            name = json.getString("name");
-            party = json.getString("party");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getParty() {
-        return party;
-    }
-
-    public static List<Candidate> fromJSON(JSONArray array) throws JSONException {
-        List<Candidate> candidates = new ArrayList<>();
-        for (int i = 0 ; i< array.length(); i++) {
-            candidates.add(new Candidate(array.getJSONObject(i)));
-        }
-        return candidates;
-    }
 }

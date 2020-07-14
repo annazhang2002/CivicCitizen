@@ -25,7 +25,7 @@
         tools:text="Election Day" />
 
     <TextView
-        android:id="@+id/tvDistrict"
+        android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvName"

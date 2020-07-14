@@ -2,12 +2,10 @@ package com.example.votingapp.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcel;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -62,7 +60,7 @@ public class ElectionsAdapter extends RecyclerView.Adapter<ElectionsAdapter.View
 
             tvName = itemView.findViewById(R.id.tvName);
             tvElectionDay = itemView.findViewById(R.id.tvElectionDay);
-            tvDistrict = itemView.findViewById(R.id.tvDistrict);
+            tvDistrict = itemView.findViewById(R.id.tvTitle);
 
             itemView.setOnClickListener(this);
         }

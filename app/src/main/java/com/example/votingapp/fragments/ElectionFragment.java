@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcel;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.votingapp.BuildConfig;
 import com.example.votingapp.adapters.ElectionsAdapter;
+import com.example.votingapp.models.Contest;
 import com.example.votingapp.models.Election;
 import com.example.votingapp.models.User;
 import com.example.votingapp.R;
@@ -84,15 +86,15 @@ public class ElectionFragment extends Fragment {
                 try {
                     JSONArray array = json.jsonObject.getJSONArray("elections");
                     Log.d(TAG, "onSuccess to getElections: " + array.toString());
-//
-//                    for (int i =0; i<array.length(); i++) {
-//                        Election election = new Election(array.getJSONObject(i));
-//                        getVoterQuery(election);
-//                    }
-
                     array.remove(0);
-                    elections.addAll(Election.fromJsonArray(array));
-                    adapter.notifyDataSetChanged();
+
+                    for (int i =0; i<array.length(); i++) {
+                        Election election = new Election(array.getJSONObject(i));
+                        getVoterQuery(election);
+                    }
+
+//                    elections.addAll(Election.fromJsonArray(array));
+//                    adapter.notifyDataSetChanged();
 
 
                 } catch (JSONException e) {
@@ -103,6 +105,36 @@ public class ElectionFragment extends Fragment {
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 Log.d(TAG, "onFailure to getElections, " + statusCode + ", " + response, throwable);
+            }
+        });
+    }
+
+    public void getVoterQuery(final Election election) {
+        RequestParams params = new RequestParams();
+        String address = User.getAddress(ParseUser.getCurrentUser());
+        params.put("address", address);
+        params.put("electionId", election.getId());
+        Log.i(TAG, "Address:  " + address);
+        Log.i(TAG, "Network call url: " + Election.VOTER_INFO_URL + "?key=" + apiKey);
+        client.get(Election.VOTER_INFO_URL + "?key=" + apiKey, params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                // Access a JSON array response with `json.jsonArray`
+                try {
+                    JSONArray array = json.jsonObject.getJSONArray("contests");
+                    if (array != null) {
+                        elections.add(election);
+                        adapter.notifyDataSetChanged();
+                    }
+                    Log.d(TAG, "onSuccess to getVoterQuery: " + elections.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.d(TAG, "onFailure to getVoterQuery, " + statusCode + ", " + response, throwable);
             }
         });
     }

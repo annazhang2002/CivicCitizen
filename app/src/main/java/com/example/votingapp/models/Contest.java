@@ -51,6 +51,9 @@ public class Contest {
     }
 
     public List<Candidate> getCandidates() {
+        if (candidates == null) {
+            return new ArrayList<>();
+        }
         return candidates;
     }
 

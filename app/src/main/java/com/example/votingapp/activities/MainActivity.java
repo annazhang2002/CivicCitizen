@@ -6,12 +6,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
+import android.icu.text.IDNA;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.votingapp.R;
 import com.example.votingapp.fragments.ElectionFragment;
+import com.example.votingapp.fragments.InfoFragment;
 import com.example.votingapp.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 //                        fragment = new ComposeFragment();
                         break;
                     case R.id.action_faqs:
-//                        fragment = new ComposeFragment();
+                        fragment = new InfoFragment();
                         break;
                     case R.id.action_profile:
                         fragment = new ProfileFragment();
@@ -60,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void goInfo() {
-        Fragment fragment = new ProfileFragment();
+        Fragment fragment = new InfoFragment();
         fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
     }
 }

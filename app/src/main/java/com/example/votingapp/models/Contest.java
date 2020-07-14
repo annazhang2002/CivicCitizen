@@ -20,7 +20,7 @@ public class Contest {
 
     public Contest(JSONObject json) {
         try {
-            ballotTitle = json.getString("ballotTitle");
+            ballotTitle = json.getString("office");
             level = json.getJSONArray("level").get(0).toString();
             district = json.getJSONObject("district").getString("name");
             candidates = Candidate.fromJSON(json.getJSONArray("candidates"));

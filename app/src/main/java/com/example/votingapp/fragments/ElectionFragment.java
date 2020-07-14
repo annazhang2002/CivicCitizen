@@ -77,21 +77,14 @@ public class ElectionFragment extends Fragment {
         adapter = new ElectionsAdapter(getContext(), elections);
         rvElections.setLayoutManager(new LinearLayoutManager(getContext()));
         rvElections.setAdapter(adapter);
+        rvElections.setVisibility(View.GONE);
+        btnGone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.goInfo();
+            }
+        });
         getElections();
-
-        if (elections.size() == 0) {
-            rvElections.setVisibility(View.GONE);
-            btnGone.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    MainActivity.goInfo();
-                }
-            });
-            ;
-        } else {
-            tvGone.setVisibility(View.GONE);
-            btnGone.setVisibility(View.GONE);
-        }
     }
 
     public void getElections() {
@@ -114,6 +107,7 @@ public class ElectionFragment extends Fragment {
 
 //                    elections.addAll(Election.fromJsonArray(array));
 //                    adapter.notifyDataSetChanged();
+                    Log.d(TAG, "onSuccess to getElections: " + elections.toString());
 
 
                 } catch (JSONException e) {
@@ -142,10 +136,15 @@ public class ElectionFragment extends Fragment {
                 try {
                     JSONArray array = json.jsonObject.getJSONArray("contests");
                     if (array != null) {
+                        Log.i(TAG, "contests is not null!");
                         elections.add(election);
                         adapter.notifyDataSetChanged();
+                        Log.d(TAG, "election: " + election.toString());
+                        tvGone.setVisibility(View.GONE);
+                        btnGone.setVisibility(View.GONE);
+                        rvElections.setVisibility(View.VISIBLE);
                     }
-                    Log.d(TAG, "onSuccess to getVoterQuery: " + elections.toString());
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

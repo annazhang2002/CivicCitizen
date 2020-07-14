@@ -25,6 +25,8 @@ public class OpeningActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_opening);
 
+        getSupportActionBar().hide();
+
         // accessing resources from layout
         btnLogin = findViewById(R.id.btnLogin);
         btnSignup = findViewById(R.id.btnSignup);

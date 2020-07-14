@@ -1,6 +1,8 @@
 package com.example.votingapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +13,8 @@ import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.votingapp.BuildConfig;
 import com.example.votingapp.R;
+import com.example.votingapp.adapters.ContestAdapter;
+import com.example.votingapp.adapters.ElectionsAdapter;
 import com.example.votingapp.models.Contest;
 import com.example.votingapp.models.Election;
 import com.example.votingapp.models.User;
@@ -32,6 +36,8 @@ public class ElectionDetailsActivity extends AppCompatActivity {
     AsyncHttpClient client;
     Election election;
     List<Contest> contests;
+    RecyclerView rvContests;
+    ContestAdapter adapter;
 
     TextView tvElectionDay;
 
@@ -43,9 +49,14 @@ public class ElectionDetailsActivity extends AppCompatActivity {
         election = Parcels.unwrap(getIntent().getParcelableExtra(Election.class.getSimpleName()));
         client = new AsyncHttpClient();
         contests = new ArrayList<>();
-        getSupportActionBar().setTitle(election.getName());
+        rvContests = findViewById(R.id.rvContests);
+        adapter = new ContestAdapter(this, contests);
+        rvContests.setLayoutManager(new LinearLayoutManager(this));
+        rvContests.setAdapter(adapter);
 
         tvElectionDay = findViewById(R.id.tvElectionDay);
+
+        getSupportActionBar().setTitle(election.getName());
         tvElectionDay.setText(election.getElectionDay());
 
         getVoterQuery(election);
@@ -65,6 +76,7 @@ public class ElectionDetailsActivity extends AppCompatActivity {
                 try {
                     JSONArray array = json.jsonObject.getJSONArray("contests");
                     contests.addAll(Contest.fromJSON(array));
+                    adapter.notifyDataSetChanged();
                     Log.d(TAG, "onSuccess to getVoterQuery: " + contests.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();

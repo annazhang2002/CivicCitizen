@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="0dp"
-        android:background="@color/colorOnSurface"
+        android:background="@color/gray"
         android:elevation="40dp"
         app:itemHorizontalTranslationEnabled="false"
         app:itemIconTint="@color/white"

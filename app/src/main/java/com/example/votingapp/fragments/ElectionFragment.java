@@ -106,31 +106,4 @@ public class ElectionFragment extends Fragment {
             }
         });
     }
-
-    public void getVoterQuery(Election election) {
-        RequestParams params = new RequestParams();
-        String address = User.getAddress(ParseUser.getCurrentUser());
-        Log.i(TAG, "current user: :  " + ParseUser.getCurrentUser());
-        params.put("address", address);
-        params.put("electionId", election.getId());
-        Log.i(TAG, "Address:  " + address);
-        Log.i(TAG, "Network call url: " + Election.VOTER_INFO_URL + "?key=" + apiKey);
-        client.get(Election.VOTER_INFO_URL + "?key=" + apiKey, params, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                // Access a JSON array response with `json.jsonArray`
-                try {
-                    JSONArray array = json.jsonObject.getJSONArray("elections");
-                    Log.d(TAG, "onSuccess to getVoterQuery: " + array.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.d(TAG, "onFailure to getVoterQuery, " + statusCode + ", " + response, throwable);
-            }
-        });
-    }
 }

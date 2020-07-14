@@ -7,20 +7,119 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="wrap_content"
         tools:context=".activities.ElectionDetailsActivity">
 
         <TextView
             android:id="@+id/tvElectionDay"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="170dp"
-            android:layout_marginTop="21dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="0dp"
+            android:gravity="center_horizontal"
+            android:textSize="40sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:layout_editor_absoluteY="51dp"
             tools:text="June 17th" />
+
+        <CheckBox
+            android:id="@+id/cbRegisterVote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvElectionDay"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="14dp"
+            android:text="Registered to Vote"
+            tools:text="Registered to Vote  (5/21)" />
+
+        <CheckBox
+            android:id="@+id/cbRegisterVote2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cbRegisterVote"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="14dp"
+            tools:text="Applied for Absentee Ballot (6/10)" />
+
+        <CheckBox
+            android:id="@+id/cbRegisterVote3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cbRegisterVote2"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="11dp"
+            tools:text="Sent in Absentee Ballot (6/16)" />
+
+        <CheckBox
+            android:id="@+id/cbRegisterVote4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cbRegisterVote3"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginBottom="10dp"
+            tools:text="Voted! (6/17)" />
+
+        <TextView
+            android:id="@+id/tvRegisterDeadline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvElectionDay"
+            android:layout_marginStart="27dp"
+            android:layout_marginTop="19dp"
+            android:layout_toEndOf="@+id/cbRegisterVote"
+            android:text="See State Specific Deadline"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/tvRegisterDeadline2"
+            android:layout_width="124dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvRegisterDeadline"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="18dp"
+            android:layout_toEndOf="@+id/cbRegisterVote2"
+            android:text="See State Specific Deadline"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/tvRegisterDeadline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvRegisterDeadline2"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/cbRegisterVote3"
+            android:text="See State Specific Deadline"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/tvContests"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cbRegisterVote4"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="66dp"
+            android:layout_marginTop="24dp"
+            android:text="Ballot Contests"
+            android:textSize="40sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvContests"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvContests"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="11dp"
+            android:layout_marginEnd="5dp" />
+
     </RelativeLayout>
+
 </ScrollView>

@@ -67,7 +67,7 @@ public class ElectionsAdapter extends RecyclerView.Adapter<ElectionsAdapter.View
 
         public void bind(Election election) {
             tvName.setText(election.getName());
-            tvElectionDay.setText(election.getElectionDay());
+            tvElectionDay.setText(election.getShortElectionDay() + "");
             tvDistrict.setText(election.getDivision());
         }
 

@@ -356,6 +356,53 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvRegistrationDeadlinesA" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cl7"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/tvAbsenteeDeadlineQ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="2dp"
+                android:text="What is the deadline to get an absentee ballot?"
+                android:textColor="#303030"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvAbsenteeDeadlineA"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="5dp"
+                android:autoLink="all"
+                android:linksClickable="true"
+                android:text="Absentee application deadlines vary between states, but generally applications must be mailed in around 15 days before an election. The link below is a great resource to find your state's registration deadline. "
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvAbsenteeDeadlineQ" />
+
+            <TextView
+                android:id="@+id/tvAbsenteeDeadlineUrl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="1dp"
+                android:autoLink="all"
+                android:linksClickable="true"
+                android:text="https://www.vote.org/absentee-ballot-deadlines/"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAbsenteeDeadlineA" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
 
 

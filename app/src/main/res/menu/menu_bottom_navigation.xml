@@ -6,10 +6,6 @@
         android:title="Home"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_profile"
-        android:title="Profile"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/action_representatives"
         android:title="Representatives"
         app:showAsAction="ifRoom" />
@@ -17,4 +13,8 @@
         android:id="@+id/action_faqs"
         android:title="FAQs"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_profile"
+        android:title="Profile"
+        app:showAsAction="always" />
 </menu>

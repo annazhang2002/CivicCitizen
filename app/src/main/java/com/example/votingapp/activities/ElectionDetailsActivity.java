@@ -55,7 +55,7 @@ public class ElectionDetailsActivity extends AppCompatActivity {
         tvElectionDay = findViewById(R.id.tvElectionDay);
 
         getSupportActionBar().setTitle(election.getName());
-        tvElectionDay.setText(election.getElectionDay());
+        tvElectionDay.setText(election.getSimpleElectionDay() + "");
 
         Network.getContests(election);
     }

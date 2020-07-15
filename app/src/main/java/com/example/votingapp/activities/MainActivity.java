@@ -65,4 +65,9 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = new InfoFragment();
         fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
     }
+
+    public static void goUserProfile(ParseUser user) {
+        Fragment fragment = new ProfileFragment();
+        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+    }
 }

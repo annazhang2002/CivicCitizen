@@ -9,6 +9,7 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.votingapp.activities.ElectionDetailsActivity;
 import com.example.votingapp.fragments.ElectionFragment;
 import com.example.votingapp.fragments.InfoFragment;
+import com.example.votingapp.fragments.RepsFragment;
 import com.example.votingapp.models.Election;
 import com.example.votingapp.models.User;
 import com.parse.ParseUser;
@@ -26,6 +27,7 @@ import okhttp3.Headers;
 public class Network {
     public static final String ELECTION_URL = "https://www.googleapis.com/civicinfo/v2/elections";
     public static final String VOTER_INFO_URL = "https://www.googleapis.com/civicinfo/v2/voterinfo";
+    public static final String REPS_URL = "https://www.googleapis.com/civicinfo/v2/representatives";
     private static final String TAG = "Network";
 
 //    public static Integer primaryElectionId = 0;
@@ -152,18 +154,31 @@ public class Network {
             }
         });
     }
-//
-//    // GETTERS FOR OUR VARIABLES
-//
-//    public static Integer getPrimaryElectionId() {
-//        return primaryElectionId;
-//    }
-//
-//    public static List<Election> getAllElections() {
-//        return allElections;
-//    }
-//
-//    public static List<Election> getUsersElections() {
-//        return usersElections;
-//    }
+
+    public static void getReps() {
+        RequestParams params = new RequestParams();
+        String address = User.getAddress(ParseUser.getCurrentUser());
+        params.put("address", address);
+        Log.i(TAG, "Network call url: " + REPS_URL + "?key=" + apiKey);
+        client.get(REPS_URL + "?key=" + apiKey, params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                // Access a JSON array response with `json.jsonArray`
+                try {
+                    JSONArray offices = json.jsonObject.getJSONArray("offices");
+                    JSONArray people = json.jsonObject.getJSONArray("officials");
+                    RepsFragment.parseNetworkRequest(offices, people);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.d(TAG, "onFailure to getVoterQuery, " + statusCode + ", " + response, throwable);
+            }
+        });
+    }
+
 }

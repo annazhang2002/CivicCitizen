@@ -15,6 +15,7 @@ import com.example.votingapp.R;
 import com.example.votingapp.fragments.ElectionFragment;
 import com.example.votingapp.fragments.InfoFragment;
 import com.example.votingapp.fragments.ProfileFragment;
+import com.example.votingapp.fragments.RepsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new ElectionFragment();
                         break;
                     case R.id.action_representatives:
-//                        fragment = new ComposeFragment();
+                        fragment = new RepsFragment();
                         break;
                     case R.id.action_faqs:
                         fragment = new InfoFragment();

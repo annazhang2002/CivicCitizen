@@ -1,6 +1,5 @@
 package com.example.votingapp.activities;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
@@ -48,7 +47,7 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
-        ivProfile = findViewById(R.id.ivProfile);
+        ivProfile = findViewById(R.id.ivImage);
         etName = findViewById(R.id.etName);
         btnPic = findViewById(R.id.btnPic);
         etAddress1 = findViewById(R.id.etAddress1);

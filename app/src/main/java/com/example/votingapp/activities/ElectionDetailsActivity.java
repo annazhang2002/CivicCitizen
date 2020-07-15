@@ -12,6 +12,7 @@ import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.votingapp.BuildConfig;
+import com.example.votingapp.Network;
 import com.example.votingapp.R;
 import com.example.votingapp.adapters.ContestAdapter;
 import com.example.votingapp.adapters.ElectionsAdapter;
@@ -32,12 +33,10 @@ import okhttp3.Headers;
 public class ElectionDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "ElectionDetailsActivity";
-    private String apiKey = BuildConfig.GOOGLE_API_KEY;
-    AsyncHttpClient client;
     Election election;
-    List<Contest> contests;
+    static List<Contest> contests;
     RecyclerView rvContests;
-    ContestAdapter adapter;
+    static ContestAdapter adapter;
 
     TextView tvElectionDay;
 
@@ -47,7 +46,6 @@ public class ElectionDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_election_details);
 
         election = Parcels.unwrap(getIntent().getParcelableExtra(Election.class.getSimpleName()));
-        client = new AsyncHttpClient();
         contests = new ArrayList<>();
         rvContests = findViewById(R.id.rvContests);
         adapter = new ContestAdapter(this, contests);
@@ -59,34 +57,42 @@ public class ElectionDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(election.getName());
         tvElectionDay.setText(election.getElectionDay());
 
-        getVoterQuery(election);
+        Network.getContests(election);
     }
+//
+//    public void getVoterQuery(Election election) {
+//        RequestParams params = new RequestParams();
+//        String address = User.getAddress(ParseUser.getCurrentUser());
+//        params.put("address", address);
+//        params.put("electionId", election.getId());
+//        Log.i(TAG, "Address:  " + address);
+//        Log.i(TAG, "Network call url: " + Election.VOTER_INFO_URL + "?key=" + apiKey);
+//        Network.client.get(Election.VOTER_INFO_URL + "?key=" + apiKey, params, new JsonHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Headers headers, JSON json) {
+//                // Access a JSON array response with `json.jsonArray`
+//                try {
+//                    JSONArray array = json.jsonObject.getJSONArray("contests");
+//                    addContests(array);
+//                    Log.d(TAG, "onSuccess to getVoterQuery: " + contests.toString());
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+//                Log.d(TAG, "onFailure to getVoterQuery, " + statusCode + ", " + response, throwable);
+//            }
+//        });
+//    }
 
-    public void getVoterQuery(Election election) {
-        RequestParams params = new RequestParams();
-        String address = User.getAddress(ParseUser.getCurrentUser());
-        params.put("address", address);
-        params.put("electionId", election.getId());
-        Log.i(TAG, "Address:  " + address);
-        Log.i(TAG, "Network call url: " + Election.VOTER_INFO_URL + "?key=" + apiKey);
-        client.get(Election.VOTER_INFO_URL + "?key=" + apiKey, params, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                // Access a JSON array response with `json.jsonArray`
-                try {
-                    JSONArray array = json.jsonObject.getJSONArray("contests");
-                    contests.addAll(Contest.fromJSON(array));
-                    adapter.notifyDataSetChanged();
-                    Log.d(TAG, "onSuccess to getVoterQuery: " + contests.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.d(TAG, "onFailure to getVoterQuery, " + statusCode + ", " + response, throwable);
-            }
-        });
+    public static void addContests(JSONArray array) {
+        try {
+            contests.addAll(Contest.fromJSON(array));
+            adapter.notifyDataSetChanged();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -37,8 +37,8 @@
             tools:text="Registered to Vote  (5/21)" />
 
         <CheckBox
-            android:id="@+id/cbRegisterVote2"
-            android:layout_width="wrap_content"
+            android:id="@+id/cbAbsentee"
+            android:layout_width="192dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/cbRegisterVote"
             android:layout_alignParentStart="true"
@@ -47,23 +47,13 @@
             tools:text="Applied for Absentee Ballot (6/10)" />
 
         <CheckBox
-            android:id="@+id/cbRegisterVote3"
+            android:id="@+id/cbVote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/cbRegisterVote2"
+            android:layout_below="@+id/cbAbsentee"
             android:layout_alignParentStart="true"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="11dp"
-            tools:text="Sent in Absentee Ballot (6/16)" />
-
-        <CheckBox
-            android:id="@+id/cbRegisterVote4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/cbRegisterVote3"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="13dp"
+            android:layout_marginTop="14dp"
             android:layout_marginBottom="10dp"
             tools:text="Voted! (6/17)" />
 
@@ -79,24 +69,13 @@
             android:textStyle="italic" />
 
         <TextView
-            android:id="@+id/tvRegisterDeadline2"
-            android:layout_width="124dp"
+            android:id="@+id/tvAbsenteeDeadline"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvRegisterDeadline"
             android:layout_marginStart="18dp"
             android:layout_marginTop="18dp"
-            android:layout_toEndOf="@+id/cbRegisterVote2"
-            android:text="See State Specific Deadline"
-            android:textStyle="italic" />
-
-        <TextView
-            android:id="@+id/tvRegisterDeadline3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvRegisterDeadline2"
-            android:layout_marginStart="17dp"
-            android:layout_marginTop="10dp"
-            android:layout_toEndOf="@+id/cbRegisterVote3"
+            android:layout_toEndOf="@+id/cbAbsentee"
             android:text="See State Specific Deadline"
             android:textStyle="italic" />
 
@@ -104,10 +83,10 @@
             android:id="@+id/tvContests"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/cbRegisterVote4"
+            android:layout_below="@+id/cbVote"
             android:layout_alignParentStart="true"
             android:layout_marginStart="66dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="15dp"
             android:text="Ballot Contests"
             android:textSize="40sp" />
 

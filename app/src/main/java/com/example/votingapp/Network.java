@@ -76,7 +76,7 @@ public class Network {
     }
 
     // method to get the specific details of an election (i.e. the contests)
-    public static void getContests(Election election) {
+    public static void getElectionDetails(Election election) {
         RequestParams params = new RequestParams();
         String address = User.getAddress(ParseUser.getCurrentUser());
         params.put("address", address);
@@ -88,8 +88,29 @@ public class Network {
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 // Access a JSON array response with `json.jsonArray`
                 try {
-                    JSONArray array = json.jsonObject.getJSONArray("contests");
-                    ElectionDetailsActivity.addContests(array);
+                    JSONArray contests = json.jsonObject.getJSONArray("contests");
+                    ElectionDetailsActivity.addContests(contests);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    JSONArray pollingLocations = json.jsonObject.getJSONArray("pollingLocations");
+                    ElectionDetailsActivity.addLocations(pollingLocations, "Polling Location");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    JSONArray earlyVoteSites = json.jsonObject.getJSONArray("earlyVoteSites");
+                    ElectionDetailsActivity.addLocations(earlyVoteSites, "Early Voting Site");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    JSONArray dropOffLocations = json.jsonObject.getJSONArray("dropOffLocations");
+                    ElectionDetailsActivity.addLocations(dropOffLocations, "Drop Off Location");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -148,14 +169,28 @@ public class Network {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 // Access a JSON array response with `json.jsonArray`
+                boolean added = false;
                 try {
                     JSONArray array = json.jsonObject.getJSONArray("contests");
                     if (array != null) {
                         ElectionFragment.addUserElection(election);
+                        added = true;
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                }
+                if (!added) {
+                    try {
+                        JSONArray array = json.jsonObject.getJSONArray("earlyVoteSites");
+                        if (array != null) {
+                            ElectionFragment.addUserElection(election);
+                            added = true;
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 

@@ -17,15 +17,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.example.votingapp.MethodLibrary.API_DATE_FORMAT;
+import static com.example.votingapp.MethodLibrary.M_D_FORMAT;
+import static com.example.votingapp.MethodLibrary.M_D_Y_FORMAT;
+import static com.example.votingapp.MethodLibrary.NUMBER_DATE_FORMAT;
+import static com.example.votingapp.MethodLibrary.getDaysBeforeDate;
+import static com.example.votingapp.MethodLibrary.getFormattedDate;
+
 @Parcel
 public class Election {
 
     public static final int REGISTER_DAYS_BEFORE = -30;
     private static final int ABSENTEE_DAYS_BEFORE = -7;
-    public static final String API_DATE_FORMAT = "yyyy-MM-dd";
-    public static final String M_D_Y_FORMAT = "MMMM d, yyyy";
-    public static final String M_D_FORMAT = "MMMM d, yyyy";
-    public static final String NUMBER_DATE_FORMAT = "MM/dd";
     private static final String TAG = "Election";
     String name;
     String electionDay;
@@ -40,46 +43,6 @@ public class Election {
         electionDay = jsonObject.getString("electionDay");
         id = jsonObject.getInt("id");
         division = jsonObject.getString("ocdDivisionId");
-    }
-//
-//    public static List<Election> fromJsonArray(JSONArray electionsJSONArray) throws JSONException {
-//        // create a list of elections we get
-//        List<Election> elections = new ArrayList<>();
-//
-//        // for each element in the given json array, add the object to the elections array
-//        for (int i = 0; i < electionsJSONArray.length(); i++) {
-//            elections.add(new Election(electionsJSONArray.getJSONObject(i)));
-//        }
-//        return elections;
-//    }
-
-    // method to get the deadline date given an input date and the number of days you want to subtract
-    public static String getDaysBeforeDate(String rawDate, int daysBefore, String givenFormat, String newFormat ) {
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat(givenFormat, Locale.ENGLISH);
-        try {
-            cal.setTime(sdf.parse(rawDate));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        cal.add(Calendar.DATE,daysBefore);
-        String wantedDate = sdf.format(cal.getTime());
-        wantedDate = getFormattedDate(wantedDate, givenFormat, newFormat);
-        Log.d(TAG, wantedDate);
-        return wantedDate;
-    }
-
-    public static String getFormattedDate(String rawJsonDate, String oldFormat, String newFormat) {
-        @SuppressLint("SimpleDateFormat") DateFormat inputFormat = new SimpleDateFormat(oldFormat);
-        @SuppressLint("SimpleDateFormat") DateFormat outputFormat = new SimpleDateFormat(newFormat);
-        String resultDate = "";
-        try {
-            resultDate=outputFormat.format(inputFormat.parse(rawJsonDate));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Log.i(TAG, "newDate: " + resultDate);
-        return resultDate;
     }
 
     public String getName() {

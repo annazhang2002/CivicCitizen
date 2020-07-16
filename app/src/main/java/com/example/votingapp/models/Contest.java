@@ -21,9 +21,9 @@ public class Contest {
     public Contest(JSONObject json) {
         try {
             ballotTitle = json.getString("office");
-            level = json.getJSONArray("level").get(0).toString();
             district = json.getJSONObject("district").getString("name");
             candidates = Candidate.fromJSON(json.getJSONArray("candidates"));
+            level = json.getJSONArray("level").get(0).toString();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -33,7 +33,8 @@ public class Contest {
     public static List<Contest> fromJSON(JSONArray array) throws JSONException {
         List<Contest> contests = new ArrayList<>();
         for (int i = 0 ; i< array.length(); i++) {
-            contests.add(new Contest(array.getJSONObject(i)));
+            Contest contest = new Contest(array.getJSONObject(i));
+            contests.add(contest);
         }
         return contests;
     }

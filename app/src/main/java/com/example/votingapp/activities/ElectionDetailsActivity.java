@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,9 +22,11 @@ import com.example.votingapp.Network;
 import com.example.votingapp.R;
 import com.example.votingapp.adapters.ContestAdapter;
 import com.example.votingapp.adapters.ElectionsAdapter;
+import com.example.votingapp.adapters.LocationAdapter;
 import com.example.votingapp.models.Action;
 import com.example.votingapp.models.Contest;
 import com.example.votingapp.models.Election;
+import com.example.votingapp.models.Location;
 import com.example.votingapp.models.User;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -39,31 +42,43 @@ import java.util.List;
 
 import okhttp3.Headers;
 
+import static com.example.votingapp.MethodLibrary.openUrl;
+
 public class ElectionDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "ElectionDetailsActivity";
     static Election election;
     static List<Contest> contests;
+    static List<Location> locations;
     static List<Action> actions;
     RecyclerView rvContests;
-    static ContestAdapter adapter;
+    static ContestAdapter contestAdapter;
+    RecyclerView rvLocations;
+    static LocationAdapter locationAdapter;
     public static CheckBox[] cbDeadlines;
     TextView tvRegisterDeadline;
     TextView tvAbsenteeDeadline;
 
     TextView tvElectionDay;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_election_details);
 
+        context = this;
         election = Parcels.unwrap(getIntent().getParcelableExtra(Election.class.getSimpleName()));
         contests = new ArrayList<>();
         rvContests = findViewById(R.id.rvContests);
-        adapter = new ContestAdapter(this, contests);
+        contestAdapter = new ContestAdapter(this, contests);
         rvContests.setLayoutManager(new LinearLayoutManager(this));
-        rvContests.setAdapter(adapter);
+        rvContests.setAdapter(contestAdapter);
+        locations = new ArrayList<>();
+        rvLocations = findViewById(R.id.rvLocations);
+        locationAdapter = new LocationAdapter(this, locations);
+        rvLocations.setLayoutManager(new LinearLayoutManager(this));
+        rvLocations.setAdapter(locationAdapter);
 
         actions = new ArrayList<>();
         cbDeadlines = new CheckBox[3];
@@ -83,13 +98,13 @@ public class ElectionDetailsActivity extends AppCompatActivity {
         tvRegisterDeadline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openUrl("https://www.vote.org/voter-registration-deadlines/#" + Network.userState);
+                openUrl("https://www.vote.org/voter-registration-deadlines/#" + Network.userState, context);
             }
         });
         tvAbsenteeDeadline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openUrl("https://www.vote.org/absentee-ballot-deadlines/#" + Network.userState);
+                openUrl("https://www.vote.org/absentee-ballot-deadlines/#" + Network.userState, context);
             }
         });
         // set onchecklisteners for checkboxes
@@ -103,22 +118,25 @@ public class ElectionDetailsActivity extends AppCompatActivity {
             });
         }
 
-        Network.getContests(election);
+        Network.getElectionDetails(election);
         Network.queryActions(election);
     }
 
     public static void addContests(JSONArray array) {
         try {
             contests.addAll(Contest.fromJSON(array));
-            adapter.notifyDataSetChanged();
+            contestAdapter.notifyDataSetChanged();
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-
-    public void openUrl(String url) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        startActivity(browserIntent);
+    public static void addLocations(JSONArray pollingLocations, String type) {
+        try {
+            locations.addAll(Location.fromJSON(pollingLocations, type));
+            locationAdapter.notifyDataSetChanged();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onCheckDeadline(Integer cbIndex) {

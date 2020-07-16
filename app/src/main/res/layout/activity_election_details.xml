@@ -83,11 +83,22 @@
             android:id="@+id/tvContests"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/rvLocations"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="72dp"
+            android:layout_marginTop="10dp"
+            android:text="Ballot Contests"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/tvPollingLocations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/cbVote"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="66dp"
-            android:layout_marginTop="15dp"
-            android:text="Ballot Contests"
+            android:layout_marginStart="69dp"
+            android:layout_marginTop="6dp"
+            android:text="Polling Locations"
             android:textSize="40sp" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -98,6 +109,15 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="11dp"
             android:layout_marginEnd="5dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvLocations"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tvPollingLocations"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="1dp" />
 
     </RelativeLayout>
 

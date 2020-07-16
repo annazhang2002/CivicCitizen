@@ -21,6 +21,7 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.votingapp.BuildConfig;
 import com.example.votingapp.Network;
 import com.example.votingapp.R;
+import com.example.votingapp.activities.MainActivity;
 import com.example.votingapp.models.Election;
 import com.example.votingapp.models.User;
 import com.parse.ParseUser;
@@ -76,7 +77,6 @@ public class InfoFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         tvName = view.findViewById(R.id.tvName);
         tvElectionInfoUrl = view.findViewById(R.id.tvElectionInfoUrl);
         tvElectionRegistrationUrl = view.findViewById(R.id.tvElectionRegistrationUrl);

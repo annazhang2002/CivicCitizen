@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.icu.text.IDNA;
 import android.os.Bundle;
@@ -24,12 +25,15 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     BottomNavigationView bottomNavigationView;
     public static FragmentManager fragmentManager;
+    static ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        createProgressDialog();
+        pd.show();
         fragmentManager = getSupportFragmentManager();
 
         // allowing the user to navigate with bottom tabs
@@ -70,5 +74,18 @@ public class MainActivity extends AppCompatActivity {
     public static void goUserProfile(ParseUser user) {
         Fragment fragment = new ProfileFragment();
         fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+    }
+
+    public void createProgressDialog() {
+        pd = new ProgressDialog(this);
+        pd.setTitle("Loading...");
+        pd.setCancelable(false);
+    }
+
+    public static void hidePd() {
+        pd.hide();
+    }
+    public static void showPd() {
+        pd.show();
     }
 }

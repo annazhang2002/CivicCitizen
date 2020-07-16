@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.example.votingapp.Network;
 import com.example.votingapp.R;
+import com.example.votingapp.activities.MainActivity;
 import com.example.votingapp.adapters.RepAdapter;
 import com.example.votingapp.models.Candidate;
 import com.example.votingapp.models.Rep;
@@ -52,6 +53,7 @@ public class RepsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        MainActivity.showPd();
         reps = new ArrayList<>();
         rvReps = view.findViewById(R.id.rvReps);
         adapter = new RepAdapter(getContext(), reps);
@@ -66,6 +68,7 @@ public class RepsFragment extends Fragment {
         try {
             reps.addAll(Rep.fromJSON(offices, people));
             adapter.notifyDataSetChanged();
+            MainActivity.hidePd();
             Log.i(TAG, "retrieved reps: " + reps);
         } catch (JSONException e) {
             e.printStackTrace();

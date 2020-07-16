@@ -1,5 +1,6 @@
 package com.example.votingapp.fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -66,7 +67,6 @@ public class ElectionFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         elections = new ArrayList<>();
         rvElections = view.findViewById(R.id.rvElections);
         tvGone = view.findViewById(R.id.tvNone);
@@ -84,73 +84,13 @@ public class ElectionFragment extends Fragment {
         Network.getElections();
     }
 
+
+
     public static void hasElections() {
         btnGone.setVisibility(View.GONE);
         tvGone.setVisibility(View.GONE);
         rvElections.setVisibility(View.VISIBLE);
     }
-
-//    public void getElections() {
-//        RequestParams params = new RequestParams();
-//        Log.i(TAG, "Network call url: " + Network.ELECTION_URL + "?key=" + Network.apiKey);
-//        Network.client.get(Network.ELECTION_URL + "?key=" + Network.apiKey, params, new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Headers headers, JSON json) {
-//                // Access a JSON array response with `json.jsonArray`
-//                Log.i(TAG, "onSuccess to getElections");
-//                try {
-//                    JSONArray array = json.jsonObject.getJSONArray("elections");
-//                    Log.d(TAG, "onSuccess to getElections: " + array.toString());
-//                    array.remove(0);
-//
-//                    for (int i =0; i<array.length(); i++) {
-//                        Election election = new Election(array.getJSONObject(i));
-//                        getVoterQuery(election);
-//                    }
-//
-//                    Log.d(TAG, "onSuccess to getElections: " + elections.toString());
-//
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-//                Log.d(TAG, "onFailure to getElections, " + statusCode + ", " + response, throwable);
-//            }
-//        });
-//    }
-//
-//    public void getVoterQuery(final Election election) {
-//        RequestParams params = new RequestParams();
-//        String address = User.getAddress(ParseUser.getCurrentUser());
-//        params.put("address", address);
-//        params.put("electionId", election.getId());
-//        Log.i(TAG, "Address:  " + address);
-//        Log.i(TAG, "Network call url: " + Network.VOTER_INFO_URL + "?key=" + Network.apiKey);
-//        Network.client.get(Network.VOTER_INFO_URL + "?key=" + Network.apiKey, params, new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Headers headers, JSON json) {
-//                // Access a JSON array response with `json.jsonArray`
-//                try {
-//                    JSONArray array = json.jsonObject.getJSONArray("contests");
-//                    if (array != null) {
-////                        addUserElection(election, elections, adapter);
-//                    }
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-//                Log.d(TAG, "onFailure to getVoterQuery, " + statusCode + ", " + response, throwable);
-//            }
-//        });
-//    }
 
     public static void addUserElection(Election election) {
         Log.i(TAG, "contests is not null!");

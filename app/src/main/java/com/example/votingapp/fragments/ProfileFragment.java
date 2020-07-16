@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.example.votingapp.BuildConfig;
 import com.example.votingapp.R;
 import com.example.votingapp.activities.EditProfileActivity;
+import com.example.votingapp.activities.MainActivity;
 import com.example.votingapp.activities.OpeningActivity;
 import com.example.votingapp.models.User;
 import com.parse.ParseUser;
@@ -87,6 +88,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void goOpening() {
+        MainActivity.showPd();
         Intent intent = new Intent(getContext(), OpeningActivity.class);
         getContext().startActivity(intent);
     }

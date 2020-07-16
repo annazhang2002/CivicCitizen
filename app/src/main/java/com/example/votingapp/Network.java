@@ -8,6 +8,7 @@ import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.votingapp.activities.ElectionDetailsActivity;
+import com.example.votingapp.activities.MainActivity;
 import com.example.votingapp.fragments.ElectionFragment;
 import com.example.votingapp.fragments.InfoFragment;
 import com.example.votingapp.fragments.RepsFragment;
@@ -121,6 +122,7 @@ public class Network {
                         Election election = new Election(array.getJSONObject(i));
                         getVoterQuery(election);
                     }
+                    MainActivity.hidePd();
 
                 } catch (JSONException e) {
                     e.printStackTrace();

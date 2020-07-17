@@ -14,8 +14,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".activities.RepDetailsActivity"></activity>
         <!-- make sure within the application tag, otherwise app will crash with XmlResourceParser errors -->
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -27,7 +28,7 @@
                 android:resource="@xml/fileprovider" />
         </provider>
 
-        <activity android:name=".activities.EditProfileActivity"></activity>
+        <activity android:name=".activities.EditProfileActivity" />
         <activity android:name=".activities.ContestDetailActivity" />
         <activity android:name=".activities.ElectionDetailsActivity" />
         <activity android:name=".activities.MainActivity" />

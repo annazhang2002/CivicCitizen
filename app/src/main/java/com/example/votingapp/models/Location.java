@@ -1,5 +1,7 @@
 package com.example.votingapp.models;
 
+import com.example.votingapp.MethodLibrary;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,16 +20,18 @@ public class Location {
     String endDate;
     String pollingHours;
     String type;
+    String notes;
 
     public Location(JSONObject jsonObject, String type) {
         try {
+            this.type = type;
             JSONObject addObj = jsonObject.getJSONObject("address");
             name = addObj.getString("locationName");
-            address = addObj.getString("line1") + ", " + addObj.getString("city") + ", " + addObj.getString("state") + " " + addObj.getString("zip");
+            address = MethodLibrary.parseAddress(addObj);
             startDate = jsonObject.getString("startDate");
             endDate = jsonObject.getString("endDate");
             pollingHours = jsonObject.getString("pollingHours");
-            this.type = type;
+            notes = jsonObject.getString("notes");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -63,5 +67,9 @@ public class Location {
 
     public String getType() {
         return type;
+    }
+
+    public String getNotes() {
+        return notes;
     }
 }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.votingapp.MethodLibrary;
 import com.example.votingapp.R;
 import com.example.votingapp.models.Location;
 import com.example.votingapp.activities.ContestDetailActivity;
@@ -58,6 +59,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         TextView tvDates;
         TextView tvPollingHours;
         TextView tvType;
+        TextView tvNotes;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -67,6 +69,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
             tvDates = itemView.findViewById(R.id.tvDates);
             tvPollingHours = itemView.findViewById(R.id.tvPollingHours);
             tvType = itemView.findViewById(R.id.tvType);
+            tvNotes = itemView.findViewById(R.id.tvNotes);
 
             itemView.setOnClickListener(this);
         }
@@ -77,11 +80,16 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
             tvDates.setText(location.getStartDate() + " - " + location.getEndDate());
             tvPollingHours.setText(location.getPollingHours());
             tvType.setText(location.getType());
+            if (!location.getNotes().equals("NULL")) {
+                tvNotes.setText(location.getNotes());
+            } else {
+                tvNotes.setVisibility(View.GONE);
+            }
         }
 
         @Override
         public void onClick(View view) {
-            openUrl("http://maps.google.co.in/maps?q=" + tvAddress.getText().toString(), context);
+            openUrl(MethodLibrary.MAPS_BASE_URL + tvAddress.getText().toString(), context);
         }
     }
 }

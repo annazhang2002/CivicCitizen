@@ -1,5 +1,6 @@
 package com.example.votingapp.fragments;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -32,9 +33,13 @@ public class RepsFragment extends Fragment {
     public static List<Rep> reps;
     public static RepAdapter adapter;
     public static RecyclerView rvReps;
+    PackageManager packageManager;
 
     public RepsFragment() {
         // Required empty public constructor
+    }
+    public RepsFragment(PackageManager packageManager) {
+        this.packageManager = packageManager;
     }
 
     @Override
@@ -56,7 +61,7 @@ public class RepsFragment extends Fragment {
         MainActivity.showPd();
         reps = new ArrayList<>();
         rvReps = view.findViewById(R.id.rvReps);
-        adapter = new RepAdapter(getContext(), reps);
+        adapter = new RepAdapter(getContext(), reps, packageManager,getFragmentManager());
         rvReps.setAdapter(adapter);
         rvReps.setLayoutManager(new LinearLayoutManager(getContext()));
 

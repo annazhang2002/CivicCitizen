@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new ElectionFragment();
                         break;
                     case R.id.action_representatives:
-                        fragment = new RepsFragment();
+                        fragment = new RepsFragment(getPackageManager());
                         break;
                     case R.id.action_faqs:
                         fragment = new InfoFragment();

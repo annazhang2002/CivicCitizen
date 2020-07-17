@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -48,6 +49,7 @@ public class ElectionDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "ElectionDetailsActivity";
     static Election election;
+    static ProgressDialog pd;
     static List<Contest> contests;
     static List<Location> locations;
     static List<Action> actions;
@@ -80,6 +82,8 @@ public class ElectionDetailsActivity extends AppCompatActivity {
         rvLocations.setLayoutManager(new LinearLayoutManager(this));
         rvLocations.setAdapter(locationAdapter);
 
+        createProgressDialog();
+        pd.show();
         actions = new ArrayList<>();
         cbDeadlines = new CheckBox[3];
         cbDeadlines[0] = findViewById(R.id.cbRegisterVote);
@@ -134,6 +138,7 @@ public class ElectionDetailsActivity extends AppCompatActivity {
         try {
             locations.addAll(Location.fromJSON(pollingLocations, type));
             locationAdapter.notifyDataSetChanged();
+            pd.hide();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -175,5 +180,11 @@ public class ElectionDetailsActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    public void createProgressDialog() {
+        pd = new ProgressDialog(this);
+        pd.setTitle("Loading...");
+        pd.setCancelable(false);
     }
 }

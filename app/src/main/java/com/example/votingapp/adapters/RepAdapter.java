@@ -1,6 +1,8 @@
 package com.example.votingapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +12,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.votingapp.MethodLibrary;
 import com.example.votingapp.R;
+import com.example.votingapp.activities.RepDetailsActivity;
 import com.example.votingapp.models.Candidate;
 import com.example.votingapp.models.Rep;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -24,10 +31,14 @@ public class RepAdapter extends RecyclerView.Adapter<RepAdapter.ViewHolder> {
     private static final String TAG = "RepAdapter";
     List<Rep> reps;
     Context context;
+    PackageManager packageManager;
+    FragmentManager fragmentManager;
 
-    public RepAdapter(Context context, List<Rep> reps) {
+    public RepAdapter(Context context, List<Rep> reps, PackageManager packageManager, FragmentManager fragmentManager) {
         this.context = context;
         this.reps = reps;
+        this.packageManager = packageManager;
+        this.fragmentManager = fragmentManager;
     }
 
     @Override
@@ -71,7 +82,7 @@ public class RepAdapter extends RecyclerView.Adapter<RepAdapter.ViewHolder> {
             itemView.setOnClickListener(this);
         }
 
-        public void bind(Rep rep) {
+        public void bind(final Rep rep) {
             tvName.setText(rep.getName());
             tvParty.setText(rep.getParty());
             if (rep.getPhotoUrl() == null) {
@@ -86,19 +97,46 @@ public class RepAdapter extends RecyclerView.Adapter<RepAdapter.ViewHolder> {
                 tvUrl.setVisibility(View.GONE);
             }
             tvPosition.setText(rep.getPosition());
+            if (rep.getEmail() != null) {
+                btnMessage.setText("Send email");
+                btnMessage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        MethodLibrary.showRepMessageDialog(fragmentManager, context, packageManager, rep);
+                    }
+                });
+            } else if (rep.getPhone() != null) {
+                btnMessage.setText("call");
+                btnMessage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        MethodLibrary.openDialer(rep.getPhone(), context);
+                    }
+                });
+            } else if (rep.getAddress() != null) {
+                btnMessage.setText("visit");
+                btnMessage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        MethodLibrary.openUrl(MethodLibrary.MAPS_BASE_URL + rep.getAddress(), context);
+                    }
+                });
+            } else {
+                btnMessage.setVisibility(View.GONE);
+            }
         }
 
         @Override
         public void onClick(View view) {
             Log.i(TAG, "onClick adapter rep item");
-//            Integer position = getAdapterPosition();
-//            // making sure the position is valid
-//            if (position != RecyclerView.NO_POSITION) {
-//                Rep election = reps.get(position);
-//                Intent intent = new Intent(context, RepDetailActivity.class);
-//                intent.putExtra(Rep.class.getSimpleName(), Parcels.wrap(election));
-//                context.startActivity(intent);
-//            }
+            Integer position = getAdapterPosition();
+            // making sure the position is valid
+            if (position != RecyclerView.NO_POSITION) {
+                Rep rep = reps.get(position);
+                Intent intent = new Intent(context, RepDetailsActivity.class);
+                intent.putExtra(Rep.class.getSimpleName(), Parcels.wrap(rep));
+                context.startActivity(intent);
+            }
 
         }
     }

@@ -1,6 +1,7 @@
 package com.example.votingapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +28,7 @@ import com.example.votingapp.ReminderBroadcast;
 import com.example.votingapp.adapters.ContestAdapter;
 import com.example.votingapp.adapters.ElectionsAdapter;
 import com.example.votingapp.adapters.LocationAdapter;
+import com.example.votingapp.fragments.ActionCompleteFragment;
 import com.example.votingapp.models.Action;
 import com.example.votingapp.models.Contest;
 import com.example.votingapp.models.Election;
@@ -48,6 +50,7 @@ import java.util.List;
 
 import okhttp3.Headers;
 
+import static com.example.votingapp.MethodLibrary.API_DATE_FORMAT;
 import static com.example.votingapp.MethodLibrary.openUrl;
 
 public class ElectionDetailsActivity extends AppCompatActivity {
@@ -101,12 +104,14 @@ public class ElectionDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(election.getName());
         tvElectionDay.setText(election.getSimpleElectionDay() + "");
         cbDeadlines[0].setText("Register to Vote (" + election.getRegisterDeadline() + ")");
-        if (!cbDeadlines[0].isChecked()) {
-            long miliSecsDate = milliseconds(election.getRegisterDeadline());
-            scheduleNotification(miliSecsDate);
-        }
         cbDeadlines[1].setText("Send in Absentee Ballot Application (" + election.getAbsenteeDeadline() + ")");
         cbDeadlines[2].setText("Vote!! (" + election.getVoteDeadline() + ")");
+
+        // set notification if not voted yet
+        if (!cbDeadlines[2].isChecked()) {
+            long miliSecsDate = milliseconds(election.getElectionReminderDate());
+            scheduleNotification(miliSecsDate);
+        }
 
         tvRegisterDeadline.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,9 +128,9 @@ public class ElectionDetailsActivity extends AppCompatActivity {
         // set onchecklisteners for checkboxes
         for (int i = 0 ; i<cbDeadlines.length; i++) {
             final int finalI = i;
-            cbDeadlines[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            cbDeadlines[i].setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                public void onClick(View view) {
                     onCheckDeadline(finalI);
                 }
             });
@@ -148,7 +153,7 @@ public class ElectionDetailsActivity extends AppCompatActivity {
 
     public static long milliseconds(String date)
     {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
+        SimpleDateFormat sdf = new SimpleDateFormat(API_DATE_FORMAT);
         try
         {
             Date mDate = sdf.parse(date);
@@ -183,12 +188,20 @@ public class ElectionDetailsActivity extends AppCompatActivity {
         if (cbDeadlines[cbIndex].isChecked()) {
             Log.i(TAG, "button checked");
             actions.get(cbIndex).setStatus("done");
+            openCongratsFragment(actions.get(cbIndex));
         } else {
             Log.i(TAG, "button unchecked");
             actions.get(cbIndex).setStatus("unfinished");
         }
         Network.updateAction(actions.get(cbIndex));
     }
+
+    public void openCongratsFragment(Action action) {
+        FragmentManager fm = getSupportFragmentManager();
+        ActionCompleteFragment actionCompleteFragment = ActionCompleteFragment.newInstance(this, action);
+        actionCompleteFragment.show(fm, "fragment_compose");
+    }
+
     public static void addActions(List<Action> newActions) {
         actions.addAll(newActions);
     }
@@ -202,6 +215,7 @@ public class ElectionDetailsActivity extends AppCompatActivity {
         } else {
             addActions(actions);
             for (Action action : actions) {
+                Log.i(TAG, "here: Action: " + action.getName());
                 // check if each action is completed or not
                 for (int i = 0 ; i< Network.ACTION_NAMES.length; i++) {
                     if (action.getName().equals(Network.ACTION_NAMES[i])) {

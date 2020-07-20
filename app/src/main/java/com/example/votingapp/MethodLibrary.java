@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 
 import androidx.fragment.app.FragmentManager;
@@ -74,6 +75,13 @@ public class MethodLibrary {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + phone));
         context.startActivity(intent);
+    }
+
+    public static void shareContentHTML(Context context, String html) {
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        sharingIntent.setType("text/html");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html.fromHtml(html));
+        context.startActivity(Intent.createChooser(sharingIntent, "Share using"));
     }
 
     public static void sendEmail(String emailTo, String subject, String body, PackageManager packageManager, Context context) {

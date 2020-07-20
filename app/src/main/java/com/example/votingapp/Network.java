@@ -36,7 +36,7 @@ public class Network {
     public static final String VOTER_INFO_URL = "https://www.googleapis.com/civicinfo/v2/voterinfo";
     public static final String REPS_URL = "https://www.googleapis.com/civicinfo/v2/representatives";
     private static final String TAG = "Network";
-    public static final String[] ACTION_NAMES = {"Registered to Vote", "Absentee Ballot", "Voted"};
+    public static final String[] ACTION_NAMES = {"registered to vote", "sent in absentee ballot", "voted"};
 
 //    public static Integer primaryElectionId = 0;
 //    public static List<Election> allElections = new ArrayList<>();
@@ -249,6 +249,7 @@ public class Network {
     public static void createElectionActions(Election election) {
         final List<Action> actions = new ArrayList<>();
         for (String name : ACTION_NAMES) {
+            Log.i(TAG, "action names: " + name);
             final Action action = new Action();
             action.setUser(ParseUser.getCurrentUser());
             action.setElectionId(election.getId());

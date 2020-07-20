@@ -30,6 +30,7 @@ public class Election {
     public static final int REGISTER_DAYS_BEFORE = -30;
     private static final int ABSENTEE_DAYS_BEFORE = -7;
     private static final String TAG = "Election";
+    private static final int REMINDER_DAYS_BEFORE = -3;
     String name;
     String electionDay;
     int id;
@@ -51,6 +52,10 @@ public class Election {
 
     public String getRegisterDeadline() {
         return getDaysBeforeDate(electionDay, REGISTER_DAYS_BEFORE, API_DATE_FORMAT, NUMBER_DATE_FORMAT);
+    }
+
+    public String getElectionReminderDate() {
+        return getDaysBeforeDate(electionDay, REMINDER_DAYS_BEFORE, API_DATE_FORMAT, API_DATE_FORMAT);
     }
 
     public String getAbsenteeDeadline() {

@@ -33,8 +33,8 @@ public class ReminderBroadcast extends BroadcastReceiver {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.question_menu_icon)
-                .setContentTitle("Register to Vote!")
-                .setContentText("Make sure you get your forms in before the deadline!")
+                .setContentTitle("Don't forget to vote")
+                .setContentText("Your vote, your voice! Make a plan for when you will go to the polls on election day. If you are voting by mail, block a specific time to mail our your ballot.")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);

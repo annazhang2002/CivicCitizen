@@ -29,6 +29,10 @@ android {
     }
 }
 
+ext {
+    parseVersion = "1.17.3"
+}
+
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -64,4 +68,7 @@ dependencies {
 
     // RECYCLER VIEWS
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
+    // NOTIFICATIONS
+    implementation "com.android.support:support-compat:28.0.0"
 }

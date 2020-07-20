@@ -27,6 +27,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/fileprovider" />
         </provider>
+        <receiver android:name=".ReminderBroadcast"/>
 
         <activity android:name=".activities.EditProfileActivity" />
         <activity android:name=".activities.ContestDetailActivity" />

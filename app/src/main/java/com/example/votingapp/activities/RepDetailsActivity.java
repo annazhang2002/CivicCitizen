@@ -3,9 +3,13 @@ package com.example.votingapp.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,6 +19,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.votingapp.MethodLibrary;
 import com.example.votingapp.R;
+import com.example.votingapp.ReminderBroadcast;
 import com.example.votingapp.fragments.ComposeDialogFragment;
 import com.example.votingapp.models.Rep;
 
@@ -22,6 +27,8 @@ import org.parceler.Parcels;
 import org.w3c.dom.Text;
 
 import java.util.HashMap;
+
+import static androidx.core.content.ContextCompat.getSystemService;
 
 public class RepDetailsActivity extends AppCompatActivity {
     Rep rep;

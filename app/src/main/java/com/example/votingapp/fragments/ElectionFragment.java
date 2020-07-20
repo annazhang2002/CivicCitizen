@@ -1,10 +1,19 @@
 package com.example.votingapp.fragments;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +31,8 @@ import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.votingapp.BuildConfig;
 import com.example.votingapp.Network;
+import com.example.votingapp.ReminderBroadcast;
+import com.example.votingapp.activities.LoginActivity;
 import com.example.votingapp.activities.MainActivity;
 import com.example.votingapp.adapters.ElectionsAdapter;
 import com.example.votingapp.models.Contest;
@@ -39,9 +50,14 @@ import java.util.List;
 
 import okhttp3.Headers;
 
+import static android.content.Context.ALARM_SERVICE;
+import static androidx.core.content.ContextCompat.getSystemService;
+import static com.example.votingapp.ParseApplication.CHANNEL_ID;
+
 public class ElectionFragment extends Fragment {
 
     private static final String TAG = "ElectionFragment";
+    private NotificationManagerCompat notificationManager;
     static List<Election> elections;
     static RecyclerView rvElections;
     static ElectionsAdapter adapter;
@@ -67,6 +83,9 @@ public class ElectionFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        notificationManager = NotificationManagerCompat.from(getContext());
+
         elections = new ArrayList<>();
         rvElections = view.findViewById(R.id.rvElections);
         tvGone = view.findViewById(R.id.tvNone);

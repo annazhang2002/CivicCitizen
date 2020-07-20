@@ -103,4 +103,5 @@ public class MethodLibrary {
     public static String parseAddress(JSONObject addObj) throws JSONException {
         return addObj.getString("line1") + ", " + addObj.getString("city") + ", " + addObj.getString("state") + " " + addObj.getString("zip");
     }
+
 }

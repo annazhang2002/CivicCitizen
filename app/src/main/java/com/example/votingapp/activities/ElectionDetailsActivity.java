@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +23,7 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.votingapp.BuildConfig;
 import com.example.votingapp.Network;
 import com.example.votingapp.R;
+import com.example.votingapp.ReminderBroadcast;
 import com.example.votingapp.adapters.ContestAdapter;
 import com.example.votingapp.adapters.ElectionsAdapter;
 import com.example.votingapp.adapters.LocationAdapter;
@@ -38,7 +41,9 @@ import org.json.JSONException;
 import org.parceler.Parcels;
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.Headers;
@@ -96,6 +101,10 @@ public class ElectionDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(election.getName());
         tvElectionDay.setText(election.getSimpleElectionDay() + "");
         cbDeadlines[0].setText("Register to Vote (" + election.getRegisterDeadline() + ")");
+        if (!cbDeadlines[0].isChecked()) {
+            long miliSecsDate = milliseconds(election.getRegisterDeadline());
+            scheduleNotification(miliSecsDate);
+        }
         cbDeadlines[1].setText("Send in Absentee Ballot Application (" + election.getAbsenteeDeadline() + ")");
         cbDeadlines[2].setText("Vote!! (" + election.getVoteDeadline() + ")");
 
@@ -124,6 +133,32 @@ public class ElectionDetailsActivity extends AppCompatActivity {
 
         Network.getElectionDetails(election);
         Network.queryActions(election);
+    }
+
+    public void scheduleNotification(long millis) {
+        Log.i(TAG, "notification scheduled");
+        Intent intent = new Intent(this, ReminderBroadcast.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,
+                millis,
+                pendingIntent);
+    }
+
+    public static long milliseconds(String date)
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
+        try
+        {
+            Date mDate = sdf.parse(date);
+            long timeInMilliseconds = mDate.getTime();
+            Log.i(TAG, "Date in milli :: " + timeInMilliseconds);
+            return timeInMilliseconds;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public static void addContests(JSONArray array) {

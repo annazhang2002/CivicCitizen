@@ -53,14 +53,14 @@ public class ElectionsAdapter extends RecyclerView.Adapter<ElectionsAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tvName;
         TextView tvElectionDay;
-        TextView tvDistrict;
+//        TextView tvDistrict;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             tvName = itemView.findViewById(R.id.tvName);
             tvElectionDay = itemView.findViewById(R.id.tvElectionDay);
-            tvDistrict = itemView.findViewById(R.id.tvTitle);
+//            tvDistrict = itemView.findViewById(R.id.tvTitle);
 
             itemView.setOnClickListener(this);
         }
@@ -68,7 +68,7 @@ public class ElectionsAdapter extends RecyclerView.Adapter<ElectionsAdapter.View
         public void bind(Election election) {
             tvName.setText(election.getName());
             tvElectionDay.setText(election.getShortElectionDay() + "");
-            tvDistrict.setText(election.getDivision());
+//            tvDistrict.setText(election.getDivision());
         }
 
         @Override

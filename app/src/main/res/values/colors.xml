@@ -5,6 +5,6 @@
     <color name="colorAccent">#2273FF</color>
     <color name="lightBlue">#B7D4FF</color>
     <color name="white">#FFFFFF</color>
-    <color name="inactive_tab_color">#B4B4B4</color>
+    <color name="bottom_tabs">#3F51B5</color>
     <color name="gray">#B4B4B4</color>
 </resources>

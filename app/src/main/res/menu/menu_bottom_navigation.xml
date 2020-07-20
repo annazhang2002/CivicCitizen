@@ -3,18 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_home"
+        android:icon="@drawable/home_icon_menu"
         android:title="Home"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_representatives"
-        android:title="Representatives"
-        app:showAsAction="ifRoom" />
+        android:icon="@drawable/rep_icon_menu"
+        android:title="Reps"
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_faqs"
+        android:icon="@drawable/question_menu_icon"
         android:title="FAQs"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_profile"
+        android:icon="@drawable/profile_icon_menu"
         android:title="Profile"
         app:showAsAction="always" />
 </menu>

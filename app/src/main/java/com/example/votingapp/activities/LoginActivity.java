@@ -2,6 +2,7 @@ package com.example.votingapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText etAddressZip;
     Button btnEnter;
     TextView tvError;
+    ProgressDialog pd;
 
     // string for whether it is login or signup
     String type;
@@ -50,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
 
         type = getIntent().getStringExtra("type");
 
+        createProgressDialog();
         etUsername = findViewById(R.id.etUsername);
         etName = findViewById(R.id.etName);
         etPassword = findViewById(R.id.etPassword);
@@ -113,10 +116,12 @@ public class LoginActivity extends AppCompatActivity {
                 if (e != null) {
                     Log.e(TAG, "Issue with signup", e);
                     tvError.setText(e.getMessage());
+                    pd.hide();
                     return;
                 }
                 tvError.setText("");
                 goMainActivity();
+                pd.hide();
             }
         });
     }
@@ -124,6 +129,7 @@ public class LoginActivity extends AppCompatActivity {
     private void loginUser(String username, String password) {
         Log.i(TAG, "Attempting to login user " + username);
         // check if the credentials are correct
+        pd.show();
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
@@ -136,8 +142,12 @@ public class LoginActivity extends AppCompatActivity {
                 goMainActivity();
             }
         });
+    }
 
-
+    public void createProgressDialog() {
+        pd = new ProgressDialog(this);
+        pd.setTitle("Loading...");
+        pd.setCancelable(false);
     }
 
     public void goMainActivity() {

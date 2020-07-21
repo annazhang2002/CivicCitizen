@@ -6,11 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.votingapp.R;
 import com.example.votingapp.models.FAQ;
 
@@ -53,6 +55,8 @@ public class FAQAdapter extends RecyclerView.Adapter<FAQAdapter.ViewHolder> {
         TextView tvQuestion;
         TextView tvAnswer;
         TextView tvUrl;
+        ImageView ivArrow;
+        boolean isOpen;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -60,15 +64,19 @@ public class FAQAdapter extends RecyclerView.Adapter<FAQAdapter.ViewHolder> {
             tvQuestion = itemView.findViewById(R.id.tvQuestion);
             tvAnswer = itemView.findViewById(R.id.tvAnswer);
             tvUrl = itemView.findViewById(R.id.tvUrl);
+            ivArrow = itemView.findViewById(R.id.ivArrow);
+            isOpen = false;
 
             itemView.setOnClickListener(this);
         }
 
         public void bind(FAQ faq) {
+            tvAnswer.setVisibility(View.GONE);
+            tvUrl.setVisibility(View.GONE);
+
             tvQuestion.setText(faq.getQuestion());
             tvAnswer.setText(faq.getAnswer());
             tvUrl.setText(faq.getUrl());
-
         }
 
         @Override
@@ -77,10 +85,16 @@ public class FAQAdapter extends RecyclerView.Adapter<FAQAdapter.ViewHolder> {
             Integer position = getAdapterPosition();
             // making sure the position is valid
             if (position != RecyclerView.NO_POSITION) {
-//                FAQ faq = faqs.get(position);
-//                Intent intent = new Intent(context, FAQDetailActivity.class);
-//                intent.putExtra(FAQ.class.getSimpleName(), Parcels.wrap(faq));
-//                context.startActivity(intent);
+                if (isOpen) {
+                    tvAnswer.setVisibility(View.GONE);
+                    tvUrl.setVisibility(View.GONE);
+                    Glide.with(context).load(R.drawable.ic_arrow_drop_down_black_18dp).into(ivArrow);
+                } else {
+                    tvAnswer.setVisibility(View.VISIBLE);
+                    tvUrl.setVisibility(View.VISIBLE);
+                    Glide.with(context).load(R.drawable.ic_arrow_drop_up_black_18dp).into(ivArrow);
+                }
+                isOpen = !isOpen;
             }
 
         }

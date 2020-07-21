@@ -33,9 +33,42 @@ public class InfoFragment extends Fragment {
     private static final String TAG = "InfoFragment";
 //    private String apiKey = BuildConfig.GOOGLE_API_KEY;
 //    AsyncHttpClient client;
-    public static final String[] QUESTIONS = {"Where do I find information about my state's elections?"};
-    public static final String[] ANSWERS = {"You learn more about any upcoming general elections in your state at the following link."};
-    public static final String[] URL_KEYS = {"electionInfoUrl"};
+    public static final String[] QUESTIONS = {
+            "Where do I find information about my state's elections?",
+            "How do I register to vote?",
+            "Where can I check if I am registered to vote?",
+            "I will not be in my home state during the election. Can I still vote?",
+            "Where do I go to vote?",
+            "Where can I find information about the election ballot?",
+            "What is the deadline to register to vote?",
+            "What is the deadline to get an absentee ballot?"
+
+
+    };
+    public static final String[] ANSWERS = {
+            "You learn more about any upcoming general elections in your state at the following link.",
+            "Using the link below, you can access your state's website with a form that will allow you to register to vote. An alternative is also to visit https://www.vote.org/register-to-vote/",
+            "Your state has provided the url below to confirm your registration. An alternative is also to visit https://www.vote.org/am-i-registered-to-vote/ which is one of the fastest ways to check you voter registration.",
+            "Yes you can! You just need to get an absentee ballot that will be mailed to your current address. The link below has more information about your state's absentee voting policies",
+            "There are many polling locations for each election. To look up where your polling locations are, click the link below",
+            "The link below has a lot of information about the ballot in your specific state. You can learn about ballot measures, deadlines, and candidates.",
+            "Voting deadlines vary between states, but the deadline is generally around 30 days before an election. The link below is a great resource to find your state's registration deadline. ",
+            "Absentee application deadlines vary between states, but generally applications must be mailed in around 15 days before an election. The link below is a great resource to find your state's registration deadline. "
+
+    };
+    public static final String[] URL_KEYS = {
+            "electionInfoUrl",
+            "electionRegistrationUrl",
+            "electionRegistrationConfirmationUrl",
+            "absenteeVotingInfoUrl",
+            "votingLocationFinderUrl",
+            "ballotInfoUrl"
+    };
+
+    public static final String[] EXTRA_URLS = {
+            "https://www.vote.org/voter-registration-deadlines/",
+            "https://www.vote.org/absentee-ballot-deadlines/"
+    };
 
     // variables with information about the state urls
     Integer electionId;
@@ -43,18 +76,6 @@ public class InfoFragment extends Fragment {
     static String stateName;
 
     static TextView tvName;
-    static TextView tvElectionInfoUrl;
-    static TextView tvElectionRegistrationUrl;
-    static TextView tvElectionRegistrationConfirmationUrl;
-    static TextView tvAbsenteeVotingUrl;
-    static TextView tvLocationFinderUrl;
-    static TextView tvBallotInfoUrl;
-    static ConstraintLayout cl1;
-    static ConstraintLayout cl2;
-    static ConstraintLayout cl3;
-    static ConstraintLayout cl4;
-    static ConstraintLayout cl5;
-    static ConstraintLayout cl6;
 
     static List<FAQ> faqs;
     RecyclerView rvFAQs;
@@ -87,37 +108,26 @@ public class InfoFragment extends Fragment {
         rvFAQs.setLayoutManager(new LinearLayoutManager(getContext()));
         rvFAQs.setAdapter(faqAdapter);
 
-        tvElectionInfoUrl = view.findViewById(R.id.tvUrl);
-        tvElectionRegistrationUrl = view.findViewById(R.id.tvElectionRegistrationUrl);
-        tvElectionRegistrationConfirmationUrl = view.findViewById(R.id.tvElectionRegistrationConfirmationUrl);
-        tvAbsenteeVotingUrl = view.findViewById(R.id.tvAbsenteeVotingUrl);
-        tvLocationFinderUrl = view.findViewById(R.id.tvLocationFinderUrl);
-        tvBallotInfoUrl = view.findViewById(R.id.tvBallotInfoUrl);
-        cl1 = view.findViewById(R.id.cl1);
-        cl2 = view.findViewById(R.id.cl12);
-        cl3 = view.findViewById(R.id.cl3);
-        cl4 = view.findViewById(R.id.cl4);
-        cl5 = view.findViewById(R.id.cl5);
-        cl6 = view.findViewById(R.id.cl6);
         electionId = 0;
         Network.getStateInfo(electionId);
     }
 
-    public static List<FAQ> getFAQs(JSONObject stateurls) {
-        List<FAQ> faqs = new ArrayList<>();
-
-        for (int i =0 ; i< QUESTIONS.length; i++) {
+    public static void getFAQs(JSONObject stateurls) {
+        // get the urls from the API
+        for (int i =0 ; i< URL_KEYS.length; i++) {
             try {
-                String electionInfoUrl = stateurls.getString("electionInfoUrl");
-                tvElectionInfoUrl.setText(electionInfoUrl);
+                String url = stateurls.getString(URL_KEYS[i]);
+                faqs.add(new FAQ(QUESTIONS[i], ANSWERS[i], url));
             } catch (JSONException e) {
                 e.printStackTrace();
-                cl1.setVisibility(View.GONE);
             }
-            faqs.add(new FAQ(QUESTIONS[i], ANSWERS[i], URL_KEYS[i]));
         }
-
-        return faqs;
+        // get a list of the extra urls
+        for (int i = 0; i< EXTRA_URLS.length; i++) {
+            Integer qaIndex = i + URL_KEYS.length;
+            faqs.add(new FAQ(QUESTIONS[qaIndex], ANSWERS[qaIndex], EXTRA_URLS[i]));
+        }
+        faqAdapter.notifyDataSetChanged();
     }
 
     public static void parseStateObject(JSONObject state) {
@@ -126,57 +136,10 @@ public class InfoFragment extends Fragment {
             JSONObject stateurls = state.getJSONObject("electionAdministrationBody");
             // set the set of variables in the layout
             tvName.setText(stateName + " Voting Information");
-            getUrls(stateurls);
+            getFAQs(stateurls);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-    }
-
-    // method to retrieve all of the urls from the JSONObject
-    public static void getUrls(JSONObject stateurls) {
-        // try catches for all of the urls
-        try {
-            String electionInfoUrl = stateurls.getString("electionInfoUrl");
-            tvElectionInfoUrl.setText(electionInfoUrl);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            cl1.setVisibility(View.GONE);
-        }
-        try {
-            String electionRegistrationUrl = stateurls.getString("electionRegistrationUrl");
-            tvElectionRegistrationUrl.setText(electionRegistrationUrl);
-        } catch (Exception e) {
-            e.printStackTrace();
-            cl2.setVisibility(View.GONE);
-        }
-        try {
-            String electionRegistrationConfirmationUrl = stateurls.getString("electionRegistrationConfirmationUrl");
-            tvElectionRegistrationConfirmationUrl.setText(electionRegistrationConfirmationUrl);
-        } catch (Exception e) {
-            e.printStackTrace();
-            cl3.setVisibility(View.GONE);
-        }
-        try {
-            String absenteeVotingInfoUrl = stateurls.getString("absenteeVotingInfoUrl");
-            tvAbsenteeVotingUrl.setText(absenteeVotingInfoUrl);
-        } catch (Exception e) {
-            e.printStackTrace();
-            cl4.setVisibility(View.GONE);
-        }
-        try {
-            String locationFinderUrl = stateurls.getString("votingLocationFinderUrl");
-            tvLocationFinderUrl.setText(locationFinderUrl);
-        } catch (Exception e) {
-            e.printStackTrace();
-            cl5.setVisibility(View.GONE);
-        }
-        try {
-            String ballotInfoUrl = stateurls.getString("ballotInfoUrl");
-            tvBallotInfoUrl.setText(ballotInfoUrl);
-        } catch (Exception e) {
-            e.printStackTrace();
-            cl5.setVisibility(View.GONE);
-        }
     }
 }

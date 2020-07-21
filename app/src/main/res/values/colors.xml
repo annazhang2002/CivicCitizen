@@ -7,4 +7,5 @@
     <color name="white">#FFFFFF</color>
     <color name="bottom_tabs">#3F51B5</color>
     <color name="gray">#B4B4B4</color>
+    <color name="inactive_tab">#DDDDDD</color>
 </resources>

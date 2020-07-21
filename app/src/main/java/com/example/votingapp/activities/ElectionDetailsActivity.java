@@ -29,6 +29,8 @@ import com.example.votingapp.adapters.ContestAdapter;
 import com.example.votingapp.adapters.ElectionsAdapter;
 import com.example.votingapp.adapters.LocationAdapter;
 import com.example.votingapp.fragments.ActionCompleteFragment;
+import com.example.votingapp.fragments.ContestsFragment;
+import com.example.votingapp.fragments.LocationsFragment;
 import com.example.votingapp.models.Action;
 import com.example.votingapp.models.Contest;
 import com.example.votingapp.models.Election;
@@ -56,21 +58,20 @@ import static com.example.votingapp.MethodLibrary.openUrl;
 public class ElectionDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "ElectionDetailsActivity";
+    public static FragmentManager fragmentManager;
     static Election election;
     static ProgressDialog pd;
-    static List<Contest> contests;
-    static List<Location> locations;
     static List<Action> actions;
-    RecyclerView rvContests;
-    static ContestAdapter contestAdapter;
-    RecyclerView rvLocations;
-    static LocationAdapter locationAdapter;
+    static List<Location> locations;
+    static List<Contest> contests;
     public static CheckBox[] cbDeadlines;
     TextView tvRegisterDeadline;
     TextView tvAbsenteeDeadline;
+    TextView tvLocations;
+    TextView tvContests;
 
     TextView tvElectionDay;
-    Context context;
+    static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,21 +79,14 @@ public class ElectionDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_election_details);
 
         context = this;
+        fragmentManager = getSupportFragmentManager();
         election = Parcels.unwrap(getIntent().getParcelableExtra(Election.class.getSimpleName()));
-        contests = new ArrayList<>();
-        rvContests = findViewById(R.id.rvContests);
-        contestAdapter = new ContestAdapter(this, contests);
-        rvContests.setLayoutManager(new LinearLayoutManager(this));
-        rvContests.setAdapter(contestAdapter);
-        locations = new ArrayList<>();
-        rvLocations = findViewById(R.id.rvLocations);
-        locationAdapter = new LocationAdapter(this, locations);
-        rvLocations.setLayoutManager(new LinearLayoutManager(this));
-        rvLocations.setAdapter(locationAdapter);
 
         createProgressDialog();
         pd.show();
         actions = new ArrayList<>();
+        locations = new ArrayList<>();
+        contests = new ArrayList<>();
         cbDeadlines = new CheckBox[3];
         cbDeadlines[0] = findViewById(R.id.cbRegisterVote);
         cbDeadlines[1] = findViewById(R.id.cbAbsentee);
@@ -100,6 +94,10 @@ public class ElectionDetailsActivity extends AppCompatActivity {
         tvElectionDay = findViewById(R.id.tvElectionDay);
         tvRegisterDeadline = findViewById(R.id.tvRegisterDeadline);
         tvAbsenteeDeadline = findViewById(R.id.tvAbsenteeDeadline);
+        tvContests = findViewById(R.id.tvContests);
+        tvLocations = findViewById(R.id.tvLocations);
+        tvLocations.setBackgroundColor(getResources().getColor(R.color.white));
+        tvContests.setBackgroundColor(getResources().getColor(R.color.inactive_tab));
 
         getSupportActionBar().setTitle(election.getName());
         tvElectionDay.setText(election.getSimpleElectionDay() + "");
@@ -107,9 +105,29 @@ public class ElectionDetailsActivity extends AppCompatActivity {
         cbDeadlines[1].setText("Send in Absentee Ballot Application (" + election.getAbsenteeDeadline() + ")");
         cbDeadlines[2].setText("Vote!! (" + election.getVoteDeadline() + ")");
 
+        // set click listeners for locations and contest toggle
+        tvLocations.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragmentManager.beginTransaction().replace(R.id.flContainer, LocationsFragment.newInstance(context, election, locations)).commit();
+                tvLocations.setBackgroundColor(getResources().getColor(R.color.white));
+                tvContests.setBackgroundColor(getResources().getColor(R.color.inactive_tab));
+            }
+        });
+        tvContests.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragmentManager.beginTransaction().replace(R.id.flContainer, ContestsFragment.newInstance(context, election, contests)).commit();
+                tvLocations.setBackgroundColor(getResources().getColor(R.color.inactive_tab));
+                tvContests.setBackgroundColor(getResources().getColor(R.color.white));
+            }
+        });
+
         // set notification if not voted yet
         if (!cbDeadlines[2].isChecked()) {
-            long miliSecsDate = milliseconds(election.getElectionReminderDate());
+            long miliSecsDate = milliseconds("2020-07-21");
+
+//            long miliSecsDate = milliseconds(election.getElectionReminderDate());
             scheduleNotification(miliSecsDate);
         }
 
@@ -166,23 +184,7 @@ public class ElectionDetailsActivity extends AppCompatActivity {
         return 0;
     }
 
-    public static void addContests(JSONArray array) {
-        try {
-            contests.addAll(Contest.fromJSON(array));
-            contestAdapter.notifyDataSetChanged();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-    public static void addLocations(JSONArray pollingLocations, String type) {
-        try {
-            locations.addAll(Location.fromJSON(pollingLocations, type));
-            locationAdapter.notifyDataSetChanged();
-            pd.hide();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     public void onCheckDeadline(Integer cbIndex) {
         if (cbDeadlines[cbIndex].isChecked()) {
@@ -204,6 +206,7 @@ public class ElectionDetailsActivity extends AppCompatActivity {
 
     public static void addActions(List<Action> newActions) {
         actions.addAll(newActions);
+        pd.hide();
     }
 
     public static void handleParseActions(List<Action> actions) {
@@ -229,6 +232,26 @@ public class ElectionDetailsActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    public static void addLocations(JSONArray pollingLocations, String type) {
+        try {
+            locations.addAll(Location.fromJSON(pollingLocations, type));
+            Log.i(TAG, String.valueOf(locations));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        fragmentManager.beginTransaction().replace(R.id.flContainer, LocationsFragment.newInstance(context, election, locations)).commit();
+    }
+
+    public static void addContests(JSONArray array) {
+        try {
+            contests.addAll(Contest.fromJSON(array));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        fragmentManager.beginTransaction().replace(R.id.flContainer, ContestsFragment.newInstance(context, election, contests)).commit();
     }
 
     public void createProgressDialog() {

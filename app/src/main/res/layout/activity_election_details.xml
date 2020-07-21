@@ -85,45 +85,45 @@
             android:textAlignment="textEnd"
             android:textStyle="italic" />
 
-        <TextView
-            android:id="@+id/tvContests"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rvLocations"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="72dp"
-            android:layout_marginTop="10dp"
-            android:text="Ballot Contests"
-            android:textSize="40sp" />
-
-        <TextView
-            android:id="@+id/tvPollingLocations"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/cbVote"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="69dp"
-            android:layout_marginTop="6dp"
-            android:text="Polling Locations"
-            android:textSize="40sp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvContests"
+        <FrameLayout
+            android:id="@+id/flContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvContests"
+            android:layout_below="@id/llToggle"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="11dp"
-            android:layout_marginEnd="5dp" />
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvLocations"
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/llToggle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/tvPollingLocations"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="3dp"
-            android:layout_marginTop="1dp" />
+            android:layout_height="30dp"
+            android:layout_below="@+id/cbVote"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="2dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvLocations"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/border"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="Polling Locations" />
+
+            <TextView
+                android:id="@+id/tvContests"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/border"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="Ballot Contests" />
+        </LinearLayout>
 
     </RelativeLayout>
 

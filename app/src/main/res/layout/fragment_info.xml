@@ -23,21 +23,31 @@
             android:textStyle="bold"
             tools:text="Michigan Voter Information" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFAQs"
+            android:layout_width="409dp"
+            android:layout_height="499dp"
+            android:layout_below="@+id/tvName"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvName"
+            android:layout_below="@+id/rvFAQs"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="98dp"
             android:layout_marginEnd="0dp">
 
             <TextView
-                android:id="@+id/tvElectionInfoQ"
+                android:id="@+id/tvQuestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="2dp"
                 android:text="Where do I find information about my state's elections?"
                 android:textColor="#303030"
                 android:textStyle="bold"
@@ -45,7 +55,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tvElectionInfoA"
+                android:id="@+id/tvAnswer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -54,10 +64,10 @@
                 android:text="You learn more about any upcoming general elections in your state at the following link."
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvElectionInfoQ" />
+                app:layout_constraintTop_toBottomOf="@+id/tvQuestion" />
 
             <TextView
-                android:id="@+id/tvElectionInfoUrl"
+                android:id="@+id/tvUrl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -65,8 +75,9 @@
                 android:autoLink="all"
                 android:linksClickable="true"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvElectionInfoA"
+                app:layout_constraintTop_toBottomOf="@+id/tvAnswer"
                 tools:text="http://www.sos.ca.gov/elections" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

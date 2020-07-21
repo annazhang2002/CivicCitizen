@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Fragment fragment = new Fragment();
+                menuItem.setEnabled(true);
                 switch (menuItem.getItemId()) {
                     case R.id.action_home:
                         fragment = new ElectionFragment();

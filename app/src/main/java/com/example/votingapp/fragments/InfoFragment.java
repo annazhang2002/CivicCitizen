@@ -1,42 +1,41 @@
 package com.example.votingapp.fragments;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.solver.widgets.ConstraintTableLayout;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.codepath.asynchttpclient.AsyncHttpClient;
-import com.codepath.asynchttpclient.RequestParams;
-import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.example.votingapp.BuildConfig;
 import com.example.votingapp.Network;
 import com.example.votingapp.R;
-import com.example.votingapp.activities.MainActivity;
-import com.example.votingapp.models.Election;
-import com.example.votingapp.models.User;
-import com.parse.ParseUser;
+import com.example.votingapp.adapters.FAQAdapter;
+import com.example.votingapp.adapters.LocationAdapter;
+import com.example.votingapp.models.FAQ;
+import com.example.votingapp.models.Location;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import okhttp3.Headers;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class InfoFragment extends Fragment {
     private static final String TAG = "InfoFragment";
 //    private String apiKey = BuildConfig.GOOGLE_API_KEY;
 //    AsyncHttpClient client;
+    public static final String[] QUESTIONS = {"Where do I find information about my state's elections?"};
+    public static final String[] ANSWERS = {"You learn more about any upcoming general elections in your state at the following link."};
+    public static final String[] URL_KEYS = {"electionInfoUrl"};
 
     // variables with information about the state urls
     Integer electionId;
@@ -56,6 +55,10 @@ public class InfoFragment extends Fragment {
     static ConstraintLayout cl4;
     static ConstraintLayout cl5;
     static ConstraintLayout cl6;
+
+    static List<FAQ> faqs;
+    RecyclerView rvFAQs;
+    static FAQAdapter faqAdapter;
 
 
     public InfoFragment() {
@@ -78,7 +81,13 @@ public class InfoFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         tvName = view.findViewById(R.id.tvName);
-        tvElectionInfoUrl = view.findViewById(R.id.tvElectionInfoUrl);
+        faqs = new ArrayList<>();
+        rvFAQs = view.findViewById(R.id.rvFAQs);
+        faqAdapter = new FAQAdapter(getContext(), faqs);
+        rvFAQs.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvFAQs.setAdapter(faqAdapter);
+
+        tvElectionInfoUrl = view.findViewById(R.id.tvUrl);
         tvElectionRegistrationUrl = view.findViewById(R.id.tvElectionRegistrationUrl);
         tvElectionRegistrationConfirmationUrl = view.findViewById(R.id.tvElectionRegistrationConfirmationUrl);
         tvAbsenteeVotingUrl = view.findViewById(R.id.tvAbsenteeVotingUrl);
@@ -92,6 +101,23 @@ public class InfoFragment extends Fragment {
         cl6 = view.findViewById(R.id.cl6);
         electionId = 0;
         Network.getStateInfo(electionId);
+    }
+
+    public static List<FAQ> getFAQs(JSONObject stateurls) {
+        List<FAQ> faqs = new ArrayList<>();
+
+        for (int i =0 ; i< QUESTIONS.length; i++) {
+            try {
+                String electionInfoUrl = stateurls.getString("electionInfoUrl");
+                tvElectionInfoUrl.setText(electionInfoUrl);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                cl1.setVisibility(View.GONE);
+            }
+            faqs.add(new FAQ(QUESTIONS[i], ANSWERS[i], URL_KEYS[i]));
+        }
+
+        return faqs;
     }
 
     public static void parseStateObject(JSONObject state) {

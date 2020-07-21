@@ -25,8 +25,8 @@
         android:background="@color/colorPrimaryDark"
         android:elevation="40dp"
         app:itemHorizontalTranslationEnabled="false"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+        app:itemIconTint="@drawable/bottom_tabs_selector"
+        app:itemTextColor="@drawable/bottom_tabs_selector"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/menu_bottom_navigation" />
 

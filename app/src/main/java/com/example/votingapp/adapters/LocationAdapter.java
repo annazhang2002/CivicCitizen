@@ -3,7 +3,9 @@ package com.example.votingapp.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -13,14 +15,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.MethodLibrary;
 import com.example.votingapp.R;
+import com.example.votingapp.activities.ElectionDetailsActivity;
+import com.example.votingapp.models.Election;
 import com.example.votingapp.models.Location;
 import com.example.votingapp.activities.ContestDetailActivity;
+import com.google.android.gms.maps.CameraUpdateFactory;
 
 import org.parceler.Parcels;
 
 import java.util.List;
 
 import static com.example.votingapp.MethodLibrary.openUrl;
+import static com.example.votingapp.fragments.LocationsFragment.map;
+import static com.example.votingapp.fragments.LocationsFragment.markers;
 
 // Create the basic adapter extending from RecyclerView.Adapter
 // Note that we specify the custom ViewHolder which gives us access to our views
@@ -53,7 +60,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         return locations.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvName;
         TextView tvAddress;
         TextView tvDates;
@@ -72,6 +79,20 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
             tvNotes = itemView.findViewById(R.id.tvNotes);
 
             itemView.setOnClickListener(this);
+            final GestureDetector gd = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener(){
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    openUrl(MethodLibrary.MAPS_BASE_URL + tvAddress.getText().toString(), context);
+                    return true;
+                }
+
+            });
+            itemView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return gd.onTouchEvent(event);
+                }
+            });
         }
 
         public void bind(Location location) {
@@ -89,7 +110,18 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
         @Override
         public void onClick(View view) {
-            openUrl(MethodLibrary.MAPS_BASE_URL + tvAddress.getText().toString(), context);
+            Integer position = getAdapterPosition();
+            // making sure the position is valid
+            if (position != RecyclerView.NO_POSITION) {
+                Location location = locations.get(position);
+
+                map.moveCamera(CameraUpdateFactory.newLatLng(location.getLatLng()));
+                markers.get(position).showInfoWindow();
+            }
         }
+
+
+
+
     }
 }

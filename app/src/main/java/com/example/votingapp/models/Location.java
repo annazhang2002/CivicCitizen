@@ -1,6 +1,7 @@
 package com.example.votingapp.models;
 
 import com.example.votingapp.MethodLibrary;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +22,7 @@ public class Location {
     String pollingHours;
     String type;
     String notes;
+    LatLng latLng;
 
     public Location(JSONObject jsonObject, String type) {
         try {
@@ -71,5 +73,20 @@ public class Location {
 
     public String getNotes() {
         return notes;
+    }
+
+    public void setLatLng(double lat, double lng) {
+        latLng = new LatLng(lat, lng);
+    }
+
+    public LatLng getLatLng() {
+        return latLng;
+    }
+
+    public double getLatitude() {
+        return latLng.latitude;
+    }
+    public double getLongitude() {
+        return latLng.longitude;
     }
 }

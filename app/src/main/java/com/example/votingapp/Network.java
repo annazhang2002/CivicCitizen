@@ -16,6 +16,7 @@ import com.example.votingapp.fragments.LocationsFragment;
 import com.example.votingapp.fragments.RepsFragment;
 import com.example.votingapp.models.Action;
 import com.example.votingapp.models.Election;
+import com.example.votingapp.models.Location;
 import com.example.votingapp.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -37,6 +38,7 @@ public class Network {
     public static final String ELECTION_URL = "https://www.googleapis.com/civicinfo/v2/elections";
     public static final String VOTER_INFO_URL = "https://www.googleapis.com/civicinfo/v2/voterinfo";
     public static final String REPS_URL = "https://www.googleapis.com/civicinfo/v2/representatives";
+    public static final String GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json?";
     private static final String TAG = "Network";
     public static final String[] ACTION_NAMES = {"registered to vote", "sent in absentee ballot", "voted"};
 
@@ -46,7 +48,37 @@ public class Network {
 
     public static AsyncHttpClient client = new AsyncHttpClient();
     public static String apiKey = BuildConfig.GOOGLE_API_KEY;
+    public static final String mapsApiKey = BuildConfig.GOOGLE_MAPS_API_KEY;
     public static String userState = "";
+
+    // method to get the coordinates from address
+    public static void getCoordinates(String address, final Location location) {
+        RequestParams params = new RequestParams();
+        params.put("address", address);
+        params.put("key", mapsApiKey);
+        Log.i(TAG, "Address:  " + address);
+        Log.i(TAG, "Network call url: " + GEOCODE_URL);
+        client.get(GEOCODE_URL, params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.i(TAG, "successfully got the coordinates!");
+                try {
+                    JSONObject loc = json.jsonObject.getJSONArray("results").getJSONObject(0).getJSONObject("geometry").getJSONObject("location");
+                    double lat = loc.getDouble("lat");
+                    double lng = loc.getDouble("lng");
+                    LocationsFragment.addLatLng(lat, lng, location);
+                    Log.i(TAG, "location: " + json);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.d(TAG, "onFailure to getVoterQuery, " + statusCode + ", " + response, throwable);
+            }
+        });
+    }
 
     // method to get the information from state on voting
     public static void getStateInfo(Integer electionId) {

@@ -84,6 +84,7 @@ public class ElectionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        getActivity().setTitle("Upcoming Elections");
         notificationManager = NotificationManagerCompat.from(getContext());
 
         elections = new ArrayList<>();

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.votingapp.Network;
 import com.example.votingapp.R;
+import com.example.votingapp.activities.MainActivity;
 import com.example.votingapp.adapters.FAQAdapter;
 import com.example.votingapp.adapters.LocationAdapter;
 import com.example.votingapp.models.FAQ;
@@ -107,6 +108,8 @@ public class InfoFragment extends Fragment {
         faqAdapter = new FAQAdapter(getContext(), faqs);
         rvFAQs.setLayoutManager(new LinearLayoutManager(getContext()));
         rvFAQs.setAdapter(faqAdapter);
+
+        getActivity().setTitle("Frequently Asked Questions");
 
         electionId = 0;
         Network.getStateInfo(electionId);

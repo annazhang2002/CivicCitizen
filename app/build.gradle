@@ -19,6 +19,8 @@ android {
         def apikeyProperties = new Properties()
         apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
         buildConfigField("String", "GOOGLE_API_KEY", apikeyProperties['GOOGLE_API_KEY'])
+        buildConfigField("String", "GOOGLE_MAPS_API_KEY", apikeyProperties['GOOGLE_MAPS_API_KEY'])
+        resValue "string", "GOOGLE_MAPS_API_KEY", apikeyProperties['GOOGLE_MAPS_API_KEY']
     }
 
     buildTypes {
@@ -31,6 +33,8 @@ android {
 
 ext {
     parseVersion = "1.17.3"
+    googlePlayVersion = "17.0.0"
+    permissionDispatcherVersion = "4.7.0"
 }
 
 dependencies {
@@ -71,4 +75,12 @@ dependencies {
 
     // NOTIFICATIONS
     implementation "com.android.support:support-compat:28.0.0"
+
+    // GOOGLE MAPS SDK
+    implementation "com.google.android.gms:play-services-maps:$googlePlayVersion"
+    implementation "com.google.android.gms:play-services-location:$googlePlayVersion"
+    // Utilities for Maps SDK for Android (requires Google Play Services)
+    implementation 'com.google.maps.android:android-maps-utils:2.0.3'
+    implementation "org.permissionsdispatcher:permissionsdispatcher:$permissionDispatcherVersion"
+    annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:$permissionDispatcherVersion"
 }

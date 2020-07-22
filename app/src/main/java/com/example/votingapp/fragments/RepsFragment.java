@@ -58,6 +58,8 @@ public class RepsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        getActivity().setTitle("Your Representatives");
+
         MainActivity.showPd();
         reps = new ArrayList<>();
         rvReps = view.findViewById(R.id.rvReps);

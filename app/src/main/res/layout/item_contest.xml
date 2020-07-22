@@ -23,7 +23,8 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="19dp"
         android:layout_marginEnd="37dp"
-        android:text="Level: Congressional" />
+        android:text="Level: Congressional"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/tvTitle"

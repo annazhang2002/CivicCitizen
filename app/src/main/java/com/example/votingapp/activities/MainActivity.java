@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.icu.text.IDNA;
 import android.os.Build;
@@ -29,12 +30,14 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     public static FragmentManager fragmentManager;
     static ProgressDialog pd;
+    static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        context = this;
         createProgressDialog();
         pd.show();
         fragmentManager = getSupportFragmentManager();

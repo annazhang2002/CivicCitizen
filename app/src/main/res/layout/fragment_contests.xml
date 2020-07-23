@@ -11,4 +11,28 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true" />
 
+    <TextView
+        android:id="@+id/tvNone"
+        android:layout_width="288dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="54dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="There are no contests for this election yet! \n\nFeel free to check out the FAQ tab to get more specific information"
+        android:textSize="24sp"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/btnNone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvNone"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="23dp"
+        android:text="View FAQs"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
 </RelativeLayout>

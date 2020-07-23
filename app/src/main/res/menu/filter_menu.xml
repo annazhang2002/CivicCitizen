@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_all"
+        android:title="Any"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_polling"
+        android:title="Polling Locations"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_dropoff"
+        android:title="Drop Off Locations"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_early"
+        android:title="Early Voting Sites"
+        app:showAsAction="ifRoom" />
+</menu>

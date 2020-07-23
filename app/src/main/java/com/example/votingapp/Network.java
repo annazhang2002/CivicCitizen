@@ -61,7 +61,7 @@ public class Network {
         client.get(GEOCODE_URL, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.i(TAG, "successfully got the coordinates!");
+                Log.i(TAG, "successfully got the coordinates for location: " + location.getName());
                 try {
                     JSONObject loc = json.jsonObject.getJSONArray("results").getJSONObject(0).getJSONObject("geometry").getJSONObject("location");
                     double lat = loc.getDouble("lat");

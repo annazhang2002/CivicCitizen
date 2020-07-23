@@ -3,6 +3,7 @@ package com.example.votingapp.fragments;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,8 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.votingapp.Network;
@@ -33,6 +37,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -46,6 +52,7 @@ import org.json.JSONException;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import permissions.dispatcher.NeedsPermission;
@@ -53,7 +60,7 @@ import permissions.dispatcher.NeedsPermission;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 
-public class LocationsFragment extends Fragment {
+public class LocationsFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
 
     private static final String ARG_ELECTION = "election";
     private static final String TAG = "LocationsFragment";
@@ -62,13 +69,14 @@ public class LocationsFragment extends Fragment {
 
     Election election;
     static Context context;
-    static List<Location> locations;
-    public static List<Marker> markers;
+    static List<Location> allLocations;
+    static List<Location> filteredLocations;
+    public static HashMap<String, Marker> allMarkers;
     RecyclerView rvLocations;
     static LocationAdapter locationAdapter;
     boolean locationPermissionGranted;
     FusedLocationProviderClient fusedLocationProviderClient;
-
+    TextView tvFilter;
 
     private SupportMapFragment mapFragment;
     public static GoogleMap map;
@@ -89,8 +97,8 @@ public class LocationsFragment extends Fragment {
         Bundle args = new Bundle();
         args.putParcelable(ARG_ELECTION, Parcels.wrap(election));
         context = context1;
-        locations = new ArrayList<>();
-        locations.addAll(inLocations);
+        allLocations = new ArrayList<>();
+        allLocations.addAll(inLocations);
         fragment.setArguments(args);
         return fragment;
     }
@@ -114,10 +122,19 @@ public class LocationsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvLocations = view.findViewById(R.id.rvLocations);
-        locationAdapter = new LocationAdapter(context, locations);
+        filteredLocations = new ArrayList<>();
+        filteredLocations.addAll(allLocations);
+        locationAdapter = new LocationAdapter(context, filteredLocations);
         rvLocations.setLayoutManager(new LinearLayoutManager(context));
         rvLocations.setAdapter(locationAdapter);
-        markers = new ArrayList<>();
+        allMarkers = new HashMap<>();
+        tvFilter = view.findViewById(R.id.tvFilter);
+        tvFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showMenu(view);
+            }
+        });
 
         getLocationPermission();
 
@@ -147,6 +164,62 @@ public class LocationsFragment extends Fragment {
         }
 
     }
+    public void showMenu(View anchor) {
+        PopupMenu popup = new PopupMenu(context, anchor);
+        popup.setOnMenuItemClickListener(this);
+        popup.getMenuInflater().inflate(R.menu.filter_menu, popup.getMenu());
+        popup.show();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_polling:
+                tvFilter.setText("Filter Locations :     Polling Locations");
+                filterLocations("Polling Location");
+                return true;
+            case R.id.action_dropoff:
+                tvFilter.setText("Filter Locations :     Drop Off Locations");
+                filterLocations("Drop Off Location");
+                return true;
+            case R.id.action_early:
+                tvFilter.setText("Filter Locations :     Early Voting Sites");
+                filterLocations("Early Voting Site");
+                return true;
+            case R.id.action_all:
+                tvFilter.setText("Filter Locations :     Any");
+                showAllLocations();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public void showAllLocations() {
+        filteredLocations.clear();
+        filteredLocations.addAll(allLocations);
+        locationAdapter.notifyDataSetChanged();
+        resetMarkers(true);
+    }
+
+    public void resetMarkers(boolean visibility) {
+        for (HashMap.Entry<String, Marker> entry : allMarkers.entrySet()) {
+            allMarkers.get(entry.getKey()).setVisible(visibility);
+        }
+    }
+
+    public void filterLocations(String type) {
+        filteredLocations.clear();
+        resetMarkers(false);
+        for (int i = 0 ; i< allLocations.size(); i++) {
+            Location location = allLocations.get(i);
+            if (location.getType().equals(type)) {
+                filteredLocations.add(location);
+                allMarkers.get(location.getName()).setVisible(true);
+            }
+        }
+        locationAdapter.notifyDataSetChanged();
+    }
 
     protected void loadMap(GoogleMap googleMap) {
         map = googleMap;
@@ -160,7 +233,9 @@ public class LocationsFragment extends Fragment {
     }
 
     public void getCoords() {
-        for (Location loc : locations) {
+        Log.i(TAG, "getCoords");
+        for (Location loc : allLocations) {
+            Log.i(TAG, "Location: " + loc.getName());
             Network.getCoordinates(loc.getAddress(), loc);
         }
     }
@@ -169,9 +244,14 @@ public class LocationsFragment extends Fragment {
         loc.setLatLng(lat, lng);
         Marker marker = map.addMarker(new MarkerOptions()
                 .position(loc.getLatLng())
-                .title(loc.getName()));
-        markers.add(marker);
-        Log.i(TAG, "markers: " + markers);
+                .title(loc.getName())
+                .icon(getMarkerIcon(context.getResources().getString(loc.getPillColor()))));
+        allMarkers.put(loc.getName(), marker);
+    }
+    public static BitmapDescriptor getMarkerIcon(String color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(Color.parseColor(color), hsv);
+        return BitmapDescriptorFactory.defaultMarker(hsv[0]);
     }
 
     private void getLocationPermission() {
@@ -249,7 +329,7 @@ public class LocationsFragment extends Fragment {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
                             map.moveCamera(CameraUpdateFactory
-                                    .newLatLngZoom(locations.get(0).getLatLng(), DEFAULT_ZOOM));
+                                    .newLatLngZoom(allLocations.get(0).getLatLng(), DEFAULT_ZOOM));
                             map.getUiSettings().setMyLocationButtonEnabled(false);
                         }
                     }

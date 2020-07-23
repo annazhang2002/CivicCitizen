@@ -12,8 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.votingapp.R;
+import com.example.votingapp.activities.MainActivity;
 import com.example.votingapp.adapters.ContestAdapter;
 import com.example.votingapp.models.Contest;
 import com.example.votingapp.models.Election;
@@ -36,6 +39,8 @@ public class ContestsFragment extends Fragment {
     static List<Contest> contests;
     RecyclerView rvContests;
     static ContestAdapter contestAdapter;
+    TextView tvNone;
+    Button btnNone;
 
     public ContestsFragment() {
         // Required empty public constructor
@@ -75,6 +80,18 @@ public class ContestsFragment extends Fragment {
         contestAdapter = new ContestAdapter(context, contests);
         rvContests.setLayoutManager(new LinearLayoutManager(context));
         rvContests.setAdapter(contestAdapter);
+        btnNone = view.findViewById(R.id.btnNone);
+        tvNone = view.findViewById(R.id.tvNone);
+        if (contests.size() == 0) {
+            btnNone.setVisibility(View.VISIBLE);
+            tvNone.setVisibility(View.VISIBLE);
+            btnNone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MainActivity.goInfo();
+                }
+            });
+        }
 
     }
 

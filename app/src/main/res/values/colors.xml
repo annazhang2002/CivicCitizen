@@ -8,4 +8,8 @@
     <color name="bottom_tabs">#3F51B5</color>
     <color name="gray">#B4B4B4</color>
     <color name="inactive_tab">#DDDDDD</color>
+    <color name="pill_polling">#57C2F3</color>
+    <color name="pill_early">#ED9B9B</color>
+    <color name="pill_dropoff">#CDE159</color>
+
 </resources>

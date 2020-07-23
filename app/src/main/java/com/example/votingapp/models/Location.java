@@ -1,6 +1,7 @@
 package com.example.votingapp.models;
 
 import com.example.votingapp.MethodLibrary;
+import com.example.votingapp.R;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -23,6 +24,7 @@ public class Location {
     String type;
     String notes;
     LatLng latLng;
+    Integer pillColor;
 
     public Location(JSONObject jsonObject, String type) {
         try {
@@ -33,10 +35,24 @@ public class Location {
             startDate = jsonObject.getString("startDate");
             endDate = jsonObject.getString("endDate");
             pollingHours = jsonObject.getString("pollingHours");
+            pillColor = setPillColor(type);
             notes = jsonObject.getString("notes");
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+    public Integer setPillColor(String type) {
+        if (type.equals("Polling Location")) {
+            return R.color.pill_polling;
+        } else if (type.equals("Drop Off Location")) {
+            return  R.color.pill_dropoff;
+        } else {
+            return R.color.pill_early;
+        }
+    }
+
+    public Integer getPillColor() {
+        return pillColor;
     }
 
     public static List<Location> fromJSON(JSONArray json, String type) throws JSONException {

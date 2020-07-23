@@ -2,6 +2,7 @@ package com.example.votingapp.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import com.example.votingapp.models.Election;
 import com.example.votingapp.models.Location;
 import com.example.votingapp.activities.ContestDetailActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 import org.parceler.Parcels;
 
@@ -27,7 +29,7 @@ import java.util.List;
 
 import static com.example.votingapp.MethodLibrary.openUrl;
 import static com.example.votingapp.fragments.LocationsFragment.map;
-import static com.example.votingapp.fragments.LocationsFragment.markers;
+import static com.example.votingapp.fragments.LocationsFragment.allMarkers;
 
 // Create the basic adapter extending from RecyclerView.Adapter
 // Note that we specify the custom ViewHolder which gives us access to our views
@@ -96,11 +98,14 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         }
 
         public void bind(Location location) {
+            Integer position = getAdapterPosition();
             tvName.setText(location.getName());
             tvAddress.setText(location.getAddress());
             tvDates.setText(location.getStartDate() + " - " + location.getEndDate());
             tvPollingHours.setText(location.getPollingHours());
             tvType.setText(location.getType());
+            GradientDrawable gradientDrawable = (GradientDrawable) tvType.getBackground().mutate();
+            gradientDrawable.setColor(context.getResources().getColor(location.getPillColor()));
             if (!location.getNotes().equals("NULL")) {
                 tvNotes.setText(location.getNotes());
             } else {
@@ -116,7 +121,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
                 Location location = locations.get(position);
 
                 map.moveCamera(CameraUpdateFactory.newLatLng(location.getLatLng()));
-                markers.get(position).showInfoWindow();
+                allMarkers.get(location.getName()).showInfoWindow();
             }
         }
 

@@ -8,10 +8,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 
 import androidx.fragment.app.FragmentManager;
 
-import com.example.votingapp.fragments.ComposeDialogFragment;
+import com.example.votingapp.fragments.dialogFragments.ComposeDialogFragment;
 import com.example.votingapp.models.Rep;
 
 import org.json.JSONException;
@@ -111,5 +115,4 @@ public class MethodLibrary {
     public static String parseAddress(JSONObject addObj) throws JSONException {
         return addObj.getString("line1") + ", " + addObj.getString("city") + ", " + addObj.getString("state") + " " + addObj.getString("zip");
     }
-
 }

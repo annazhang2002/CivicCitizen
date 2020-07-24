@@ -2,9 +2,17 @@
 <resources>
     <color name="colorPrimary">#002D6E</color>
     <color name="colorPrimaryDark">#001240</color>
-    <color name="colorAccent">#2273FF</color>
+    <color name="darkGrayBlue">#1D1F23</color>
+    <color name="darkDarkBlue">#000B25</color>
+    <!-- USE ONLY FOR LINKS -->
+    <color name="colorAccent">#1851B3</color>
+
+    <color name="actualAccent">#2273FF</color>
     <color name="lightBlue">#B7D4FF</color>
+    <color name="lightLightBlue">#C5DCFF</color>
+    <color name="whiteBlue">#DCEAFF</color>
     <color name="white">#FFFFFF</color>
+    <color name="almostWhite">#F1F7FF</color>
     <color name="bottom_tabs">#3F51B5</color>
     <color name="gray">#B4B4B4</color>
     <color name="inactive_tab">#DDDDDD</color>

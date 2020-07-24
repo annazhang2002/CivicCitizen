@@ -1,6 +1,5 @@
 package com.example.votingapp.fragments;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -21,12 +20,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.votingapp.Network;
 import com.example.votingapp.R;
-import com.example.votingapp.activities.ElectionDetailsActivity;
-import com.example.votingapp.activities.RepDetailsActivity;
 import com.example.votingapp.adapters.LocationAdapter;
 import com.example.votingapp.models.Election;
 import com.example.votingapp.models.Location;
@@ -43,19 +39,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import permissions.dispatcher.NeedsPermission;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
@@ -173,6 +163,7 @@ public class LocationsFragment extends Fragment implements PopupMenu.OnMenuItemC
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
+        rvLocations.smoothScrollToPosition(0);
         switch (item.getItemId()) {
             case R.id.action_polling:
                 tvFilter.setText("Filter Locations :     Polling Locations");

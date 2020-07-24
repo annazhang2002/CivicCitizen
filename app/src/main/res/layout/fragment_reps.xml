@@ -28,6 +28,8 @@
             android:layout_marginTop="11dp"
             android:layout_marginEnd="47dp"
             android:text="Your Representatives"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="@color/darkDarkBlue"
+            android:textStyle="bold" />
     </RelativeLayout>
 </ScrollView>

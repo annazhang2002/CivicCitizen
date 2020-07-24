@@ -21,7 +21,9 @@
         android:layout_below="@+id/tvFilter"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="0dp" />
+        android:layout_marginTop="0dp"
+        android:background="@color/almostWhite"
+        android:elevation="10dp" />
 
     <TextView
         android:id="@+id/tvFilter"
@@ -31,8 +33,11 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="0dp"
-        android:background="@color/inactive_tab"
+        android:background="@color/whiteBlue"
+        android:elevation="10dp"
+        android:padding="3dp"
         android:paddingStart="20dp"
-        android:text="Filter Locations :     Any" />
+        android:text="Filter Locations :     Any"
+        android:textColor="@color/darkGrayBlue" />
 
 </RelativeLayout>

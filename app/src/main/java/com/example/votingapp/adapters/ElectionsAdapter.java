@@ -12,7 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.R;
-import com.example.votingapp.activities.ElectionDetailsActivity;
+import com.example.votingapp.activities.MainActivity;
+import com.example.votingapp.fragments.ElectionDetailsFragment;
 import com.example.votingapp.models.Election;
 
 import org.parceler.Parcels;
@@ -78,9 +79,7 @@ public class ElectionsAdapter extends RecyclerView.Adapter<ElectionsAdapter.View
             // making sure the position is valid
             if (position != RecyclerView.NO_POSITION) {
                 Election election = elections.get(position);
-                Intent intent = new Intent(context, ElectionDetailsActivity.class);
-                intent.putExtra(Election.class.getSimpleName(), Parcels.wrap(election));
-                context.startActivity(intent);
+                MainActivity.goElectionDetails(election);
             }
 
         }

@@ -1,15 +1,12 @@
 package com.example.votingapp;
 
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.example.votingapp.activities.ElectionDetailsActivity;
+import com.example.votingapp.fragments.ElectionDetailsFragment;
 import com.example.votingapp.activities.MainActivity;
-import com.example.votingapp.fragments.ContestsFragment;
 import com.example.votingapp.fragments.ElectionFragment;
 import com.example.votingapp.fragments.InfoFragment;
 import com.example.votingapp.fragments.LocationsFragment;
@@ -123,28 +120,28 @@ public class Network {
                 // Access a JSON array response with `json.jsonArray`
                 try {
                     JSONArray contests = json.jsonObject.getJSONArray("contests");
-                    ElectionDetailsActivity.addContests(contests);
+                    ElectionDetailsFragment.addContests(contests);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 try {
                     JSONArray pollingLocations = json.jsonObject.getJSONArray("pollingLocations");
-                    ElectionDetailsActivity.addLocations(pollingLocations, "Polling Location");
+                    ElectionDetailsFragment.addLocations(pollingLocations, "Polling Location");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
                 try {
                     JSONArray earlyVoteSites = json.jsonObject.getJSONArray("earlyVoteSites");
-                    ElectionDetailsActivity.addLocations(earlyVoteSites, "Early Voting Site");
+                    ElectionDetailsFragment.addLocations(earlyVoteSites, "Early Voting Site");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
                 try {
                     JSONArray dropOffLocations = json.jsonObject.getJSONArray("dropOffLocations");
-                    ElectionDetailsActivity.addLocations(dropOffLocations, "Drop Off Location");
+                    ElectionDetailsFragment.addLocations(dropOffLocations, "Drop Off Location");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -275,11 +272,12 @@ public class Network {
                 if (e != null) {
                     Log.e(TAG, "Issue with getting actions", e);
                 }
-                ElectionDetailsActivity.handleParseActions(actions);
+                ElectionDetailsFragment.handleParseActions(actions);
             }
         });
     }
 
+    // for new elections, method will create the three deadlines/checkboxes/actions that are unfinished
     public static void createElectionActions(Election election) {
         final List<Action> actions = new ArrayList<>();
         for (String name : ACTION_NAMES) {
@@ -301,7 +299,7 @@ public class Network {
                 }
             });
         }
-        ElectionDetailsActivity.addActions(actions);
+        ElectionDetailsFragment.addActions(actions);
         Log.i(TAG, "Added all actions: " + actions);
     }
 

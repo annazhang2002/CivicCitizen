@@ -1,14 +1,11 @@
-package com.example.votingapp.fragments;
+package com.example.votingapp.fragments.dialogFragments;
 
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.ShareActionProvider;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +15,6 @@ import android.widget.TextView;
 
 import com.example.votingapp.MethodLibrary;
 import com.example.votingapp.R;
-import com.example.votingapp.adapters.CandidateAdapter;
 import com.example.votingapp.models.Action;
 
 import org.parceler.Parcels;

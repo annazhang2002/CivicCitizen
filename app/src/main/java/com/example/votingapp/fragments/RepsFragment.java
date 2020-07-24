@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,12 +35,17 @@ public class RepsFragment extends Fragment {
     public static RepAdapter adapter;
     public static RecyclerView rvReps;
     PackageManager packageManager;
+    static Integer startPosition = 0;
 
     public RepsFragment() {
         // Required empty public constructor
     }
     public RepsFragment(PackageManager packageManager) {
         this.packageManager = packageManager;
+    }
+    public RepsFragment(PackageManager packageManager, Integer position) {
+        this.packageManager = packageManager;
+        this.startPosition = position;
     }
 
     @Override
@@ -59,14 +65,12 @@ public class RepsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         getActivity().setTitle("Your Representatives");
-
-        MainActivity.showPd();
+//        MainActivity.showPd();
         reps = new ArrayList<>();
         rvReps = view.findViewById(R.id.rvReps);
         adapter = new RepAdapter(getContext(), reps, packageManager,getFragmentManager());
         rvReps.setAdapter(adapter);
         rvReps.setLayoutManager(new LinearLayoutManager(getContext()));
-
         Network.getReps();
 
     }
@@ -75,7 +79,7 @@ public class RepsFragment extends Fragment {
         try {
             reps.addAll(Rep.fromJSON(offices, people));
             adapter.notifyDataSetChanged();
-            MainActivity.hidePd();
+//            MainActivity.hidePd();
             Log.i(TAG, "retrieved reps: " + reps);
         } catch (JSONException e) {
             e.printStackTrace();

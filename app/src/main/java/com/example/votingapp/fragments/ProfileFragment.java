@@ -56,7 +56,7 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         user = ParseUser.getCurrentUser();
-        getActivity().setTitle("Profile");
+        getActivity().setTitle(user.getString("name") + "'s Profile");
         ivProfilePic = view.findViewById(R.id.ivProfilePic);
         tvName = view.findViewById(R.id.tvName);
         tvUsername = view.findViewById(R.id.tvUsername);

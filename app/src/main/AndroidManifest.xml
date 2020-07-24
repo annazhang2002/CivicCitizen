@@ -27,7 +27,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.RepDetailsActivity"></activity>
+        <activity android:name=".fragments.RepDetailsFragment"></activity>
         <!-- make sure within the application tag, otherwise app will crash with XmlResourceParser errors -->
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -49,7 +49,7 @@
 
         <activity android:name=".activities.EditProfileActivity" />
         <activity android:name=".activities.ContestDetailActivity" />
-        <activity android:name=".activities.ElectionDetailsActivity" />
+        <activity android:name=".fragments.ElectionDetailsFragment" />
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.OpeningActivity">

@@ -17,16 +17,18 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.097" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_constraintVertical_bias="0.016" />
 
     <EditText
         android:id="@+id/etUsername"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="5dp"
+        android:layout_marginEnd="50dp"
         android:ems="10"
         android:hint="Username"
         android:inputType="textPersonName"
@@ -37,9 +39,11 @@
 
     <EditText
         android:id="@+id/etName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
         android:ems="10"
         android:hint="Name"
         android:inputType="textPersonName"
@@ -50,9 +54,11 @@
 
     <EditText
         android:id="@+id/etPassword"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
@@ -63,9 +69,11 @@
 
     <EditText
         android:id="@+id/etAddressLine1"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
         android:ems="10"
         android:hint="Address Line 1"
         android:inputType="textPersonName"
@@ -76,22 +84,26 @@
 
     <EditText
         android:id="@+id/etAddressState"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_width="141dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="50dp"
         android:ems="10"
         android:hint="Address State"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etAddressCity" />
 
     <EditText
         android:id="@+id/etAddressCity"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
         android:ems="10"
         android:hint="Address City"
         android:inputType="textPersonName"
@@ -102,22 +114,24 @@
 
     <EditText
         android:id="@+id/etAddressZip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_width="150dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="50dp"
         android:ems="10"
         android:hint="Address Zip"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etAddressState" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/etAddressState"
+        app:layout_constraintTop_toBottomOf="@+id/etAddressCity" />
 
     <Button
         android:id="@+id/btnEnter"
         android:layout_width="216dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/white_button"
         android:text="Sign up"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
@@ -135,5 +149,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:text="BIG ERROR IN LOGIN" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="116dp"
+        android:layout_height="98dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.067"
+        app:srcCompat="@drawable/ic_ballot_box" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

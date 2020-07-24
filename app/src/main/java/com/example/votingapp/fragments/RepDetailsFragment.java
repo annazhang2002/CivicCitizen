@@ -1,16 +1,18 @@
-package com.example.votingapp.activities;
+package com.example.votingapp.fragments;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.Fragment;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.media.Image;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.transition.TransitionInflater;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,19 +21,26 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.votingapp.MethodLibrary;
 import com.example.votingapp.R;
-import com.example.votingapp.ReminderBroadcast;
-import com.example.votingapp.fragments.ComposeDialogFragment;
+import com.example.votingapp.activities.MainActivity;
+import com.example.votingapp.models.Election;
+import com.example.votingapp.models.Location;
 import com.example.votingapp.models.Rep;
+import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
-import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-import static androidx.core.content.ContextCompat.getSystemService;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import okhttp3.Callback;
 
-public class RepDetailsActivity extends AppCompatActivity {
-    Rep rep;
+public class RepDetailsFragment extends Fragment {
+    static Rep rep;
+    static Context context;
+    static PackageManager packageManager;
+    static Integer position;
 
     TextView tvName;
     TextView tvParty;
@@ -49,41 +58,71 @@ public class RepDetailsActivity extends AppCompatActivity {
     ImageView ivFacebook;
     ImageView ivYoutube;
     Button btnMessage;
-    Context context;
+    Button btnBack;
+
+
+    public RepDetailsFragment() {
+        // Required empty public constructor
+    }
+
+    public static RepDetailsFragment newInstance(Context context1, Rep rep1, PackageManager packageManager1, Integer position1) {
+        RepDetailsFragment fragment = new RepDetailsFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(Rep.class.getSimpleName(), Parcels.wrap(rep));
+        context = context1;
+        rep = rep1;
+        packageManager = packageManager1;
+        position = position1;
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rep_details);
+        postponeEnterTransition();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setSharedElementEnterTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move));
+        }
+    }
 
-        // unwrap parcelable extra from intent
-        rep = Parcels.unwrap(getIntent().getParcelableExtra(Rep.class.getSimpleName()));
-        context = this;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_rep_details, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         // find views
-        tvName = findViewById(R.id.tvName);
-        tvParty = findViewById(R.id.tvParty);
-        ivImage = findViewById(R.id.ivImage);
-        tvUrl = findViewById(R.id.tvUrl);
-        tvPosition = findViewById(R.id.tvPosition);
-        tvAddressLabel = findViewById(R.id.tvAddressLabel);
-        tvAddress = findViewById(R.id.tvAddress);
-        tvPhoneLabel = findViewById(R.id.tvPhoneLabel);
-        tvPhone = findViewById(R.id.tvPhone);
-        tvEmailLabel = findViewById(R.id.tvEmailLabel);
-        tvEmail = findViewById(R.id.tvEmail);
-        llChannels = findViewById(R.id.llChannels);
-        ivTwitter = findViewById(R.id.ivTwitter);
-        ivFacebook = findViewById(R.id.ivFacebook);
-        ivYoutube = findViewById(R.id.ivYoutube);
-        btnMessage = findViewById(R.id.btnMessage);
+        tvName = view.findViewById(R.id.tvName);
+        tvParty = view.findViewById(R.id.tvParty);
+        ivImage = view.findViewById(R.id.ivImage);
+        tvUrl = view.findViewById(R.id.tvUrl);
+        tvPosition = view.findViewById(R.id.tvPosition);
+        tvAddressLabel = view.findViewById(R.id.tvAddressLabel);
+        tvAddress = view.findViewById(R.id.tvAddress);
+        tvPhoneLabel = view.findViewById(R.id.tvPhoneLabel);
+        tvPhone = view.findViewById(R.id.tvPhone);
+        tvEmailLabel = view.findViewById(R.id.tvEmailLabel);
+        tvEmail = view.findViewById(R.id.tvEmail);
+        llChannels = view.findViewById(R.id.llChannels);
+        ivTwitter = view.findViewById(R.id.ivTwitter);
+        ivFacebook = view.findViewById(R.id.ivFacebook);
+        ivYoutube = view.findViewById(R.id.ivYoutube);
+        btnMessage = view.findViewById(R.id.btnMessage);
+        btnBack = view.findViewById(R.id.btnBack);
 
         // set values for each view
         tvName.setText(rep.getName());
         tvParty.setText(rep.getParty());
         if (rep.getPhotoUrl() == null) {
-            Glide.with(this).load(R.drawable.default_profile).into(ivImage);
+            Glide.with(this).load(R.drawable.default_profile).transform(new RoundedCornersTransformation(20, 0)).into(ivImage);
         } else {
-            Glide.with(this).load(rep.getPhotoUrl()).into(ivImage);
+            Glide.with(this).load(rep.getPhotoUrl()).transform(new RoundedCornersTransformation(20, 0)).into(ivImage);
         }
         String url = rep.getWebUrl();
         if (url != null) {
@@ -125,13 +164,13 @@ public class RepDetailsActivity extends AppCompatActivity {
             tvEmail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MethodLibrary.sendEmail(rep.getEmail(), "", "", getPackageManager(), context);
+                    MethodLibrary.sendEmail(rep.getEmail(), "", "", packageManager, context);
                 }
             });
             btnMessage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MethodLibrary.showRepMessageDialog(getSupportFragmentManager(), context, getPackageManager(), rep);
+                    MethodLibrary.showRepMessageDialog(getFragmentManager(), context, packageManager, rep);
                 }
             });
         }
@@ -140,6 +179,13 @@ public class RepDetailsActivity extends AppCompatActivity {
         } else {
             setChannels(rep.getChannels());
         }
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.backToReps(position);
+            }
+        });
     }
 
     public void setChannels(final HashMap<String, String> channels) {

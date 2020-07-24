@@ -4,27 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/almostWhite"
     tools:context=".fragments.ProfileFragment">
 
 
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_below="@+id/tvAddress"
-        android:layout_marginStart="9dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="28dp"
+        android:layout_marginEnd="10dp"
         android:layout_toEndOf="@+id/btnEdit"
+        android:background="@drawable/white_button"
+        android:backgroundTint="@color/white"
         android:text="Logout" />
 
     <Button
         android:id="@+id/btnEdit"
         android:layout_width="194dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_below="@+id/tvAddress"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="28dp"
+        android:background="@drawable/white_button"
+        android:backgroundTint="@color/white"
         android:text="Edit Profile" />
 
     <ImageView
@@ -35,6 +41,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="14dp"
         android:layout_marginTop="14dp"
+        android:elevation="10dp"
         tools:src="@tools:sample/avatars" />
 
     <TextView
@@ -42,10 +49,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="11dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
         android:layout_toEndOf="@+id/ivProfilePic"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"
         tools:text="Anna Zhang" />
 
     <TextView
@@ -53,10 +62,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUsername"
-        android:layout_marginStart="9dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="6dp"
         android:layout_toEndOf="@+id/ivProfilePic"
         android:text="Address"
+        android:textColor="@color/darkGrayBlue"
         android:textSize="12sp"
         android:textStyle="italic" />
 
@@ -65,10 +75,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView3"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="-3dp"
         android:layout_marginEnd="20dp"
         android:layout_toEndOf="@+id/ivProfilePic"
+        android:textColor="@color/darkDarkBlue"
         tools:text="430 Hobart Ave, San Mateo, CA 94402" />
 
     <TextView
@@ -76,9 +87,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvName"
-        android:layout_marginStart="11dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="-3dp"
         android:layout_toEndOf="@+id/ivProfilePic"
+        android:textColor="@color/darkDarkBlue"
         android:textSize="16sp"
         tools:text="@anna" />
 

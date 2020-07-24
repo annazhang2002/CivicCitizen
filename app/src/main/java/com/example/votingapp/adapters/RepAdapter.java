@@ -1,5 +1,6 @@
 package com.example.votingapp.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,19 +13,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.votingapp.MethodLibrary;
 import com.example.votingapp.R;
-import com.example.votingapp.activities.RepDetailsActivity;
-import com.example.votingapp.models.Candidate;
+import com.example.votingapp.activities.MainActivity;
+import com.example.votingapp.fragments.RepDetailsFragment;
 import com.example.votingapp.models.Rep;
 
 import org.parceler.Parcels;
 
 import java.util.List;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class RepAdapter extends RecyclerView.Adapter<RepAdapter.ViewHolder> {
 
@@ -59,13 +62,13 @@ public class RepAdapter extends RecyclerView.Adapter<RepAdapter.ViewHolder> {
         return new ViewHolder(view);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder{
         TextView tvName;
         TextView tvParty;
         ImageView ivImage;
         TextView tvUrl;
         Button btnMessage;
-        TextView tvMore;
+        Button btnMore;
         TextView tvPosition;
 
         public ViewHolder(View itemView) {
@@ -76,19 +79,19 @@ public class RepAdapter extends RecyclerView.Adapter<RepAdapter.ViewHolder> {
             ivImage = itemView.findViewById(R.id.ivImage);
             tvUrl = itemView.findViewById(R.id.tvUrl);
             btnMessage = itemView.findViewById(R.id.btnMessage);
-            tvMore = itemView.findViewById(R.id.tvMore);
+            btnMore = itemView.findViewById(R.id.btnMore);
             tvPosition = itemView.findViewById(R.id.tvPosition);
-
-            itemView.setOnClickListener(this);
         }
 
         public void bind(final Rep rep) {
+            ViewCompat.setTransitionName(ivImage, rep.getName() + " picture");
+
             tvName.setText(rep.getName());
             tvParty.setText(rep.getParty());
             if (rep.getPhotoUrl() == null) {
-                Glide.with(context).load(R.drawable.default_profile).into(ivImage);
+                Glide.with(context).load(R.drawable.default_profile).transform(new RoundedCornersTransformation(20, 0)).into(ivImage);
             } else {
-                Glide.with(context).load(rep.getPhotoUrl()).into(ivImage);
+                Glide.with(context).load(rep.getPhotoUrl()).transform(new RoundedCornersTransformation(20, 0)).into(ivImage);
             }
             String url = rep.getWebUrl();
             if (url != null) {
@@ -98,7 +101,7 @@ public class RepAdapter extends RecyclerView.Adapter<RepAdapter.ViewHolder> {
             }
             tvPosition.setText(rep.getPosition());
             if (rep.getEmail() != null) {
-                btnMessage.setText("Send email");
+                btnMessage.setText("Email");
                 btnMessage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -124,20 +127,20 @@ public class RepAdapter extends RecyclerView.Adapter<RepAdapter.ViewHolder> {
             } else {
                 btnMessage.setVisibility(View.GONE);
             }
-        }
 
-        @Override
-        public void onClick(View view) {
-            Log.i(TAG, "onClick adapter rep item");
-            Integer position = getAdapterPosition();
-            // making sure the position is valid
-            if (position != RecyclerView.NO_POSITION) {
-                Rep rep = reps.get(position);
-                Intent intent = new Intent(context, RepDetailsActivity.class);
-                intent.putExtra(Rep.class.getSimpleName(), Parcels.wrap(rep));
-                context.startActivity(intent);
-            }
-
+            btnMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.i(TAG, "onClick adapter rep item");
+                    Integer position = getAdapterPosition();
+                    // making sure the position is valid
+                    if (position != RecyclerView.NO_POSITION) {
+                        Rep rep = reps.get(position);
+//                        repClickListener.onClick(position, rep, ivImage);
+                        MainActivity.goRepDetails(rep, position);
+                    }
+                }
+            });
         }
     }
 }

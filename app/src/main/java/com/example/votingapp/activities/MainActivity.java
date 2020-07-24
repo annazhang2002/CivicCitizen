@@ -5,30 +5,33 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.icu.text.IDNA;
-import android.os.Build;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.votingapp.R;
+import com.example.votingapp.fragments.ElectionDetailsFragment;
 import com.example.votingapp.fragments.ElectionFragment;
 import com.example.votingapp.fragments.InfoFragment;
 import com.example.votingapp.fragments.ProfileFragment;
+import com.example.votingapp.fragments.RepDetailsFragment;
 import com.example.votingapp.fragments.RepsFragment;
+import com.example.votingapp.models.Election;
+import com.example.votingapp.models.Rep;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private static final String TAG = "MainActivity";
-    BottomNavigationView bottomNavigationView;
+    private static final long FADE_DEFAULT_TIME = 2;
+    private static final long MOVE_DEFAULT_TIME = 2;
+    static BottomNavigationView bottomNavigationView;
     public static FragmentManager fragmentManager;
+    public static PackageManager packageManager;
     static ProgressDialog pd;
     static Context context;
 
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         createProgressDialog();
         pd.show();
         fragmentManager = getSupportFragmentManager();
+        packageManager = getPackageManager();
 
         // allowing the user to navigate with bottom tabs
         bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -76,6 +80,31 @@ public class MainActivity extends AppCompatActivity {
     public static void goInfo() {
         Fragment fragment = new InfoFragment();
         fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+        bottomNavigationView.setSelectedItemId(R.id.action_faqs);
+    }
+
+    public static void goRepDetails(Rep rep, Integer pos) {
+        Fragment fragment = RepDetailsFragment.newInstance(context, rep, packageManager, pos);
+        fragmentManager
+                .beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
+                .replace(R.id.flContainer, fragment)
+                .commit();
+    }
+
+    public static void backToReps(Integer position) {
+        Fragment fragment = new RepsFragment(packageManager, position);
+        Log.i(TAG, "rep position: " + position);
+        fragmentManager
+                .beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
+                .replace(R.id.flContainer, fragment)
+                .commit();
+    }
+
+    public static void goElectionDetails(Election election) {
+        Fragment fragment = ElectionDetailsFragment.newInstance(context, election);
+        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
     }
 
     public static void goUserProfile(ParseUser user) {
@@ -86,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
     public void createProgressDialog() {
         pd = new ProgressDialog(this);
         pd.setTitle("Loading...");
+        pd.getWindow().setBackgroundDrawableResource(R.drawable.election_card);
         pd.setCancelable(false);
     }
 

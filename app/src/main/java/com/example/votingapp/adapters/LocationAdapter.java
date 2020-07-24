@@ -1,9 +1,7 @@
 package com.example.votingapp.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -16,14 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.MethodLibrary;
 import com.example.votingapp.R;
-import com.example.votingapp.activities.ElectionDetailsActivity;
-import com.example.votingapp.models.Election;
 import com.example.votingapp.models.Location;
-import com.example.votingapp.activities.ContestDetailActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-
-import org.parceler.Parcels;
 
 import java.util.List;
 

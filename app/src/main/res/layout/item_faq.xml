@@ -7,9 +7,11 @@
     android:layout_height="wrap_content"
     android:layout_below="@+id/tvName"
     android:layout_alignParentEnd="true"
+    android:layout_margin="10dp"
     android:layout_marginTop="0dp"
     android:layout_marginEnd="0dp"
-    android:background="@drawable/border"
+    android:background="@drawable/election_card"
+    android:elevation="2dp"
     android:padding="10dp">
 
     <TextView
@@ -19,40 +21,13 @@
         android:layout_marginStart="6dp"
         android:layout_marginEnd="3dp"
         android:text="Where do I find information about my state's elections?"
-        android:textColor="#303030"
+        android:textColor="@color/darkGrayBlue"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@id/ivArrow"
         app:layout_constraintHorizontal_bias="0.02"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvAnswer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="6dp"
-        android:text="You learn more about any upcoming general elections in your state at the following link."
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvQuestion" />
-
-    <TextView
-        android:id="@+id/tvUrl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="6dp"
-        android:autoLink="all"
-        android:linksClickable="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAnswer"
-        tools:text="http://www.sos.ca.gov/elections" />
 
     <ImageView
         android:id="@+id/ivArrow"
@@ -65,4 +40,42 @@
         app:layout_constraintStart_toEndOf="@+id/tvQuestion"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_arrow_drop_down_black_18dp" />
+
+    <RelativeLayout
+        android:id="@+id/rlContainter"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvQuestion">
+
+        <TextView
+            android:id="@+id/tvAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="6dp"
+            android:text="You learn more about any upcoming general elections in your state at the following link."
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvUrl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvAnswer"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="6dp"
+            android:autoLink="all"
+            android:linksClickable="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAnswer"
+            tools:text="http://www.sos.ca.gov/elections" />
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

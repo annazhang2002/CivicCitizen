@@ -7,6 +7,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,12 +21,20 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.votingapp.BuildConfig;
+import com.example.votingapp.Network;
 import com.example.votingapp.R;
 import com.example.votingapp.activities.EditProfileActivity;
 import com.example.votingapp.activities.MainActivity;
 import com.example.votingapp.activities.OpeningActivity;
+import com.example.votingapp.adapters.ActionAdapter;
+import com.example.votingapp.adapters.CandidateAdapter;
+import com.example.votingapp.models.Action;
+import com.example.votingapp.models.Candidate;
 import com.example.votingapp.models.User;
 import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProfileFragment extends Fragment {
     ParseUser user;
@@ -35,6 +45,9 @@ public class ProfileFragment extends Fragment {
     TextView tvAddress;
     Button btnEdit;
     Button btnLogout;
+    RecyclerView rvActions;
+    static List<Action> actions;
+    static ActionAdapter adapter;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -56,6 +69,13 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         user = ParseUser.getCurrentUser();
+        actions = new ArrayList<>();
+        rvActions = view.findViewById(R.id.rvActions);
+        rvActions.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new ActionAdapter(getContext(), actions, getFragmentManager());
+        rvActions.setAdapter(adapter);
+        Network.queryUserActions(ParseUser.getCurrentUser());
+
         getActivity().setTitle(user.getString("name") + "'s Profile");
         ivProfilePic = view.findViewById(R.id.ivProfilePic);
         tvName = view.findViewById(R.id.tvName);
@@ -86,6 +106,11 @@ public class ProfileFragment extends Fragment {
                 ParseUser.logOut();
             }
         });
+    }
+
+    public static void handleParseActions(List<Action> newActions) {
+        actions.addAll(newActions);
+        adapter.notifyDataSetChanged();
     }
 
     private void goOpening() {

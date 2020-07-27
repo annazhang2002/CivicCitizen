@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/election_card"
+    android:padding="0dp">
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="123dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivPreview"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/action_button"
+        android:text="Save"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/btnPicture"
+        android:layout_width="123dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivPreview"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="9dp"
+        android:background="@drawable/action_button"
+        android:text="Take Picture"
+        android:textColor="#FFFFFF" />
+
+    <EditText
+        android:id="@+id/etCompose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivClose"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/border"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Write any notes about this experience!"
+        android:inputType="textMultiLine"
+        android:minLines="5"
+        android:padding="10dp"
+        android:textColor="@color/darkDarkBlue"
+        android:textColorHighlight="@color/colorPrimaryDark"
+        android:textColorHint="@color/lightBlue"
+        android:textColorLink="@color/colorPrimaryDark" />
+
+    <ImageView
+        android:id="@+id/ivClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="19dp"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        app:srcCompat="@drawable/ic_close_24px" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="19dp"
+        android:layout_toEndOf="@+id/ivClose"
+        android:text="I registered to vote!"
+        android:textColor="@color/darkDarkBlue"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/ivPreview"
+        android:layout_width="match_parent"
+        android:layout_height="199dp"
+        android:layout_below="@+id/etCompose"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="60dp"
+        android:scaleType="centerCrop"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+    <ImageView
+        android:id="@+id/ivDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ivPreview"
+        android:layout_alignEnd="@+id/ivPreview"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/election_card"
+        android:src="@drawable/ic_delete_forever_24px" />
+
+
+</RelativeLayout>

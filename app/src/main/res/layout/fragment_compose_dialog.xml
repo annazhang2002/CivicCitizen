@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/election_card"
     android:padding="0dp">
 
     <Button
-        android:id="@+id/btnSubmit"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnSave"
+        android:layout_width="123dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etCompose"
         android:layout_alignParentEnd="true"
@@ -16,7 +17,9 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="22dp"
         android:layout_marginBottom="10dp"
-        android:text="Send Email" />
+        android:background="@drawable/action_button"
+        android:text="Send Email"
+        android:textColor="#FFFFFF" />
 
     <EditText
         android:id="@+id/etCompose"
@@ -35,7 +38,9 @@
         android:inputType="textMultiLine"
         android:minLines="5"
         android:padding="10dp"
+        android:textColor="@color/darkDarkBlue"
         android:textColorHighlight="@color/colorPrimaryDark"
+        android:textColorHint="@color/lightBlue"
         android:textColorLink="@color/colorPrimaryDark" />
 
     <ImageView
@@ -46,7 +51,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="9dp"
         android:layout_marginTop="8dp"
-        android:src="@android:drawable/ic_menu_close_clear_cancel" />
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        app:srcCompat="@drawable/ic_close_24px" />
 
     <EditText
         android:id="@+id/etSubject"
@@ -60,7 +66,9 @@
         android:ems="10"
         android:hint="Subject"
         android:inputType="textPersonName"
-        android:padding="5dp" />
+        android:padding="5dp"
+        android:textColor="@color/darkDarkBlue"
+        android:textColorHint="@color/lightBlue" />
 
 
 </RelativeLayout>

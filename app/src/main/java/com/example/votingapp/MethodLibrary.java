@@ -26,6 +26,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class MethodLibrary {
@@ -38,8 +39,9 @@ public class MethodLibrary {
 
     public static final String API_DATE_FORMAT = "yyyy-MM-dd";
     public static final String M_D_Y_FORMAT = "MMMM d, yyyy";
-    public static final String M_D_FORMAT = "MMMM d, yyyy";
+    public static final String M_D_FORMAT = "MMMM d";
     public static final String NUMBER_DATE_FORMAT = "MM/dd";
+    public static final String DATE_OBJ_FORMAT = "EEE MMM dd hh:mm:ss zzz yyyy";
 
     // method to get the deadline date given an input date and the number of days you want to subtract
     public static String getDaysBeforeDate(String rawDate, int daysBefore, String givenFormat, String newFormat ) {
@@ -114,5 +116,11 @@ public class MethodLibrary {
 
     public static String parseAddress(JSONObject addObj) throws JSONException {
         return addObj.getString("line1") + ", " + addObj.getString("city") + ", " + addObj.getString("state") + " " + addObj.getString("zip");
+    }
+
+    public static String getTodayActionDate() {
+        Date c = Calendar.getInstance().getTime();
+        return getFormattedDate(c.toString(), DATE_OBJ_FORMAT, M_D_Y_FORMAT);
+
     }
 }

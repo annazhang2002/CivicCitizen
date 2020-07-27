@@ -10,6 +10,7 @@ import com.example.votingapp.activities.MainActivity;
 import com.example.votingapp.fragments.ElectionFragment;
 import com.example.votingapp.fragments.InfoFragment;
 import com.example.votingapp.fragments.LocationsFragment;
+import com.example.votingapp.fragments.ProfileFragment;
 import com.example.votingapp.fragments.RepsFragment;
 import com.example.votingapp.models.Action;
 import com.example.votingapp.models.Election;
@@ -313,6 +314,24 @@ public class Network {
                 }
 
                 Log.i(TAG, "User changes were saved!!");
+            }
+        });
+    }
+
+    public static void queryUserActions(ParseUser user) {
+        Log.i(TAG, "queryUserActions");
+        ParseQuery<Action> query = ParseQuery.getQuery(Action.class);
+        query.include(Action.KEY_USER);
+        query.whereEqualTo(Action.KEY_STATUS, "done");
+        query.whereEqualTo(Action.KEY_USER, ParseUser.getCurrentUser());
+        query.findInBackground(new FindCallback<Action>() {
+            @Override
+            public void done(List<Action> actions, ParseException e) {
+                Log.i(TAG, "here");
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting actions", e);
+                }
+                ProfileFragment.handleParseActions(actions);
             }
         });
     }

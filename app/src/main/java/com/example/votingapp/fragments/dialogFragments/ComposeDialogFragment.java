@@ -64,7 +64,7 @@ public class ComposeDialogFragment extends DialogFragment {
         // Get field from view
         etCompose = view.findViewById(R.id.etCompose);
         etSubject = view.findViewById(R.id.etSubject);
-        btnSubmit = view.findViewById(R.id.btnSubmit);
+        btnSubmit = view.findViewById(R.id.btnSave);
         ivClose = view.findViewById(R.id.ivClose);
 
         // Show soft keyboard automatically and request focus to field

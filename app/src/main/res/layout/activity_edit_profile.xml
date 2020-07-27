@@ -4,27 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/almostWhite"
     tools:context=".activities.EditProfileActivity">
 
     <ImageView
         android:id="@+id/ivImage"
-        android:layout_width="138dp"
-        android:layout_height="144dp"
+        android:layout_width="149dp"
+        android:layout_height="141dp"
         android:layout_alignParentStart="true"
         android:layout_marginStart="11dp"
         android:layout_marginTop="13dp"
+        android:scaleType="centerCrop"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
         android:id="@+id/btnPic"
-        android:layout_width="wrap_content"
+        android:layout_width="174dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etName"
         android:layout_marginStart="21dp"
         android:layout_marginTop="14dp"
         android:layout_toEndOf="@+id/ivImage"
+        android:background="@drawable/white_button"
+        android:backgroundTint="@color/white"
         android:text="Take New Picture"
-        android:textSize="12sp" />
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/textView2"
@@ -33,7 +37,9 @@
         android:layout_marginStart="21dp"
         android:layout_marginTop="11dp"
         android:layout_toEndOf="@+id/ivImage"
-        android:text="Name" />
+        android:text="Name"
+        android:textColor="@color/darkGrayBlue"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tvAddress"
@@ -44,6 +50,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="11dp"
         android:text="Address"
+        android:textColor="@color/darkGrayBlue"
         android:textSize="20sp" />
 
     <EditText
@@ -58,19 +65,39 @@
         android:layout_toEndOf="@+id/ivImage"
         android:ems="10"
         android:inputType="textPersonName"
+        android:textColor="@color/darkDarkBlue"
         tools:text="Anna Zhang" />
 
     <Button
-        android:id="@+id/btnSave"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
+        android:id="@+id/btnCancel"
+        android:layout_width="182dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/etZip"
         android:layout_alignParentStart="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/white_button"
+        android:backgroundTint="@color/white"
+        android:elevation="30dp"
+        android:text="Cancel"
+        android:textSize="15sp" />
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="188dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etZip"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="35dp"
         android:layout_marginEnd="15dp"
-        android:text="Save Changes" />
+        android:layout_toEndOf="@+id/btnCancel"
+        android:background="@drawable/white_button"
+        android:backgroundTint="@color/white"
+        android:elevation="30dp"
+        android:text="Save Changes"
+        android:textSize="15sp" />
 
     <EditText
         android:id="@+id/etCity"
@@ -84,6 +111,7 @@
         android:layout_toEndOf="@+id/etAddress1"
         android:ems="10"
         android:inputType="textPersonName"
+        android:textColor="@color/darkDarkBlue"
         tools:text="San Mateo" />
 
     <EditText
@@ -96,6 +124,7 @@
         android:layout_marginTop="26dp"
         android:ems="10"
         android:inputType="textPersonName"
+        android:textColor="@color/darkDarkBlue"
         tools:text="430 Hobart Ave" />
 
     <TextView
@@ -106,7 +135,8 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="17dp"
         android:layout_marginTop="8dp"
-        android:text="Street" />
+        android:text="Street"
+        android:textColor="@color/darkGrayBlue" />
 
     <TextView
         android:id="@+id/textView5"
@@ -118,7 +148,8 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="107dp"
         android:layout_toEndOf="@+id/etAddress1"
-        android:text="City" />
+        android:text="City"
+        android:textColor="@color/darkGrayBlue" />
 
     <TextView
         android:id="@+id/textView6"
@@ -128,7 +159,8 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
-        android:text="State" />
+        android:text="State"
+        android:textColor="@color/darkGrayBlue" />
 
     <TextView
         android:id="@+id/textView7"
@@ -138,7 +170,8 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="3dp"
         android:layout_toEndOf="@+id/etState"
-        android:text="Zip Code" />
+        android:text="Zip Code"
+        android:textColor="@color/darkGrayBlue" />
 
     <EditText
         android:id="@+id/etState"
@@ -150,18 +183,20 @@
         android:layout_marginTop="4dp"
         android:ems="10"
         android:inputType="textPersonName"
+        android:textColor="@color/darkDarkBlue"
         tools:text="CA" />
 
     <EditText
         android:id="@+id/etZip"
         android:layout_width="249dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/textView7"
         android:layout_marginStart="23dp"
-        android:layout_marginTop="292dp"
+        android:layout_marginTop="3dp"
         android:layout_toEndOf="@+id/etState"
         android:ems="10"
         android:inputType="textPersonName"
+        android:textColor="@color/darkDarkBlue"
         tools:text="94402" />
 
 </RelativeLayout>

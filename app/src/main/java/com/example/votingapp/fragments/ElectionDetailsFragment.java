@@ -45,6 +45,7 @@ import java.util.Map;
 
 import static android.content.Context.ALARM_SERVICE;
 import static com.example.votingapp.MethodLibrary.API_DATE_FORMAT;
+import static com.example.votingapp.MethodLibrary.getTodayActionDate;
 import static com.example.votingapp.MethodLibrary.openUrl;
 
 public class ElectionDetailsFragment extends Fragment {
@@ -231,6 +232,7 @@ public class ElectionDetailsFragment extends Fragment {
             if (cbDeadlines[cbIndex].isChecked()) {
                 Log.i(TAG, "button checked");
                 allActions.get(Network.ACTION_NAMES[cbIndex]).setStatus("done");
+                allActions.get(Network.ACTION_NAMES[cbIndex]).setDate(getTodayActionDate());
                 openCongratsFragment(allActions.get(Network.ACTION_NAMES[cbIndex]));
             } else {
                 Log.i(TAG, "button unchecked");

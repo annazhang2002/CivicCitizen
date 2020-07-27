@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/border"
+    android:paddingBottom="16dp">
+
+    <ImageView
+        android:id="@+id/ivIcon"
+        android:layout_width="57dp"
+        android:layout_height="58dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="12dp"
+        app:srcCompat="@drawable/ic_how_to_reg_24px" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="16dp"
+        android:layout_toEndOf="@+id/ivIcon"
+        android:text="I registered to vote!"
+        android:textColor="@color/darkDarkBlue"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvName"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ivIcon"
+        android:text="July 24th, 2020" />
+
+    <ImageView
+        android:id="@+id/ivShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="22dp"
+        app:srcCompat="@drawable/ic_share_24px" />
+
+    <ImageView
+        android:id="@+id/ivEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="19dp"
+        android:layout_toStartOf="@+id/ivShare"
+        app:srcCompat="@drawable/ic_create_24px" />
+
+    <ImageView
+        android:id="@+id/ivImage"
+        android:layout_width="match_parent"
+        android:layout_height="205dp"
+        android:layout_below="@+id/tvDate"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="16dp"
+        android:layout_toEndOf="@+id/ivIcon"
+        android:scaleType="centerCrop"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <TextView
+        android:id="@+id/tvNotes"
+        android:layout_width="362dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivImage"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_toEndOf="@+id/ivIcon"
+        android:textColor="@color/darkGrayBlue"
+        android:textSize="16sp"
+        tools:text="I went to the San Mateo County Office to vote, and I voted for x, y, and z. It was a great experience!" />
+</RelativeLayout>

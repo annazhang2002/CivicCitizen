@@ -3,6 +3,7 @@ package com.example.votingapp.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,7 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.votingapp.R;
@@ -30,6 +30,7 @@ import java.io.File;
 public class EditProfileActivity extends AppCompatActivity {
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 22;
     private static final String TAG = "EditProfileActivity";
+    ProgressDialog pd;
     ImageView ivProfile;
     EditText etName;
     Button btnPic;
@@ -38,6 +39,7 @@ public class EditProfileActivity extends AppCompatActivity {
     EditText etState;
     EditText etZip;
     Button btnSave;
+    Button btnCancel;
     File photoFile;
     ParseUser user;
     private String photoFileName = "photo.jpg";
@@ -47,6 +49,8 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
+        createProgressDialog();
+
         ivProfile = findViewById(R.id.ivImage);
         etName = findViewById(R.id.etName);
         btnPic = findViewById(R.id.btnPic);
@@ -55,8 +59,10 @@ public class EditProfileActivity extends AppCompatActivity {
         etState = findViewById(R.id.etState);
         etZip = findViewById(R.id.etZip);
         btnSave = findViewById(R.id.btnSave);
+        btnCancel = findViewById(R.id.btnCancel);
 
         user = ParseUser.getCurrentUser();
+        getSupportActionBar().setTitle("Edit Profile");
 
         ParseFile profile = user.getParseFile(User.KEY_PROFILEPIC);
         if (profile != null) {
@@ -83,9 +89,16 @@ public class EditProfileActivity extends AppCompatActivity {
                 saveProfile(etAddress1.getText().toString(), etCity.getText().toString(),etState.getText().toString(),etZip.getText().toString(),etName.getText().toString(), photoFile);
             }
         });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goMainActivity();
+            }
+        });
     }
 
     private void saveProfile(String add1, String city, String state, String zip, String name, File photoFile) {
+        pd.show();
         Log.i(TAG, "Saving profile");
         user.put(User.KEY_NAME, name);
         user.put(User.KEY_ADDRESS1, add1);
@@ -104,7 +117,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
 
                 Log.i(TAG, "User changes were saved!!");
-//                pd.dismiss();
+                pd.hide();
 //                MainActivity.goUserProfile(user);
                 goMainActivity();
             }
@@ -112,7 +125,9 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public void goMainActivity() {
+        pd.hide();
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("frgToLoad", "profile");
         this.startActivity(intent);
     }
 
@@ -147,7 +162,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 // Load the taken image into a preview
                 ivProfile.setImageBitmap(takenImage);
             } else { // Result was a failure
-                Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "Picture wasn't taken");
+//                Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -168,5 +184,12 @@ public class EditProfileActivity extends AppCompatActivity {
         File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
 
         return file;
+    }
+
+    public void createProgressDialog() {
+        pd = new ProgressDialog(this);
+        pd.setTitle("Loading...");
+        pd.getWindow().setBackgroundDrawableResource(R.drawable.election_card);
+        pd.setCancelable(false);
     }
 }

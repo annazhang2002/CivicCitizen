@@ -74,7 +74,30 @@ public class MainActivity extends AppCompatActivity{
                 return true;
             }
         });
-        bottomNavigationView.setSelectedItemId(R.id.action_home);
+
+        showStartFragment();
+    }
+
+    private void showStartFragment() {
+        String intentFragment = getIntent().getStringExtra("frgToLoad");
+
+        switch (intentFragment){
+            case "home":
+                bottomNavigationView.setSelectedItemId(R.id.action_home);
+                break;
+            case "profile":
+                bottomNavigationView.setSelectedItemId(R.id.action_profile);
+                pd.hide();
+                break;
+            case "reps":
+                bottomNavigationView.setSelectedItemId(R.id.action_representatives);
+                pd.hide();
+                break;
+            case "faqs":
+                bottomNavigationView.setSelectedItemId(R.id.action_faqs);
+                pd.hide();
+                break;
+        }
     }
 
     public static void goInfo() {

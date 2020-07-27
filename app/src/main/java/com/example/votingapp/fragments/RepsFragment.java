@@ -36,6 +36,7 @@ public class RepsFragment extends Fragment {
     public static RecyclerView rvReps;
     PackageManager packageManager;
     static Integer startPosition = 0;
+    boolean reload = false;
 
     public RepsFragment() {
         // Required empty public constructor
@@ -46,6 +47,7 @@ public class RepsFragment extends Fragment {
     public RepsFragment(PackageManager packageManager, Integer position) {
         this.packageManager = packageManager;
         this.startPosition = position;
+        reload = true;
     }
 
     @Override
@@ -65,7 +67,9 @@ public class RepsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         getActivity().setTitle("Your Representatives");
-//        MainActivity.showPd();
+        if (!reload) {
+            MainActivity.showPd();
+        }
         reps = new ArrayList<>();
         rvReps = view.findViewById(R.id.rvReps);
         adapter = new RepAdapter(getContext(), reps, packageManager,getFragmentManager());
@@ -79,7 +83,7 @@ public class RepsFragment extends Fragment {
         try {
             reps.addAll(Rep.fromJSON(offices, people));
             adapter.notifyDataSetChanged();
-//            MainActivity.hidePd();
+            MainActivity.hidePd();
             Log.i(TAG, "retrieved reps: " + reps);
         } catch (JSONException e) {
             e.printStackTrace();

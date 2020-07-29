@@ -2,21 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:background="@drawable/election_card"
+    android:padding="16dp"
     tools:context=".fragments.dialogFragments.ActionCompleteFragment">
 
 
     <TextView
         android:id="@+id/tvCongrats"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageView2"
-        android:layout_alignParentStart="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="127dp"
         android:layout_marginTop="12dp"
+        android:gravity="center_horizontal"
         android:text="Congrats!"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="@color/colorPrimaryDark"
@@ -29,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="29dp"
+        android:layout_marginTop="0dp"
         android:src="@drawable/congrats" />
 
     <TextView
@@ -39,7 +38,7 @@
         android:layout_below="@+id/tvCongrats"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="7dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="0dp"
         android:gravity="center_horizontal"
         android:text="Great work! You just registered to vote! Thanks for being a Civic Citizen"
         android:textColor="@color/darkGrayBlue"
@@ -47,24 +46,91 @@
 
     <ImageView
         android:id="@+id/ivShare"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="28dp"
-        android:layout_toEndOf="@+id/imageView2"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
         android:src="@drawable/ic_share_24px" />
 
     <ImageView
         android:id="@+id/ivClose"
-        android:layout_width="46dp"
-        android:layout_height="43dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
         android:src="@drawable/ic_close_24px" />
+
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="123dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivPreview"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/action_button"
+        android:text="Save"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/btnPicture"
+        android:layout_width="123dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivPreview"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="9dp"
+        android:background="@drawable/action_button"
+        android:text="Take Picture"
+        android:textColor="#FFFFFF" />
+
+    <EditText
+        android:id="@+id/etCompose"
+        android:layout_width="347dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvMessage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/border"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Write any notes about this experience!"
+        android:inputType="textMultiLine"
+        android:minLines="5"
+        android:padding="10dp"
+        android:textColor="@color/darkDarkBlue"
+        android:textColorHighlight="@color/colorPrimaryDark"
+        android:textColorHint="@color/lightBlue"
+        android:textColorLink="@color/colorPrimaryDark"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/ivPreview"
+        android:layout_width="match_parent"
+        android:layout_height="199dp"
+        android:layout_below="@+id/etCompose"
+        android:layout_marginTop="7dp"
+        android:scaleType="centerCrop"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+    <ImageView
+        android:id="@+id/ivDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ivPreview"
+        android:layout_alignEnd="@+id/ivPreview"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/election_card"
+        android:src="@drawable/ic_delete_forever_24px" />
+
 
 </RelativeLayout>

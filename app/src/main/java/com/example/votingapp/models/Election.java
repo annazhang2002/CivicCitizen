@@ -1,7 +1,10 @@
 package com.example.votingapp.models;
 
 import android.annotation.SuppressLint;
+import android.graphics.Paint;
 import android.util.Log;
+
+import com.example.votingapp.Network;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,8 +17,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static com.example.votingapp.MethodLibrary.API_DATE_FORMAT;
 import static com.example.votingapp.MethodLibrary.M_D_FORMAT;
@@ -35,6 +40,7 @@ public class Election {
     String electionDay;
     int id;
     String division;
+    HashMap<String, Action> actions;
 
     // no-arg, empty constructor required for Parceler
     public Election() {}
@@ -78,7 +84,31 @@ public class Election {
         return id;
     }
 
+
     public String getDivision() {
         return division;
+    }
+
+    public HashMap<String, Action> getActions() {
+        return actions;
+    }
+
+    public void setActions(HashMap<String, Action> actions) {
+        this.actions = actions;
+    }
+
+    public int getProgress() {
+        int total = 0;
+        int done = 0;
+        for (Map.Entry entry : actions.entrySet()) {
+            String status = ((Action) entry.getValue()).getStatus();
+            if (!status.equals("closed")) {
+                total++;
+                if (status.equals("done")) {
+                    done++;
+                }
+            }
+        }
+        return (int) (((float) done/total) * 100);
     }
 }

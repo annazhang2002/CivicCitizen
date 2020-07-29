@@ -109,6 +109,7 @@ public class ProfileFragment extends Fragment {
     }
 
     public static void handleParseActions(List<Action> newActions) {
+        actions.clear();
         actions.addAll(newActions);
         adapter.notifyDataSetChanged();
     }

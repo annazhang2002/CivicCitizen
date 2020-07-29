@@ -130,9 +130,10 @@ public class MainActivity extends AppCompatActivity{
         fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
     }
 
-    public static void goUserProfile(ParseUser user) {
+    public static void goUserProfile() {
         Fragment fragment = new ProfileFragment();
         fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+        bottomNavigationView.setSelectedItemId(R.id.action_profile);
     }
 
     public void createProgressDialog() {

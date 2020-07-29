@@ -1,7 +1,11 @@
 package com.example.votingapp.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -19,13 +23,20 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.votingapp.R;
+import com.example.votingapp.adapters.ElectionsAdapter;
+import com.example.votingapp.adapters.PreferenceAdapter;
 import com.example.votingapp.models.User;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.json.JSONException;
+
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class EditProfileActivity extends AppCompatActivity {
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 22;
@@ -42,13 +53,17 @@ public class EditProfileActivity extends AppCompatActivity {
     Button btnCancel;
     File photoFile;
     ParseUser user;
+    RecyclerView rvPreferences;
+    PreferenceAdapter adapter;
+    List<String> preferences;
+    List<Integer> weights;
     private String photoFileName = "photo.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
-
+        user = ParseUser.getCurrentUser();
         createProgressDialog();
 
         ivProfile = findViewById(R.id.ivImage);
@@ -60,8 +75,21 @@ public class EditProfileActivity extends AppCompatActivity {
         etZip = findViewById(R.id.etZip);
         btnSave = findViewById(R.id.btnSave);
         btnCancel = findViewById(R.id.btnCancel);
+        rvPreferences = findViewById(R.id.rvPreferences);
+        preferences = new ArrayList<>();
+        weights = new ArrayList<>();
+        weights = User.getPreferenceWeights(user);
+        adapter = new PreferenceAdapter(this, preferences);
+        rvPreferences.setLayoutManager(new LinearLayoutManager(this));
+        rvPreferences.setAdapter(adapter);
 
-        user = ParseUser.getCurrentUser();
+        try {
+            preferences.addAll(User.getPreferenceOrder(ParseUser.getCurrentUser()));
+            adapter.notifyDataSetChanged();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         getSupportActionBar().setTitle("Edit Profile");
 
         ParseFile profile = user.getParseFile(User.KEY_PROFILEPIC);
@@ -95,6 +123,33 @@ public class EditProfileActivity extends AppCompatActivity {
                 goMainActivity();
             }
         });
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(rvPreferences);
+    }
+
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END, 0) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            int fromPosition = viewHolder.getAdapterPosition();
+            int toPosition = target.getAdapterPosition();
+
+            swapPreferences(fromPosition, toPosition);
+
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+        }
+    };
+
+    public void swapPreferences(int fromPosition, int toPosition) {
+        Collections.swap(preferences, fromPosition, toPosition);
+        adapter.notifyDataSetChanged();
+
+        Collections.swap(weights, fromPosition, toPosition);
     }
 
     private void saveProfile(String add1, String city, String state, String zip, String name, File photoFile) {
@@ -105,6 +160,7 @@ public class EditProfileActivity extends AppCompatActivity {
         user.put(User.KEY_CITY, city);
         user.put(User.KEY_STATE, state);
         user.put(User.KEY_ZIP, zip);
+        User.setWeights(user, weights);
         if (photoFile != null) {
             user.put(User.KEY_PROFILEPIC, new ParseFile(photoFile));
         }

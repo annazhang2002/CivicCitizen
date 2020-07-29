@@ -5,11 +5,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import androidx.appcompat.app.ActionBar;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -31,6 +31,7 @@ import com.example.votingapp.models.Contest;
 import com.example.votingapp.models.Election;
 import com.example.votingapp.models.Location;
 import com.example.votingapp.models.Rep;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,6 +48,8 @@ import static android.content.Context.ALARM_SERVICE;
 import static com.example.votingapp.MethodLibrary.API_DATE_FORMAT;
 import static com.example.votingapp.MethodLibrary.getTodayActionDate;
 import static com.example.votingapp.MethodLibrary.openUrl;
+import static com.example.votingapp.activities.MainActivity.goUserProfile;
+import static com.example.votingapp.activities.MainActivity.packageManager;
 
 public class ElectionDetailsFragment extends Fragment {
 
@@ -65,6 +68,7 @@ public class ElectionDetailsFragment extends Fragment {
 
     TextView tvElectionDay;
     static Context context;
+    private String currentFragment = "locations";
 
     public ElectionDetailsFragment() {
         // Required empty public constructor
@@ -99,7 +103,7 @@ public class ElectionDetailsFragment extends Fragment {
         fragmentManager = getFragmentManager();
         createProgressDialog();
         pd.show();
-        allActions = new HashMap<>();
+        allActions = election.getActions();
         locations = new ArrayList<>();
         contests = new ArrayList<>();
         cbDeadlines = new CheckBox[3];
@@ -111,38 +115,45 @@ public class ElectionDetailsFragment extends Fragment {
         ivOpenAbsentee = view.findViewById(R.id.ivOpenAbsentee);
         tvContests = view.findViewById(R.id.tvContests);
         tvLocations = view.findViewById(R.id.tvLocations);
-        tvLocations.setBackgroundColor(getResources().getColor(R.color.white));
-        tvContests.setBackgroundColor(getResources().getColor(R.color.inactive_tab));
+        tvLocations.setBackgroundColor(getResources().getColor(R.color.whiteBlue));
+        tvContests.setBackgroundColor(getResources().getColor(R.color.lightLightBlue));
 
         getActivity().setTitle(election.getName());
         tvElectionDay.setText(election.getSimpleElectionDay() + "");
         cbDeadlines[0].setText("Register to Vote (" + election.getRegisterDeadline() + ")");
         cbDeadlines[1].setText("Send in Absentee Ballot Application (" + election.getAbsenteeDeadline() + ")");
         cbDeadlines[2].setText("Vote!! (" + election.getVoteDeadline() + ")");
+        setCheckboxes();
 
         // set click listeners for locations and contest toggle
         tvLocations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fragmentManager.beginTransaction().replace(R.id.flContainerDetails, LocationsFragment.newInstance(context, election, locations)).commit();
-                tvLocations.setBackgroundColor(getResources().getColor(R.color.whiteBlue));
-                tvContests.setBackgroundColor(getResources().getColor(R.color.lightLightBlue));
+                if (currentFragment.equals("contests")) {
+                    fragmentManager.beginTransaction().setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right).replace(R.id.flContainerDetails, LocationsFragment.newInstance(context, election, locations)).commit();
+                    tvLocations.setBackgroundColor(getResources().getColor(R.color.whiteBlue));
+                    tvContests.setBackgroundColor(getResources().getColor(R.color.lightLightBlue));
+                    currentFragment = "locations";
+                }
             }
         });
         tvContests.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fragmentManager.beginTransaction().replace(R.id.flContainerDetails, ContestsFragment.newInstance(context, election, contests)).commit();
-                tvLocations.setBackgroundColor(getResources().getColor(R.color.lightLightBlue));
-                tvContests.setBackgroundColor(getResources().getColor(R.color.whiteBlue));
+                if (currentFragment.equals("locations")) {
+                    fragmentManager.beginTransaction().setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left).replace(R.id.flContainerDetails, ContestsFragment.newInstance(context, election, contests)).commit();
+                    tvLocations.setBackgroundColor(getResources().getColor(R.color.lightLightBlue));
+                    tvContests.setBackgroundColor(getResources().getColor(R.color.whiteBlue));
+                    currentFragment = "contests";
+                }
             }
         });
 
         // set notification if not voted yet
         if (!cbDeadlines[2].isChecked()) {
-            long miliSecsDate = milliseconds("2020-07-21");
+//            long miliSecsDate = milliseconds("2020-07-21");
 
-//            long miliSecsDate = milliseconds(election.getElectionReminderDate());
+            long miliSecsDate = milliseconds(election.getElectionReminderDate());
             scheduleNotification(miliSecsDate);
         }
 
@@ -156,12 +167,14 @@ public class ElectionDetailsFragment extends Fragment {
                     cbDeadlines[1].setChecked(true);
                     cbDeadlines[1].setPaintFlags(cbDeadlines[1].getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                     allActions.get("sent in absentee ballot").setStatus("unfinished");
+                    election.setActions(allActions);
                     Network.updateAction(allActions.get("sent in absentee ballot"));
                 } else if (allActions.get("sent in absentee ballot").getStatus().equals("unfinished")) {
 //                    cbDeadlines[1].setEnabled(false);
                     cbDeadlines[1].setChecked(false);
                     cbDeadlines[1].setPaintFlags(cbDeadlines[1].getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     allActions.get("sent in absentee ballot").setStatus("closed");
+                    election.setActions(allActions);
                     Network.updateAction(allActions.get("sent in absentee ballot"));
                 }
                 return false;
@@ -192,7 +205,6 @@ public class ElectionDetailsFragment extends Fragment {
         }
 
         Network.getElectionDetails(election);
-        Network.queryActions(election);
     }
 
 
@@ -222,7 +234,26 @@ public class ElectionDetailsFragment extends Fragment {
         return 0;
     }
 
-
+    public void setCheckboxes() {
+        for (Map.Entry entry : allActions.entrySet()) {
+            Action action = (Action) entry.getValue();
+            Log.i(TAG, "here: Action: " + action.getName());
+            // check if each action is completed or not
+            for (int i = 0 ; i< Network.ACTION_NAMES.length; i++) {
+                if (action.getName().equals(Network.ACTION_NAMES[i])) {
+                    if (action.getStatus().equals("done")) {
+                        cbDeadlines[i].setChecked(true);
+                    } else if (action.getStatus().equals("closed")) {
+//                            cbDeadlines[i].setEnabled(false);
+                        cbDeadlines[i].setPaintFlags(cbDeadlines[i].getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    }else {
+                        cbDeadlines[i].setChecked(false);
+                    }
+                    break;
+                }
+            }
+        }
+    }
 
     public void onCheckDeadline(Integer cbIndex) {
         if (allActions.get(Network.ACTION_NAMES[cbIndex]).getStatus().equals("closed")) {
@@ -230,59 +261,75 @@ public class ElectionDetailsFragment extends Fragment {
             cbDeadlines[cbIndex].setChecked(false);
         } else {
             if (cbDeadlines[cbIndex].isChecked()) {
-                Log.i(TAG, "button checked");
-                allActions.get(Network.ACTION_NAMES[cbIndex]).setStatus("done");
-                allActions.get(Network.ACTION_NAMES[cbIndex]).setDate(getTodayActionDate());
-                openCongratsFragment(allActions.get(Network.ACTION_NAMES[cbIndex]));
+                if (prevReqFulfilled(cbIndex)) {
+                    Log.i(TAG, "button checked");
+                    allActions.get(Network.ACTION_NAMES[cbIndex]).setStatus("done");
+                    allActions.get(Network.ACTION_NAMES[cbIndex]).setDate(getTodayActionDate());
+                    openCongratsFragment(allActions.get(Network.ACTION_NAMES[cbIndex]));
+                } else {
+                    Toast.makeText(context, "Sorry, you must complete the preceding action(s) before you are able to complete this actions", Toast.LENGTH_LONG).show();
+                    cbDeadlines[cbIndex].setChecked(false);
+                }
             } else {
                 Log.i(TAG, "button unchecked");
-                allActions.get(Network.ACTION_NAMES[cbIndex]).setStatus("unfinished");
+//                allActions.get(Network.ACTION_NAMES[cbIndex]).setStatus("unfinished");
+//                allActions.get(Network.ACTION_NAMES[cbIndex]).remove(Action.KEY_IMAGE);
+//                allActions.get(Network.ACTION_NAMES[cbIndex]).setNotes("");
+                cbDeadlines[cbIndex].setChecked(true);
+                showConfirmDialog(cbIndex);
             }
+            election.setActions(allActions);
             Network.updateAction(allActions.get(Network.ACTION_NAMES[cbIndex]));
         }
     }
 
-    public void openCongratsFragment(Action action) {
-        ActionCompleteFragment actionCompleteFragment = ActionCompleteFragment.newInstance(context, action);
-        actionCompleteFragment.show(getFragmentManager(), "fragment_compose");
-    }
+    private void showConfirmDialog(final Integer cbIndex) {
+        new MaterialAlertDialogBuilder(context)
+                .setTitle("Delete action")
+                .setMessage("Are you sure you want to delete this action?")
 
-    public static void addActions(List<Action> listActions) {
-        HashMap<String, Action> actions = new HashMap<>();
-        for (Action action : listActions) {
-            actions.put(action.getName(), action);
-        }
-        allActions.putAll(actions);
-        pd.hide();
-    }
-
-    public static void handleParseActions(List<Action> listActions) {
-        Log.i(TAG, "handleParseActions: "  + listActions);
-
-        // if there are no listActions for this election + user yet, then make them!
-        if (listActions.size() == 0) {
-            Network.createElectionActions(election);
-        } else {
-            addActions(listActions);
-            for (Map.Entry entry : allActions.entrySet()) {
-                Action action = (Action) entry.getValue();
-                Log.i(TAG, "here: Action: " + action.getName());
-                // check if each action is completed or not
-                for (int i = 0 ; i< Network.ACTION_NAMES.length; i++) {
-                    if (action.getName().equals(Network.ACTION_NAMES[i])) {
-                        if (action.getStatus().equals("done")) {
-                            cbDeadlines[i].setChecked(true);
-                        } else if (action.getStatus().equals("closed")) {
-//                            cbDeadlines[i].setEnabled(false);
-                            cbDeadlines[i].setPaintFlags(cbDeadlines[i].getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                        }else {
-                            cbDeadlines[i].setChecked(false);
-                        }
-                        break;
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Continue with delete operation
+                        unCheck(cbIndex);
                     }
-                }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton("No", null)
+//                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    public void unCheck(Integer cbIndex) {
+        cbDeadlines[cbIndex].setChecked(false);
+        allActions.get(Network.ACTION_NAMES[cbIndex]).setStatus("unfinished");
+        allActions.get(Network.ACTION_NAMES[cbIndex]).remove(Action.KEY_IMAGE);
+        allActions.get(Network.ACTION_NAMES[cbIndex]).setNotes("");
+        election.setActions(allActions);
+        Network.updateAction(allActions.get(Network.ACTION_NAMES[cbIndex]));
+    }
+
+    private boolean prevReqFulfilled(Integer cbIndex) {
+        for (int i =0 ; i< cbIndex; i++) {
+            if (!cbDeadlines[i].isChecked()) {
+                return false;
             }
         }
+        return true;
+    }
+
+    public void openCongratsFragment(Action action) {
+        ActionCompleteFragment actionCompleteFragment = ActionCompleteFragment.newInstance(context, packageManager, action);
+        actionCompleteFragment.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                goUserProfile();
+            }
+        });
+        actionCompleteFragment.show(getFragmentManager(), "fragment_compose");
     }
 
     public static void addLocations(JSONArray pollingLocations, String type) {
@@ -294,6 +341,7 @@ public class ElectionDetailsFragment extends Fragment {
             e.printStackTrace();
         }
         fragmentManager.beginTransaction().replace(R.id.flContainerDetails, LocationsFragment.newInstance(context, election, locations)).commit();
+        pd.hide();
     }
 
     public static void addContests(JSONArray array) {

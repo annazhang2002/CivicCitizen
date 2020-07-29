@@ -85,7 +85,7 @@ public class ActionAdapter extends RecyclerView.Adapter<ActionAdapter.ViewHolder
         public void bind(final Action action) {
             tvName.setText("I " + action.getName());
             tvDate.setText(action.getDate());
-            if (action.getNotes() == null) {
+            if (action.getNotes() == null || action.getNotes().isEmpty()) {
                 tvNotes.setVisibility(View.GONE);
             } else {
                 tvNotes.setText(action.getNotes());

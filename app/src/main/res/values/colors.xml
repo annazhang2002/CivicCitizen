@@ -6,6 +6,7 @@
     <color name="darkDarkBlue">#000B25</color>
     <!-- USE ONLY FOR LINKS -->
     <color name="colorAccent">#1851B3</color>
+    <color name="colorSurface">@color/almostWhite</color>
 
     <color name="actualAccent">#2273FF</color>
     <color name="lightBlue">#B7D4FF</color>

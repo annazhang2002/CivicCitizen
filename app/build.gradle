@@ -20,6 +20,7 @@ android {
         apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
         buildConfigField("String", "GOOGLE_API_KEY", apikeyProperties['GOOGLE_API_KEY'])
         buildConfigField("String", "GOOGLE_MAPS_API_KEY", apikeyProperties['GOOGLE_MAPS_API_KEY'])
+        buildConfigField("String", "DISTANCE_MATRIX_API_KEY", apikeyProperties['DISTANCE_MATRIX_API_KEY'])
         resValue "string", "GOOGLE_MAPS_API_KEY", apikeyProperties['GOOGLE_MAPS_API_KEY']
     }
 
@@ -54,6 +55,7 @@ dependencies {
     // DESIGN SUPPORT LIBRARY
     implementation "androidx.appcompat:appcompat:${appCompatVersion}"
     implementation "com.google.android.material:material:${designSupportVersion}"
+    api 'com.google.android.material:material:1.1.0-alpha06'
 
     // ASYNC LIBRARY
     implementation 'com.codepath.libraries:asynchttpclient:0.0.9'

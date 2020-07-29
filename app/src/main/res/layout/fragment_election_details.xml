@@ -91,8 +91,7 @@
                 android:layout_height="30dp"
                 android:layout_weight="1"
                 android:background="@drawable/border"
-                android:backgroundTint="@color/whiteBlue"
-                android:elevation="10dp"
+                android:elevation="0dp"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="Polling Locations"
                 android:textColor="@color/darkGrayBlue" />
@@ -103,7 +102,7 @@
                 android:layout_height="30dp"
                 android:layout_weight="1"
                 android:background="@drawable/border"
-                android:backgroundTint="@color/lightLightBlue"
+                android:elevation="0dp"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="Ballot Contests"
                 android:textColor="@color/darkGrayBlue" />

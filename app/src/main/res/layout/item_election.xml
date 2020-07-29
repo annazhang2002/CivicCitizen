@@ -34,4 +34,23 @@
         android:textSize="20sp"
         tools:text="Election Day" />
 
+    <ProgressBar
+        android:id="@+id/pbCompletion"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="253dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvElectionDay"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/tvPercentage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvElectionDay"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_toEndOf="@+id/pbCompletion"
+        android:textColor="@color/darkGrayBlue"
+        tools:text="50%" />
+
 </RelativeLayout>

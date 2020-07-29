@@ -44,6 +44,7 @@ import com.google.android.gms.tasks.Task;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -61,7 +62,6 @@ public class LocationsFragment extends Fragment implements PopupMenu.OnMenuItemC
     static Context context;
     static List<Location> allLocations;
     static List<Location> filteredLocations;
-    public static HashMap<String, Marker> allMarkers;
     RecyclerView rvLocations;
     static LocationAdapter locationAdapter;
     boolean locationPermissionGranted;
@@ -89,6 +89,7 @@ public class LocationsFragment extends Fragment implements PopupMenu.OnMenuItemC
         context = context1;
         allLocations = new ArrayList<>();
         allLocations.addAll(inLocations);
+//        Collections.sort(allLocations);
         fragment.setArguments(args);
         return fragment;
     }
@@ -113,11 +114,11 @@ public class LocationsFragment extends Fragment implements PopupMenu.OnMenuItemC
         super.onViewCreated(view, savedInstanceState);
         rvLocations = view.findViewById(R.id.rvLocations);
         filteredLocations = new ArrayList<>();
+//        Collections.sort(allLocations);
         filteredLocations.addAll(allLocations);
         locationAdapter = new LocationAdapter(context, filteredLocations);
         rvLocations.setLayoutManager(new LinearLayoutManager(context));
         rvLocations.setAdapter(locationAdapter);
-        allMarkers = new HashMap<>();
         tvFilter = view.findViewById(R.id.tvFilter);
         tvFilter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,6 +162,11 @@ public class LocationsFragment extends Fragment implements PopupMenu.OnMenuItemC
         popup.show();
     }
 
+
+    public static void sortLocations() {
+        Collections.sort(allLocations);
+    }
+
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         rvLocations.smoothScrollToPosition(0);
@@ -194,8 +200,8 @@ public class LocationsFragment extends Fragment implements PopupMenu.OnMenuItemC
     }
 
     public void resetMarkers(boolean visibility) {
-        for (HashMap.Entry<String, Marker> entry : allMarkers.entrySet()) {
-            allMarkers.get(entry.getKey()).setVisible(visibility);
+        for (Location location : allLocations) {
+            location.getMarker().setVisible(visibility);
         }
     }
 
@@ -206,7 +212,7 @@ public class LocationsFragment extends Fragment implements PopupMenu.OnMenuItemC
             Location location = allLocations.get(i);
             if (location.getType().equals(type)) {
                 filteredLocations.add(location);
-                allMarkers.get(location.getName()).setVisible(true);
+                location.getMarker().setVisible(true);
             }
         }
         locationAdapter.notifyDataSetChanged();
@@ -237,7 +243,7 @@ public class LocationsFragment extends Fragment implements PopupMenu.OnMenuItemC
                 .position(loc.getLatLng())
                 .title(loc.getName())
                 .icon(getMarkerIcon(context.getResources().getString(loc.getPillColor()))));
-        allMarkers.put(loc.getName(), marker);
+        loc.setMarker(marker);
     }
     public static BitmapDescriptor getMarkerIcon(String color) {
         float[] hsv = new float[3];

@@ -21,7 +21,6 @@ import java.util.List;
 
 import static com.example.votingapp.MethodLibrary.openUrl;
 import static com.example.votingapp.fragments.LocationsFragment.map;
-import static com.example.votingapp.fragments.LocationsFragment.allMarkers;
 
 // Create the basic adapter extending from RecyclerView.Adapter
 // Note that we specify the custom ViewHolder which gives us access to our views
@@ -90,7 +89,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         }
 
         public void bind(Location location) {
-            Integer position = getAdapterPosition();
             tvName.setText(location.getName());
             tvAddress.setText(location.getAddress());
             tvDates.setText(location.getStartDate() + " - " + location.getEndDate());
@@ -113,7 +111,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
                 Location location = locations.get(position);
 
                 map.moveCamera(CameraUpdateFactory.newLatLng(location.getLatLng()));
-                allMarkers.get(location.getName()).showInfoWindow();
+                location.getMarker().showInfoWindow();
             }
         }
 

@@ -1,10 +1,12 @@
 package com.example.votingapp;
 
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.example.votingapp.adapters.ElectionsAdapter;
 import com.example.votingapp.fragments.ElectionDetailsFragment;
 import com.example.votingapp.activities.MainActivity;
 import com.example.votingapp.fragments.ElectionFragment;
@@ -37,6 +39,7 @@ public class Network {
     public static final String VOTER_INFO_URL = "https://www.googleapis.com/civicinfo/v2/voterinfo";
     public static final String REPS_URL = "https://www.googleapis.com/civicinfo/v2/representatives";
     public static final String GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json?";
+    public static final String DISTANCE_MATRIX_URL = "https://maps.googleapis.com/maps/api/distancematrix/json?";
     private static final String TAG = "Network";
     public static final String[] ACTION_NAMES = {"registered to vote", "sent in absentee ballot", "voted"};
 
@@ -47,6 +50,7 @@ public class Network {
     public static AsyncHttpClient client = new AsyncHttpClient();
     public static String apiKey = BuildConfig.GOOGLE_API_KEY;
     public static final String mapsApiKey = BuildConfig.GOOGLE_MAPS_API_KEY;
+    public static final String distanceMatrixApiKey = BuildConfig.DISTANCE_MATRIX_API_KEY;
     public static String userState = "";
 
     // method to get the coordinates from address
@@ -175,7 +179,6 @@ public class Network {
                         Election election = new Election(array.getJSONObject(i));
                         getVoterQuery(election);
                     }
-                    MainActivity.hidePd();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -260,7 +263,7 @@ public class Network {
     }
 
     // query the action/checkboxes for a particular election
-    public static void queryActions(Election election) {
+    public static void queryActions(final Election election) {
         Log.i(TAG, "queryActions");
         ParseQuery<Action> query = ParseQuery.getQuery(Action.class);
         query.include(Action.KEY_USER);
@@ -273,7 +276,7 @@ public class Network {
                 if (e != null) {
                     Log.e(TAG, "Issue with getting actions", e);
                 }
-                ElectionDetailsFragment.handleParseActions(actions);
+                ElectionsAdapter.handleParseActions(actions, election);
             }
         });
     }
@@ -300,7 +303,7 @@ public class Network {
                 }
             });
         }
-        ElectionDetailsFragment.addActions(actions);
+        ElectionsAdapter.addActions(actions, election);
         Log.i(TAG, "Added all actions: " + actions);
     }
 
@@ -323,16 +326,40 @@ public class Network {
         ParseQuery<Action> query = ParseQuery.getQuery(Action.class);
         query.include(Action.KEY_USER);
         query.whereEqualTo(Action.KEY_STATUS, "done");
-        query.whereEqualTo(Action.KEY_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(Action.KEY_USER, user);
         query.findInBackground(new FindCallback<Action>() {
             @Override
             public void done(List<Action> actions, ParseException e) {
-                Log.i(TAG, "here");
                 if (e != null) {
                     Log.e(TAG, "Issue with getting actions", e);
                 }
-                ProfileFragment.handleParseActions(actions);
+                if (actions != null) {
+                    ProfileFragment.handleParseActions(actions);
+                }
             }
         });
     }
+
+//    public static void getDistanceFrom(String origin, String destination) {
+//        RequestParams params = new RequestParams();
+//        params.put("origin", origin);
+//        params.put("destination", destination);
+//        client.get(DISTANCE_MATRIX_URL + "key=" + distanceMatrixApiKey, params, new JsonHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Headers headers, JSON json) {
+//                try {
+//                    // retrieve the state object
+//                    Long distance = json.jsonObject.getJSONArray("rows").getJSONObject(0).getJSONArray("elements").getJSONObject(0).getJSONObject("distance").getLong("value");
+//                    Location.parseDistance(distance);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+//                Log.d(TAG, "onFailure to getVoterQuery, " + statusCode + ", " + response, throwable);
+//            }
+//        });
+//    }
 }

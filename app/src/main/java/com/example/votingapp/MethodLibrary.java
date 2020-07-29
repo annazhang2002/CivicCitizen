@@ -118,6 +118,10 @@ public class MethodLibrary {
         return addObj.getString("line1") + ", " + addObj.getString("city") + ", " + addObj.getString("state") + " " + addObj.getString("zip");
     }
 
+    public static String parseAddressDistanceMatrix(JSONObject addObj) throws JSONException {
+        return addObj.getString("line1") + ", " + addObj.getString("city") + ", " + addObj.getString("state") + " " + addObj.getString("zip");
+    }
+
     public static String getTodayActionDate() {
         Date c = Calendar.getInstance().getTime();
         return getFormattedDate(c.toString(), DATE_OBJ_FORMAT, M_D_Y_FORMAT);

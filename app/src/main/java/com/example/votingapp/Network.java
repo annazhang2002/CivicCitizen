@@ -2,6 +2,7 @@ package com.example.votingapp;
 
 import android.util.Log;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.RequestParams;
@@ -10,6 +11,7 @@ import com.example.votingapp.adapters.ElectionsAdapter;
 import com.example.votingapp.fragments.ElectionDetailsFragment;
 import com.example.votingapp.activities.MainActivity;
 import com.example.votingapp.fragments.ElectionFragment;
+import com.example.votingapp.fragments.FriendFragment;
 import com.example.votingapp.fragments.InfoFragment;
 import com.example.votingapp.fragments.LocationsFragment;
 import com.example.votingapp.fragments.ProfileFragment;
@@ -19,6 +21,7 @@ import com.example.votingapp.models.Election;
 import com.example.votingapp.models.Location;
 import com.example.votingapp.models.User;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -68,6 +71,7 @@ public class Network {
                     JSONObject loc = json.jsonObject.getJSONArray("results").getJSONObject(0).getJSONObject("geometry").getJSONObject("location");
                     double lat = loc.getDouble("lat");
                     double lng = loc.getDouble("lng");
+                    location.setLatLng(lat, lng);
                     LocationsFragment.addLatLng(lat, lng, location);
                     Log.i(TAG, "location: " + json);
                 } catch (JSONException e) {
@@ -340,26 +344,145 @@ public class Network {
         });
     }
 
-//    public static void getDistanceFrom(String origin, String destination) {
+    public static void queryFriendActions(ParseUser currentUser) {
+        Log.i(TAG, "queryFriendActions");
+
+        final List<String> friendIds = new ArrayList<>();
+        friendIds.addAll(User.getFriends(currentUser));
+
+        ParseQuery<Action> query = ParseQuery.getQuery(Action.class);
+        query.include(Action.KEY_USER);
+        query.whereEqualTo(Action.KEY_STATUS, "done");
+        query.findInBackground(new FindCallback<Action>() {
+            @Override
+            public void done(List<Action> actions, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting actions", e);
+                }
+                if (actions != null) {
+                    for (int i = 0; i < actions.size(); i++) {
+                        if (friendIds.contains(actions.get(i).getUser().getUsername())) {
+                            FriendFragment.addFriendAction(actions.get(i));
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    public static void searchFriends(final ParseUser currentUser, final String friendUsername) {
+        Log.i(TAG, "searchFriends");
+        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+        query.whereContains("username", friendUsername);
+        query.whereNotEqualTo("username", currentUser.getUsername());
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> users, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting usernames", e);
+                }
+                if (users != null && !users.isEmpty()) {
+                    FriendFragment.showSearchResults(users);
+                }
+            }
+        });
+    }
+
+    public static void findFriend(final ParseUser currentUser, final String friendUsername) {
+        Log.i(TAG, "findFriend");
+        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+        query.whereEqualTo("username", friendUsername);
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> users, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting usernames", e);
+                }
+                if (users != null && !users.isEmpty()) {
+                    addFriend(currentUser, users.get(0));
+                } else {
+                    FriendFragment.noFriendAlert(friendUsername);
+                }
+            }
+        });
+    }
+
+    public static void addFriend(ParseUser currentUser, final ParseUser friend) {
+        Log.i(TAG, "queryFriendActions");
+
+        final List<String> friendIds = new ArrayList<>();
+        friendIds.addAll(User.getFriends(currentUser));
+        friendIds.add(friend.getUsername());
+        User.setFriends(currentUser, friendIds);
+        currentUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                MainActivity.goUserProfile(friend);
+            }
+        });
+    }
+
+//    public static void getDistanceFrom(String origin, Location location) {
 //        RequestParams params = new RequestParams();
-//        params.put("origin", origin);
-//        params.put("destination", destination);
-//        client.get(DISTANCE_MATRIX_URL + "key=" + distanceMatrixApiKey, params, new JsonHttpResponseHandler() {
+//        String destinationString = "";
+//        for (Location location : locations) {
+//            destinationString += location.getLatLng().latitude + "," + location.getLatLng().longitude + "|";
+//        }
+//        destinationString.substring(0,destinationString.length()-1);
+//
+//        client.get(DISTANCE_MATRIX_URL + "origins=" + origin + "&destinations=" + destinationString + "&key=" + distanceMatrixApiKey, params, new JsonHttpResponseHandler() {
 //            @Override
 //            public void onSuccess(int statusCode, Headers headers, JSON json) {
 //                try {
-//                    // retrieve the state object
-//                    Long distance = json.jsonObject.getJSONArray("rows").getJSONObject(0).getJSONArray("elements").getJSONObject(0).getJSONObject("distance").getLong("value");
-//                    Location.parseDistance(distance);
+//                    Log.i(TAG, "got the distances");
+//                    JSONArray elements = json.jsonObject.getJSONArray("rows").getJSONObject(0).getJSONArray("elements");
+//                    for (int i = 0; i< elements.length(); i++) {
+//                        Long distance = elements.getJSONObject(i).getJSONObject("distance").getLong("value");
+//                        locations.get(i).setDistanceHome(distance);
+//                    }
+//                    LocationsFragment.sortLocations();
 //                } catch (JSONException e) {
+//                    Log.i(TAG, "failure to get the distances");
 //                    e.printStackTrace();
 //                }
 //            }
 //
 //            @Override
 //            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-//                Log.d(TAG, "onFailure to getVoterQuery, " + statusCode + ", " + response, throwable);
+//                Log.d(TAG, "onFailure to getDistancesFrom, " + statusCode + ", " + response, throwable);
 //            }
 //        });
 //    }
+
+    public static void getDistancesFrom(String origin, final List<Location> locations) {
+        RequestParams params = new RequestParams();
+        String destinationString = "";
+        for (Location location : locations) {
+            destinationString += location.getAddress() + "|";
+        }
+        destinationString.substring(0,destinationString.length()-1);
+
+        client.get(DISTANCE_MATRIX_URL + "origins=" + origin + "&destinations=" + destinationString + "&key=" + distanceMatrixApiKey, params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                try {
+                    Log.i(TAG, "got the distances");
+                    JSONArray elements = json.jsonObject.getJSONArray("rows").getJSONObject(0).getJSONArray("elements");
+                    for (int i = 0; i< elements.length(); i++) {
+                        Long distance = elements.getJSONObject(i).getJSONObject("distance").getLong("value");
+                        locations.get(i).setDistanceHome(distance);
+                    }
+                    LocationsFragment.sortLocations();
+                } catch (JSONException e) {
+                    Log.i(TAG, "failure to get the distances");
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.d(TAG, "onFailure to getDistancesFrom, " + statusCode + ", " + response, throwable);
+            }
+        });
+    }
 }

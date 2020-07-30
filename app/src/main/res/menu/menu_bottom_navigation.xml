@@ -12,6 +12,11 @@
         android:title="Reps"
         app:showAsAction="always" />
     <item
+        android:id="@+id/action_friends"
+        android:icon="@drawable/ic_people_alt_24px"
+        android:title="Friends"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_faqs"
         android:icon="@drawable/question_menu_icon"
         android:title="FAQs"
@@ -21,4 +26,5 @@
         android:icon="@drawable/profile_icon_menu"
         android:title="Profile"
         app:showAsAction="always" />
+
 </menu>

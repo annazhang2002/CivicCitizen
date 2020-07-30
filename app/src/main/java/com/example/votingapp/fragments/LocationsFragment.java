@@ -26,6 +26,7 @@ import com.example.votingapp.R;
 import com.example.votingapp.adapters.LocationAdapter;
 import com.example.votingapp.models.Election;
 import com.example.votingapp.models.Location;
+import com.example.votingapp.models.User;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -40,6 +41,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
@@ -47,6 +49,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
@@ -89,7 +95,7 @@ public class LocationsFragment extends Fragment implements PopupMenu.OnMenuItemC
         context = context1;
         allLocations = new ArrayList<>();
         allLocations.addAll(inLocations);
-//        Collections.sort(allLocations);
+        Collections.sort(allLocations);
         fragment.setArguments(args);
         return fragment;
     }
@@ -126,6 +132,8 @@ public class LocationsFragment extends Fragment implements PopupMenu.OnMenuItemC
                 showMenu(view);
             }
         });
+
+        Network.getDistancesFrom(User.getAddress(ParseUser.getCurrentUser()), filteredLocations);
 
         getLocationPermission();
 
@@ -165,6 +173,9 @@ public class LocationsFragment extends Fragment implements PopupMenu.OnMenuItemC
 
     public static void sortLocations() {
         Collections.sort(allLocations);
+        filteredLocations.clear();
+        filteredLocations.addAll(allLocations);
+        locationAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -238,7 +249,6 @@ public class LocationsFragment extends Fragment implements PopupMenu.OnMenuItemC
     }
 
     public static void addLatLng(double lat, double lng, Location loc) {
-        loc.setLatLng(lat, lng);
         Marker marker = map.addMarker(new MarkerOptions()
                 .position(loc.getLatLng())
                 .title(loc.getName())

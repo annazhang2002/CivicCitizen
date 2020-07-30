@@ -17,9 +17,12 @@ import com.bumptech.glide.Glide;
 import com.example.votingapp.MethodLibrary;
 import com.example.votingapp.Network;
 import com.example.votingapp.R;
+import com.example.votingapp.activities.MainActivity;
 import com.example.votingapp.fragments.dialogFragments.ActionCompleteFragment;
 import com.example.votingapp.fragments.dialogFragments.EditActionDialogFragment;
 import com.example.votingapp.models.Action;
+import com.parse.Parse;
+import com.parse.ParseUser;
 
 import org.w3c.dom.Text;
 
@@ -33,6 +36,7 @@ public class ActionAdapter extends RecyclerView.Adapter<ActionAdapter.ViewHolder
     List<Action> actions;
     Context context;
     FragmentManager fragmentManager;
+    ParseUser user;
 
     public ActionAdapter(Context context, List<Action> actions, FragmentManager fragmentManager) {
         this.context = context;
@@ -83,7 +87,26 @@ public class ActionAdapter extends RecyclerView.Adapter<ActionAdapter.ViewHolder
         }
 
         public void bind(final Action action) {
-            tvName.setText("I " + action.getName());
+            user = action.getUser();
+            if (user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+                tvName.setText("I " + action.getName());
+                ivShare.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        MethodLibrary.shareContentHTML(context, "<p>Hey, I just " + action.getName() + "! Make sure you do before the deadline!</p>");
+                    }
+                });
+                ivEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        openEditDialog();
+                    }
+                });
+            } else {
+                tvName.setText(user.getString("name") + " " + action.getName());
+                ivShare.setVisibility(View.GONE);
+                ivEdit.setVisibility(View.GONE);
+            }
             tvDate.setText(action.getDate());
             if (action.getNotes() == null || action.getNotes().isEmpty()) {
                 tvNotes.setVisibility(View.GONE);
@@ -102,18 +125,6 @@ public class ActionAdapter extends RecyclerView.Adapter<ActionAdapter.ViewHolder
             } else if (action.getName().equals(Network.ACTION_NAMES[2])) {
                 Glide.with(context).load(R.drawable.ic_how_to_vote_24px).into(ivIcon);
             }
-            ivShare.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    MethodLibrary.shareContentHTML(context, "<p>Hey, I just " + action.getName() + "! Make sure you do before the deadline!</p>");
-                }
-            });
-            ivEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    openEditDialog();
-                }
-            });
         }
 
         public void openEditDialog() {
@@ -149,7 +160,9 @@ public class ActionAdapter extends RecyclerView.Adapter<ActionAdapter.ViewHolder
         @Override
         public void onClick(View view) {
             Log.i(TAG, "onClick adapter action item");
-
+            if (!user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+                MainActivity.goUserProfile(user);
+            }
 
         }
     }

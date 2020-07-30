@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,26 +32,36 @@ import com.example.votingapp.adapters.CandidateAdapter;
 import com.example.votingapp.models.Action;
 import com.example.votingapp.models.Candidate;
 import com.example.votingapp.models.User;
+import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileFragment extends Fragment {
+    private static final String TAG = "ProfileFragment";
     ParseUser user;
 
     ImageView ivProfilePic;
     TextView tvName;
     TextView tvUsername;
     TextView tvAddress;
+    TextView tvAddressText;
     Button btnEdit;
     Button btnLogout;
+    ImageView ivBack;
     RecyclerView rvActions;
     static List<Action> actions;
     static ActionAdapter adapter;
 
     public ProfileFragment() {
         // Required empty public constructor
+        user = ParseUser.getCurrentUser();
+    }
+
+    public ProfileFragment(ParseUser user) {
+        this.user = user;
     }
 
     @Override
@@ -68,44 +79,113 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        user = ParseUser.getCurrentUser();
         actions = new ArrayList<>();
         rvActions = view.findViewById(R.id.rvActions);
         rvActions.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new ActionAdapter(getContext(), actions, getFragmentManager());
         rvActions.setAdapter(adapter);
-        Network.queryUserActions(ParseUser.getCurrentUser());
+        Network.queryUserActions(user);
 
         getActivity().setTitle(user.getString("name") + "'s Profile");
         ivProfilePic = view.findViewById(R.id.ivProfilePic);
         tvName = view.findViewById(R.id.tvName);
         tvUsername = view.findViewById(R.id.tvUsername);
         tvAddress = view.findViewById(R.id.tvAddress);
+        tvAddressText = view.findViewById(R.id.tvAddressText);
         btnEdit = view.findViewById(R.id.btnEdit);
         btnLogout = view.findViewById(R.id.btnLogout);
+        ivBack = view.findViewById(R.id.ivBack);
 
         // set values for all of the views
         tvName.setText(user.getString("name"));
         tvUsername.setText("@" + user.getUsername());
-        tvAddress.setText(User.getAddress(user));
+
+        // if the user is the current user
+        if (user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+            tvAddress.setText(User.getAddress(user));
+            btnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    goEditProfile();
+                }
+            });
+            btnLogout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    goOpening();
+                    ParseUser.logOut();
+                }
+            });
+            ivBack.setVisibility(View.GONE);
+        }
+        // if we are viewing someone else's profile
+        else {
+            tvAddress.setVisibility(View.GONE);
+            tvAddressText.setVisibility(View.GONE);
+            if (User.getFriends(user).contains(user.getUsername())) {
+                btnEdit.setText("Poke (Remind)");
+                btnEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        poke();
+                    }
+                });
+            } else {
+                btnEdit.setVisibility(View.GONE);
+            }
+            // if the current user is friends with this user
+            if (User.getFriends(ParseUser.getCurrentUser()).contains(user.getUsername())) {
+                btnLogout.setText("Unfriend");
+            } else {
+                btnLogout.setText("Friend");
+            }
+
+            btnLogout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    friendClick();
+                }
+            });
+            ivBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MainActivity.goFriends();
+                }
+            });
+        }
         if (user.getParseFile(User.KEY_PROFILEPIC) == null) {
             Glide.with(getContext()).load(R.drawable.default_profile).circleCrop().into(ivProfilePic);
         } else {
             Glide.with(getContext()).load(user.getParseFile(User.KEY_PROFILEPIC).getUrl()).circleCrop().into(ivProfilePic);
         }
-        btnEdit.setOnClickListener(new View.OnClickListener() {
+
+    }
+
+    private void poke() {
+
+    }
+
+    private void friendClick() {
+        // if the person is already user's friend, then unfriend
+        List<String> friends = new ArrayList<>();
+        friends.addAll(User.getFriends(ParseUser.getCurrentUser()));
+        if (friends.contains(user.getUsername())) {
+            friends.remove(friends.indexOf(user.getUsername()));
+            btnLogout.setText("Friend");
+        }
+        // else friend them
+        else {
+            friends.add(user.getUsername());
+            btnLogout.setText("Unfriend");
+        }
+        ParseUser.getCurrentUser().put(User.KEY_FRIENDS, friends);
+        ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
             @Override
-            public void onClick(View view) {
-                goEditProfile();
+            public void done(ParseException e) {
+                Log.i(TAG, "User's friends updates");
             }
         });
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goOpening();
-                ParseUser.logOut();
-            }
-        });
+
     }
 
     public static void handleParseActions(List<Action> newActions) {

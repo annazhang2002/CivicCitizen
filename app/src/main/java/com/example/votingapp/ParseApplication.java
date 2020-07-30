@@ -8,7 +8,10 @@ import android.util.Log;
 
 import com.example.votingapp.models.Action;
 import com.parse.Parse;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+
+//import org.testng.annotations.Configuration;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -42,6 +45,7 @@ public class ParseApplication extends Application {
                 .applicationId("votingApp") // should correspond to APP_ID env variable
                 .clientKey("votingAppAndroidFBU")
                 .server("https://voting-app-fbu.herokuapp.com/parse/").build());
+        ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 
     public void createNotificationChannel() {

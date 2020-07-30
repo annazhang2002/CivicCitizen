@@ -36,14 +36,15 @@ public class Location implements Comparable<Location>{
     String endDate;
     String pollingHours;
     String type;
-    static Integer typeIndex;
+    Integer typeIndex;
     String notes;
     LatLng latLng;
     Integer pillColor;
-    Integer weight;
-    static Long distanceHome;
+    Integer weight = 0;
+    Long distanceHome;
     Marker marker;
     JSONObject addObj;
+    Integer locationPreferWeight;
 
     public Location(JSONObject jsonObject, String type1) {
         try {
@@ -56,7 +57,7 @@ public class Location implements Comparable<Location>{
             pollingHours = jsonObject.getString("pollingHours");
             pillColor = setPillColor(type);
             notes = jsonObject.getString("notes");
-            getDistanceFrom(address, User.getAddress(ParseUser.getCurrentUser()));
+//            getDistanceFrom(address, User.getAddress(ParseUser.getCurrentUser()));
 //            weight = calculateWeight();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -64,17 +65,11 @@ public class Location implements Comparable<Location>{
     }
 
     private Integer calculateWeight() {
-        int locationPreferWeight;
-//        long distance = distanceHome;
-        long distance = 0;
+        long distance = distanceHome;
+//        long distance = 0;
         locationPreferWeight = User.getLocationPreference(ParseUser.getCurrentUser(), typeIndex);
 
-        return locationPreferWeight + (int) distance;
-    }
-
-    public void parseDistance(long distance) {
-        distanceHome = distance;
-        weight = calculateWeight();
+        return (int) (distance / locationPreferWeight);
     }
 
     public Integer setPillColor(String type) {
@@ -150,38 +145,30 @@ public class Location implements Comparable<Location>{
         this.marker = marker;
     }
 
-    public static Integer getTypeIndex() {
+    public Integer getTypeIndex() {
         return typeIndex;
     }
 
+    public Long getDistanceHome() {
+        return distanceHome;
+    }
 
-    public void getDistanceFrom(String origin, String destination) {
-        RequestParams params = new RequestParams();
-        params.put("origin", origin);
-        params.put("destination", destination);
-        Network.client.get(DISTANCE_MATRIX_URL + "key=" + Network.distanceMatrixApiKey, params, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                try {
-                    // retrieve the state object
-                    Long distance = json.jsonObject.getJSONArray("rows").getJSONObject(0).getJSONArray("elements").getJSONObject(0).getJSONObject("distance").getLong("value");
-                    parseDistance(distance);
-                    LocationsFragment.sortLocations();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
+    public void setDistanceHome(Long distanceHome) {
+        this.distanceHome = distanceHome;
+        weight = calculateWeight();
+    }
 
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.d(TAG, "onFailure to getDistanceFrom, " + statusCode + ", " + response, throwable);
-            }
-        });
+    public Integer getLocationPreferWeight() {
+        return locationPreferWeight;
+    }
+
+    public void setLocationPreferWeight(Integer locationPreferWeight) {
+        this.locationPreferWeight = locationPreferWeight;
     }
 
     @Override
     public int compareTo(Location location) {
-        Log.i(TAG, location.getName() + "'s weight: " + location.getWeight() + " and " + name + "'s weight: " + weight);
-        return location.getWeight().compareTo(weight);
+//        Log.i(TAG, location.getName() + "'s weight: " + location.getWeight() + " and " + name + "'s weight: " + weight);
+        return weight.compareTo(location.getWeight());
     }
 }

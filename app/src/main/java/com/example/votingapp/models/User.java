@@ -22,6 +22,7 @@ public class User {
     public static final String KEY_ZIP = "addressZip";
     private static final String KEY_LOCATION_WEIGHTS = "locationPreferences";
     private static final String TAG = "User";
+    public static final String KEY_FRIENDS = "friends";
 
     public static String getAddress(ParseUser user) {
         String add1 = user.getString(KEY_ADDRESS1);
@@ -77,4 +78,20 @@ public class User {
         user.put(KEY_LOCATION_WEIGHTS, weights);
     }
 
+    public static List<String> getFriends(ParseUser currentUser) {
+        List<String> friendIds = new ArrayList<>();
+        JSONArray jsonFriends = currentUser.getJSONArray(KEY_FRIENDS);
+        for (int i = 0 ; i< jsonFriends.length(); i++) {
+            try {
+                friendIds.add(jsonFriends.getString(i));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return friendIds;
+    }
+
+    public static void setFriends(ParseUser user, List<String> friends) {
+        user.put(KEY_FRIENDS, friends);
+    }
 }

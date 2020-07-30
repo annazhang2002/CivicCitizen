@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import com.example.votingapp.R;
 import com.example.votingapp.fragments.ElectionDetailsFragment;
 import com.example.votingapp.fragments.ElectionFragment;
+import com.example.votingapp.fragments.FriendFragment;
 import com.example.votingapp.fragments.InfoFragment;
 import com.example.votingapp.fragments.ProfileFragment;
 import com.example.votingapp.fragments.RepDetailsFragment;
@@ -65,6 +66,9 @@ public class MainActivity extends AppCompatActivity{
                         break;
                     case R.id.action_profile:
                         fragment = new ProfileFragment();
+                        break;
+                    case R.id.action_friends:
+                        fragment = new FriendFragment();
                         break;
                     default:
                         Log.i(TAG, "Error with the bottom navigation tabs");
@@ -130,10 +134,17 @@ public class MainActivity extends AppCompatActivity{
         fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
     }
 
-    public static void goUserProfile() {
-        Fragment fragment = new ProfileFragment();
+    public static void goUserProfile(ParseUser user) {
+        Fragment fragment = new ProfileFragment(user);
         fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
-        bottomNavigationView.setSelectedItemId(R.id.action_profile);
+        if (user == ParseUser.getCurrentUser()) {
+            bottomNavigationView.setSelectedItemId(R.id.action_profile);
+        }
+    }
+    public static void goFriends() {
+        Fragment fragment = new FriendFragment(true);
+        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+        bottomNavigationView.setSelectedItemId(R.id.action_friends);
     }
 
     public void createProgressDialog() {

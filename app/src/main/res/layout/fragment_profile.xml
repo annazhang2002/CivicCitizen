@@ -18,9 +18,9 @@
             android:id="@+id/btnLogout"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_below="@+id/tvAddress"
+            android:layout_below="@+id/ivProfilePic"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="13dp"
             android:layout_marginEnd="10dp"
             android:layout_toEndOf="@+id/btnEdit"
             android:background="@drawable/white_button"
@@ -31,10 +31,10 @@
             android:id="@+id/btnEdit"
             android:layout_width="194dp"
             android:layout_height="40dp"
-            android:layout_below="@+id/tvAddress"
+            android:layout_below="@+id/ivProfilePic"
             android:layout_alignParentStart="true"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="13dp"
             android:background="@drawable/white_button"
             android:backgroundTint="@color/white"
             android:text="Edit Profile" />
@@ -43,10 +43,10 @@
             android:id="@+id/ivProfilePic"
             android:layout_width="139dp"
             android:layout_height="141dp"
-            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="14dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="14dp"
+            android:layout_toEndOf="@+id/ivBack"
             android:elevation="10dp"
             tools:src="@tools:sample/avatars" />
 
@@ -64,7 +64,7 @@
             tools:text="Anna Zhang" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/tvAddressText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvUsername"
@@ -80,7 +80,7 @@
             android:id="@+id/tvAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textView3"
+            android:layout_below="@+id/tvAddressText"
             android:layout_marginStart="10dp"
             android:layout_marginTop="-3dp"
             android:layout_marginEnd="20dp"
@@ -104,8 +104,18 @@
             android:id="@+id/rvActions"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/btnEdit"
+            android:layout_below="@+id/btnLogout"
             android:layout_marginTop="5dp" />
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="15dp"
+            app:srcCompat="@drawable/ic_arrow_back_24px" />
 
     </RelativeLayout>
 </ScrollView>

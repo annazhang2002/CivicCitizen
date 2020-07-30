@@ -32,6 +32,7 @@ import com.example.votingapp.models.Election;
 import com.example.votingapp.models.Location;
 import com.example.votingapp.models.Rep;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -326,7 +327,7 @@ public class ElectionDetailsFragment extends Fragment {
         actionCompleteFragment.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                goUserProfile();
+                goUserProfile(ParseUser.getCurrentUser());
             }
         });
         actionCompleteFragment.show(getFragmentManager(), "fragment_compose");

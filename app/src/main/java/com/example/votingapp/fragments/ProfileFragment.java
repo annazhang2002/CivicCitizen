@@ -63,7 +63,6 @@ public class ProfileFragment extends Fragment {
     public ProfileFragment(ParseUser user) {
         this.user = user;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,7 +148,7 @@ public class ProfileFragment extends Fragment {
             ivBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MainActivity.goFriends();
+                    MainActivity.goFriends("friends");
                 }
             });
         }

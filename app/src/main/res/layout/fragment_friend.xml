@@ -5,14 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".fragments.FriendFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvFriendActions"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/svSearch"
-        android:layout_marginTop="0dp"
-        android:background="@color/almostWhite" />
-
     <SearchView
         android:id="@+id/svSearch"
         android:layout_width="match_parent"
@@ -25,14 +17,60 @@
         android:id="@+id/lvSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/rvFriendActions"
+        android:layout_below="@+id/svSearch"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="50dp"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="50dp"
-        android:layout_marginBottom="0dp" />
+        android:layout_marginBottom="0dp"
+        android:elevation="50dp" />
+
+    <LinearLayout
+        android:id="@+id/llToggle"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@id/svSearch"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="100dp"
+        android:background="@drawable/election_card"
+        android:elevation="0dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvTimeline"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:elevation="0dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Timeline"
+            android:textColor="@color/darkGrayBlue" />
+
+        <TextView
+            android:id="@+id/tvFriends"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:elevation="0dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Friends"
+            android:textColor="@color/darkGrayBlue" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/flContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/llToggle"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="5dp">
+
+    </FrameLayout>
 
 </RelativeLayout>
 

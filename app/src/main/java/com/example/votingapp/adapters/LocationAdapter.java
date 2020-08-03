@@ -96,7 +96,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
             tvType.setText(location.getType());
             GradientDrawable gradientDrawable = (GradientDrawable) tvType.getBackground().mutate();
             gradientDrawable.setColor(context.getResources().getColor(location.getPillColor()));
-            if (!location.getNotes().equals("NULL")) {
+            if (location.getNotes() != null && !location.getNotes().equals("NULL")) {
                 tvNotes.setText(location.getNotes());
             } else {
                 tvNotes.setVisibility(View.GONE);

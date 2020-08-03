@@ -114,8 +114,8 @@ public class ElectionDetailsFragment extends Fragment {
         tvElectionDay = view.findViewById(R.id.tvElectionDay);
         ivOpenRegister = view.findViewById(R.id.ivOpenRegister);
         ivOpenAbsentee = view.findViewById(R.id.ivOpenAbsentee);
-        tvContests = view.findViewById(R.id.tvContests);
-        tvLocations = view.findViewById(R.id.tvLocations);
+        tvContests = view.findViewById(R.id.tvFriends);
+        tvLocations = view.findViewById(R.id.tvTimeline);
         tvLocations.setBackgroundColor(getResources().getColor(R.color.whiteBlue));
         tvContests.setBackgroundColor(getResources().getColor(R.color.lightLightBlue));
 

@@ -1,73 +1,57 @@
 package com.example.votingapp.fragments;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.votingapp.Network;
 import com.example.votingapp.R;
-import com.example.votingapp.activities.MainActivity;
-import com.example.votingapp.adapters.ActionAdapter;
 import com.example.votingapp.adapters.SearchAdapter;
 import com.example.votingapp.models.Action;
-import com.example.votingapp.models.User;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.parse.Parse;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FriendFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
 public class FriendFragment extends Fragment {
 
-    RecyclerView rvActions;
-//    Button btnAdd;
-//    static EditText etFind;
     SearchView svSearch;
     ListView lvSearch;
     static List<ParseUser> usersFound;
-    static List<Action> actions;
+    static List<ParseUser> friends;
     static SearchAdapter searchAdapter;
-    static ActionAdapter adapter;
     static Context context;
+    FrameLayout flContainer;
+    String currentFragment = "timeline";
+    TextView tvTimeline;
+    TextView tvFriends;
+    static FragmentManager fragmentManager;
+    static List<Action> actions;
     boolean returning = false;
 
-
-    public static FriendFragment newInstance(String param1, String param2) {
-        FriendFragment fragment = new FriendFragment();
-        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     public FriendFragment() {
         // Required empty public constructor
     }
 
-    public FriendFragment(boolean returning) {
+    public FriendFragment(boolean returning, String startFragment) {
+        // Required empty public constructor
         this.returning = returning;
+        this.currentFragment = startFragment;
+
     }
 
     @Override
@@ -90,23 +74,64 @@ public class FriendFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Your Friends");
+        fragmentManager = getChildFragmentManager();
         context = getContext();
-        actions = new ArrayList<>();
         usersFound = new ArrayList<>();
-        rvActions = view.findViewById(R.id.rvFriendActions);
+        friends = new ArrayList<>();
+        actions = new ArrayList<>();
+        usersFound.clear();
+        friends.clear();
+        actions.clear();
         svSearch = view.findViewById(R.id.svSearch);
         lvSearch = view.findViewById(R.id.lvSearch);
+        tvFriends = view.findViewById(R.id.tvFriends);
+        tvTimeline = view.findViewById(R.id.tvTimeline);
+        flContainer = view.findViewById(R.id.flContainer);
         searchAdapter = new SearchAdapter(getActivity(), usersFound);
         lvSearch.setAdapter(searchAdapter);
-//        btnAdd = view.findViewById(R.id.btnAdd);
-//        etFind = view.findViewById(R.id.etFind);
-        rvActions.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new ActionAdapter(getContext(), actions, getFragmentManager());
-        rvActions.setAdapter(adapter);
+        lvSearch.setVisibility(View.GONE);
         if (!returning) {
             Network.queryFriendActions(ParseUser.getCurrentUser());
+            Network.queryUserFriends(ParseUser.getCurrentUser());
         }
-        lvSearch.setVisibility(View.GONE);
+
+        if (currentFragment.equals("timeline")) {
+            fragmentManager.beginTransaction().setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right).replace(R.id.flContainer,
+                    TimelineFragment.newInstance(actions)).commit();
+            tvTimeline.setBackgroundColor(getResources().getColor(R.color.lightLightBlue));
+            tvFriends.setBackgroundColor(getResources().getColor(R.color.whiteBlue));
+        } else {
+            fragmentManager.beginTransaction().setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left).replace(R.id.flContainer,
+                    FriendUserFragment.newInstance(friends)).commit();
+            tvTimeline.setBackgroundColor(getResources().getColor(R.color.whiteBlue));
+            tvFriends.setBackgroundColor(getResources().getColor(R.color.lightLightBlue));
+        }
+
+        // set click listeners for locations and contest toggle
+        tvTimeline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentFragment.equals("friends")) {
+                    fragmentManager.beginTransaction().setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right).replace(R.id.flContainer,
+                            TimelineFragment.newInstance(actions)).commit();
+                    tvFriends.setBackgroundColor(getResources().getColor(R.color.lightLightBlue));
+                    tvTimeline.setBackgroundColor(getResources().getColor(R.color.whiteBlue));
+                    currentFragment = "timeline";
+                }
+            }
+        });
+        tvFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentFragment.equals("timeline")) {
+                    fragmentManager.beginTransaction().setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left).replace(R.id.flContainer,
+                            FriendUserFragment.newInstance(friends)).commit();
+                    tvFriends.setBackgroundColor(getResources().getColor(R.color.whiteBlue));
+                    tvTimeline.setBackgroundColor(getResources().getColor(R.color.lightLightBlue));
+                    currentFragment = "friends";
+                }
+            }
+        });
 
         svSearch.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
@@ -136,17 +161,16 @@ public class FriendFragment extends Fragment {
             }
         });
 
-//        btnAdd.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String username = etFind.getText().toString();
-//                if (!User.getFriends(ParseUser.getCurrentUser()).contains(username)) {
-//                    Network.findFriend(ParseUser.getCurrentUser(), username);
-//                } else {
-//                    Toast.makeText(getContext(), "@" + username + " is already your friend!", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
+    }
+
+    public static void addFriendAction(Action action) {
+        actions.add(action);
+        fragmentManager.beginTransaction().replace(R.id.flContainer,
+                TimelineFragment.newInstance(actions)).commit();
+    }
+
+    public static void addUserFriends(List<ParseUser> users) {
+        friends.addAll(users);
     }
 
     public static void showSearchResults(List<ParseUser> users) {
@@ -155,13 +179,7 @@ public class FriendFragment extends Fragment {
         searchAdapter.notifyDataSetChanged();
     }
 
-    public static void addFriendAction(Action action) {
-        actions.add(action);
-        adapter.notifyDataSetChanged();
-    }
-
     public static void noFriendAlert(String username) {
-//        etFind.setText("");
         new MaterialAlertDialogBuilder(context)
                 .setTitle("No User Found")
                 .setMessage("There is no user @" + username + " on Civic Citzen. Please try your search again with a valid username")

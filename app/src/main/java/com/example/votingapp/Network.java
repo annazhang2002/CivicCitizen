@@ -183,6 +183,7 @@ public class Network {
                         Election election = new Election(array.getJSONObject(i));
                         getVoterQuery(election);
                     }
+                    MainActivity.hidePd();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -192,6 +193,7 @@ public class Network {
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 Log.d(TAG, "onFailure to getElections, " + statusCode + ", " + response, throwable);
+                MainActivity.hidePd();
             }
         });
     }
@@ -422,38 +424,6 @@ public class Network {
         });
     }
 
-//    public static void getDistanceFrom(String origin, Location location) {
-//        RequestParams params = new RequestParams();
-//        String destinationString = "";
-//        for (Location location : locations) {
-//            destinationString += location.getLatLng().latitude + "," + location.getLatLng().longitude + "|";
-//        }
-//        destinationString.substring(0,destinationString.length()-1);
-//
-//        client.get(DISTANCE_MATRIX_URL + "origins=" + origin + "&destinations=" + destinationString + "&key=" + distanceMatrixApiKey, params, new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Headers headers, JSON json) {
-//                try {
-//                    Log.i(TAG, "got the distances");
-//                    JSONArray elements = json.jsonObject.getJSONArray("rows").getJSONObject(0).getJSONArray("elements");
-//                    for (int i = 0; i< elements.length(); i++) {
-//                        Long distance = elements.getJSONObject(i).getJSONObject("distance").getLong("value");
-//                        locations.get(i).setDistanceHome(distance);
-//                    }
-//                    LocationsFragment.sortLocations();
-//                } catch (JSONException e) {
-//                    Log.i(TAG, "failure to get the distances");
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-//                Log.d(TAG, "onFailure to getDistancesFrom, " + statusCode + ", " + response, throwable);
-//            }
-//        });
-//    }
-
     public static void getDistancesFrom(String origin, final List<Location> locations) {
         RequestParams params = new RequestParams();
         String destinationString = "";
@@ -461,6 +431,7 @@ public class Network {
             destinationString += location.getAddress() + "|";
         }
         destinationString.substring(0,destinationString.length()-1);
+        Log.i(TAG, "Network call: " + DISTANCE_MATRIX_URL + "origins=" + origin + "&destinations=" + destinationString + "&key=" + distanceMatrixApiKey);
 
         client.get(DISTANCE_MATRIX_URL + "origins=" + origin + "&destinations=" + destinationString + "&key=" + distanceMatrixApiKey, params, new JsonHttpResponseHandler() {
             @Override
@@ -482,6 +453,24 @@ public class Network {
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 Log.d(TAG, "onFailure to getDistancesFrom, " + statusCode + ", " + response, throwable);
+            }
+        });
+    }
+
+    public static void queryUserFriends(ParseUser currentUser) {
+        Log.i(TAG, "findFriend");
+        List<String> friendUsernames = User.getFriends(currentUser);
+        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+        query.whereContainedIn("username", friendUsernames);
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> users, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting usernames", e);
+                }
+                if (users != null && !users.isEmpty()) {
+                    FriendFragment.addUserFriends(users);
+                }
             }
         });
     }

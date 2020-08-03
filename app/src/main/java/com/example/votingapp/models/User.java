@@ -20,7 +20,7 @@ public class User {
     public static final String KEY_CITY = "addressCity";
     public static final String KEY_STATE = "addressState";
     public static final String KEY_ZIP = "addressZip";
-    private static final String KEY_LOCATION_WEIGHTS = "locationPreferences";
+    public static final String KEY_LOCATION_WEIGHTS = "locationPreferences";
     private static final String TAG = "User";
     public static final String KEY_FRIENDS = "friends";
 
@@ -90,6 +90,7 @@ public class User {
         }
         return friendIds;
     }
+
 
     public static void setFriends(ParseUser user, List<String> friends) {
         user.put(KEY_FRIENDS, friends);

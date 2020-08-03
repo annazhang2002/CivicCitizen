@@ -136,13 +136,16 @@ public class MainActivity extends AppCompatActivity{
 
     public static void goUserProfile(ParseUser user) {
         Fragment fragment = new ProfileFragment(user);
-        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
         if (user == ParseUser.getCurrentUser()) {
             bottomNavigationView.setSelectedItemId(R.id.action_profile);
+            fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+        } else {
+            fragmentManager.beginTransaction().setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left).replace(R.id.flContainer, fragment).commit();
         }
     }
-    public static void goFriends() {
-        Fragment fragment = new FriendFragment(true);
+
+    public static void goFriends(String startFragment) {
+        Fragment fragment = new FriendFragment(true, startFragment);
         fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
         bottomNavigationView.setSelectedItemId(R.id.action_friends);
     }

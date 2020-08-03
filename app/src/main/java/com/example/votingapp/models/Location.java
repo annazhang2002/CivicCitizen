@@ -50,15 +50,39 @@ public class Location implements Comparable<Location>{
         try {
             type = type1;
             addObj = jsonObject.getJSONObject("address");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
             name = addObj.getString("locationName");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
             address = MethodLibrary.parseAddress(addObj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
             startDate = jsonObject.getString("startDate");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
             endDate = jsonObject.getString("endDate");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
             pollingHours = jsonObject.getString("pollingHours");
-            pillColor = setPillColor(type);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        pillColor = setPillColor(type);
+        try {
             notes = jsonObject.getString("notes");
-//            getDistanceFrom(address, User.getAddress(ParseUser.getCurrentUser()));
-//            weight = calculateWeight();
         } catch (JSONException e) {
             e.printStackTrace();
         }

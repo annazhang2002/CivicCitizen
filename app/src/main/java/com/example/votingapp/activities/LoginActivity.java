@@ -13,10 +13,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.votingapp.R;
+import com.example.votingapp.models.User;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -26,7 +30,6 @@ public class LoginActivity extends AppCompatActivity {
     public static final String KEY_CITY = "addressCity";
     public static final String KEY_STATE = "addressState";
     public static final String KEY_ZIP = "addressZip";
-    private static final String KEY_LOCATION_PREFER = "locationWeights" ;
 
     private static final String TAG = "LoginActivity";
     EditText etUsername;
@@ -109,7 +112,11 @@ public class LoginActivity extends AppCompatActivity {
         user.put(KEY_CITY, city);
         user.put(KEY_STATE, state);
         user.put(KEY_ZIP, zip);
-//        user.put(KEY_LOCATION_PREFER, {5, 3, 1});
+        List<Integer> locationPreferences = new ArrayList<>();
+        locationPreferences.add(5);
+        locationPreferences.add(3);
+        locationPreferences.add(1);
+        user.put(User.KEY_LOCATION_WEIGHTS, locationPreferences);
 
         // Invoke signUpInBackground
         user.signUpInBackground(new SignUpCallback() {

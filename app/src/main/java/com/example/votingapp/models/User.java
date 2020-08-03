@@ -34,6 +34,9 @@ public class User {
 
     public static Integer getLocationPreference(ParseUser user, Integer index) {
         JSONArray jsonWeights = user.getJSONArray(KEY_LOCATION_WEIGHTS);
+        if (jsonWeights == null) {
+
+        }
         try {
             return jsonWeights.getInt(index);
         } catch (JSONException e) {
@@ -81,6 +84,9 @@ public class User {
     public static List<String> getFriends(ParseUser currentUser) {
         List<String> friendIds = new ArrayList<>();
         JSONArray jsonFriends = currentUser.getJSONArray(KEY_FRIENDS);
+        if (jsonFriends == null) {
+            return new ArrayList<>();
+        }
         for (int i = 0 ; i< jsonFriends.length(); i++) {
             try {
                 friendIds.add(jsonFriends.getString(i));

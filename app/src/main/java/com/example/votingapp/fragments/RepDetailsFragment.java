@@ -28,6 +28,7 @@ import com.example.votingapp.models.Rep;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,7 +59,7 @@ public class RepDetailsFragment extends Fragment {
     ImageView ivFacebook;
     ImageView ivYoutube;
     Button btnMessage;
-    Button btnBack;
+    ImageView ivBack;
 
 
     public RepDetailsFragment() {
@@ -114,7 +115,7 @@ public class RepDetailsFragment extends Fragment {
         ivFacebook = view.findViewById(R.id.ivFacebook);
         ivYoutube = view.findViewById(R.id.ivYoutube);
         btnMessage = view.findViewById(R.id.btnMessage);
-        btnBack = view.findViewById(R.id.btnBack);
+        ivBack = view.findViewById(R.id.ivBack);
 
         // set values for each view
         tvName.setText(rep.getName());
@@ -180,7 +181,7 @@ public class RepDetailsFragment extends Fragment {
             setChannels(rep.getChannels());
         }
 
-        btnBack.setOnClickListener(new View.OnClickListener() {
+        ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MainActivity.backToReps(position);

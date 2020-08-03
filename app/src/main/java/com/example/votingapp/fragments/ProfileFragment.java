@@ -2,6 +2,7 @@ package com.example.votingapp.fragments;
 
 import android.content.Intent;
 import android.media.Image;
+import android.media.VolumeAutomation;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,8 +21,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.example.votingapp.BuildConfig;
 import com.example.votingapp.Network;
 import com.example.votingapp.R;
 import com.example.votingapp.activities.EditProfileActivity;
@@ -38,6 +40,10 @@ import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.parse.ParsePush;
+
+import org.json.JSONObject;
 
 public class ProfileFragment extends Fragment {
     private static final String TAG = "ProfileFragment";
@@ -202,4 +208,5 @@ public class ProfileFragment extends Fragment {
         Intent intent = new Intent(getContext(), EditProfileActivity.class);
         getContext().startActivity(intent);
     }
+
 }

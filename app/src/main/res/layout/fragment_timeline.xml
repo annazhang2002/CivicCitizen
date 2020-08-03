@@ -5,11 +5,32 @@
     android:layout_height="match_parent"
     tools:context=".fragments.TimelineFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvFriendActions"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="0dp"
-        android:background="@color/almostWhite" />
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFriendActions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="0dp"
+            android:background="@color/almostWhite" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <TextView
+        android:id="@+id/tvNoActions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="103dp"
+        android:layout_marginEnd="50dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="Oops! Looks like your friends haven't saved any actions! \n\nYou can add new friends by finding them in the search bar above"
+        android:textColor="@color/darkGrayBlue"
+        android:textSize="18sp"
+        android:visibility="gone"
+        tools:visibility="visible" />
 </RelativeLayout>

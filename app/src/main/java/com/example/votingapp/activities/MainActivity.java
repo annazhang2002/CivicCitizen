@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity{
 
     public static void goInfo() {
         Fragment fragment = new InfoFragment();
-        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(null).commit();
         bottomNavigationView.setSelectedItemId(R.id.action_faqs);
     }
 
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity{
                 .beginTransaction()
                 .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
                 .replace(R.id.flContainer, fragment)
-                .commit();
+                .addToBackStack(null).commit();
     }
 
     public static void backToReps(Integer position) {
@@ -126,27 +126,27 @@ public class MainActivity extends AppCompatActivity{
                 .beginTransaction()
                 .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
                 .replace(R.id.flContainer, fragment)
-                .commit();
+                .addToBackStack(null).commit();
     }
 
     public static void goElectionDetails(Election election) {
         Fragment fragment = ElectionDetailsFragment.newInstance(context, election);
-        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(null).commit();
     }
 
     public static void goUserProfile(ParseUser user) {
         Fragment fragment = new ProfileFragment(user);
         if (user == ParseUser.getCurrentUser()) {
             bottomNavigationView.setSelectedItemId(R.id.action_profile);
-            fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(null).commit();
         } else {
-            fragmentManager.beginTransaction().setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left).replace(R.id.flContainer, fragment).commit();
+            fragmentManager.beginTransaction().setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left).replace(R.id.flContainer, fragment).addToBackStack(null).commit();
         }
     }
 
     public static void goFriends(String startFragment) {
         Fragment fragment = new FriendFragment(true, startFragment);
-        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+        fragmentManager.beginTransaction().setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right).replace(R.id.flContainer, fragment).addToBackStack(null).commit();
         bottomNavigationView.setSelectedItemId(R.id.action_friends);
     }
 

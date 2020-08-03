@@ -8,32 +8,20 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.votingapp.Network;
 import com.example.votingapp.R;
-import com.example.votingapp.activities.MainActivity;
 import com.example.votingapp.adapters.ActionAdapter;
-import com.example.votingapp.adapters.ActionAdapter;
-import com.example.votingapp.adapters.SearchAdapter;
 import com.example.votingapp.models.Action;
-import com.example.votingapp.models.Contest;
-import com.example.votingapp.models.Election;
-import com.example.votingapp.models.Location;
 import com.parse.ParseUser;
 
-import org.parceler.Parcels;
-
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class TimelineFragment extends Fragment {
@@ -42,6 +30,8 @@ public class TimelineFragment extends Fragment {
     static Context context;
     RecyclerView rvActions;
     static ActionAdapter adapter;
+    TextView tvNoActions;
+    public SwipeRefreshLayout swipeContainer;
 
     public TimelineFragment() {
         // Required empty public constructor
@@ -76,6 +66,27 @@ public class TimelineFragment extends Fragment {
         rvActions.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new ActionAdapter(getContext(), actions, getFragmentManager());
         rvActions.setAdapter(adapter);
+        tvNoActions = view.findViewById(R.id.tvNoActions);
+
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshActions();
+            }
+        });
+
+        if (actions.size() == 0 ) {
+            tvNoActions.setVisibility(View.VISIBLE);
+        } else {
+            tvNoActions.setVisibility(View.GONE);
+        }
+    }
+
+    public void refreshActions() {
+        swipeContainer.setRefreshing(false);
+        FriendFragment.refreshFriendActions();
     }
 
 }

@@ -205,6 +205,7 @@ public class Network {
         params.put("address", address);
         params.put("electionId", election.getId());
         Log.i(TAG, "Address:  " + address);
+        Log.i(TAG, "ElectionId" + election.getId());
         Log.i(TAG, "Network call url: " + VOTER_INFO_URL + "?key=" + apiKey);
         client.get(VOTER_INFO_URL + "?key=" + apiKey, params, new JsonHttpResponseHandler() {
             @Override
@@ -333,6 +334,7 @@ public class Network {
         query.include(Action.KEY_USER);
         query.whereEqualTo(Action.KEY_STATUS, "done");
         query.whereEqualTo(Action.KEY_USER, user);
+        query.orderByDescending("updatedAt");
         query.findInBackground(new FindCallback<Action>() {
             @Override
             public void done(List<Action> actions, ParseException e) {
@@ -355,6 +357,7 @@ public class Network {
         ParseQuery<Action> query = ParseQuery.getQuery(Action.class);
         query.include(Action.KEY_USER);
         query.whereEqualTo(Action.KEY_STATUS, "done");
+        query.orderByDescending("updatedAt");
         query.findInBackground(new FindCallback<Action>() {
             @Override
             public void done(List<Action> actions, ParseException e) {

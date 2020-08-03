@@ -130,11 +130,13 @@ public class Location implements Comparable<Location>{
     }
 
     public String getStartDate() {
-        return getFormattedDate(startDate, API_DATE_FORMAT, NUMBER_DATE_FORMAT);
+        return startDate;
+//        return getFormattedDate(startDate, API_DATE_FORMAT, NUMBER_DATE_FORMAT);
     }
 
     public String getEndDate() {
-        return getFormattedDate(endDate, API_DATE_FORMAT, NUMBER_DATE_FORMAT);
+        return endDate;
+//        return getFormattedDate(endDate, API_DATE_FORMAT, NUMBER_DATE_FORMAT);
     }
 
     public String getPollingHours() {

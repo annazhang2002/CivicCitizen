@@ -91,7 +91,9 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         public void bind(Location location) {
             tvName.setText(location.getName());
             tvAddress.setText(location.getAddress());
-            tvDates.setText(location.getStartDate() + " - " + location.getEndDate());
+            if (location.getStartDate() != null) {
+                tvDates.setText(location.getStartDate() + " - " + location.getEndDate());
+            }
             tvPollingHours.setText(location.getPollingHours());
             tvType.setText(location.getType());
             GradientDrawable gradientDrawable = (GradientDrawable) tvType.getBackground().mutate();

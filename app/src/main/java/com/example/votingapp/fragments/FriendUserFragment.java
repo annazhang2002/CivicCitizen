@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.votingapp.R;
 import com.example.votingapp.adapters.SearchAdapter;
@@ -25,6 +26,8 @@ public class FriendUserFragment extends Fragment {
     static List<ParseUser> userFriends;
     private SearchAdapter searchAdapter;
     private ListView lvFriends;
+    TextView tvNoFriends;
+    TextView tvFriendRequests;
 
     public FriendUserFragment() {
         // Required empty public constructor
@@ -62,5 +65,13 @@ public class FriendUserFragment extends Fragment {
         lvFriends = view.findViewById(R.id.lvFriends);
         searchAdapter = new SearchAdapter(getActivity(), userFriends);
         lvFriends.setAdapter(searchAdapter);
+        tvNoFriends = view.findViewById(R.id.tvNoFriends);
+        tvFriendRequests = view.findViewById(R.id.tvFriendRequests);
+
+        if (userFriends.size() == 0) {
+            tvNoFriends.setVisibility(View.VISIBLE);
+        } else {
+            tvNoFriends.setVisibility(View.GONE);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.votingapp.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -11,6 +12,8 @@ import androidx.fragment.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -96,15 +99,15 @@ public class FriendFragment extends Fragment {
         }
 
         if (currentFragment.equals("timeline")) {
-            fragmentManager.beginTransaction().setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right).replace(R.id.flContainer,
+            fragmentManager.beginTransaction().replace(R.id.flContainer,
                     TimelineFragment.newInstance(actions)).commit();
-            tvTimeline.setBackgroundColor(getResources().getColor(R.color.lightLightBlue));
-            tvFriends.setBackgroundColor(getResources().getColor(R.color.whiteBlue));
-        } else {
-            fragmentManager.beginTransaction().setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left).replace(R.id.flContainer,
-                    FriendUserFragment.newInstance(friends)).commit();
-            tvTimeline.setBackgroundColor(getResources().getColor(R.color.whiteBlue));
             tvFriends.setBackgroundColor(getResources().getColor(R.color.lightLightBlue));
+            tvTimeline.setBackgroundColor(getResources().getColor(R.color.whiteBlue));
+        } else {
+            fragmentManager.beginTransaction().replace(R.id.flContainer,
+                    FriendUserFragment.newInstance(friends)).commit();
+            tvFriends.setBackgroundColor(getResources().getColor(R.color.whiteBlue));
+            tvTimeline.setBackgroundColor(getResources().getColor(R.color.lightLightBlue));
         }
 
         // set click listeners for locations and contest toggle
@@ -189,4 +192,10 @@ public class FriendFragment extends Fragment {
                 .setPositiveButton("OK", null)
                 .show();
     }
+
+    public static void refreshFriendActions() {
+        actions.clear();
+        Network.queryFriendActions(ParseUser.getCurrentUser());
+    }
+
 }

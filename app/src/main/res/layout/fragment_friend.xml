@@ -11,7 +11,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="0dp"
-        android:background="@drawable/border" />
+        android:background="@drawable/border"
+        android:focusableInTouchMode="true"
+        android:iconifiedByDefault="false"
+        android:queryHint="Search for New Friends" />
 
     <ListView
         android:id="@+id/lvSearch"

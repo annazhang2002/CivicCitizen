@@ -315,7 +315,7 @@ public class ElectionDetailsFragment extends Fragment {
 
     private boolean prevReqFulfilled(Integer cbIndex) {
         for (int i =0 ; i< cbIndex; i++) {
-            if (!cbDeadlines[i].isChecked()) {
+            if (!allActions.get(Network.ACTION_NAMES[cbIndex]).getStatus().equals("unfinished")) {
                 return false;
             }
         }

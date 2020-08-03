@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.os.Build;
 import android.util.Log;
 
+import com.example.votingapp.activities.MainActivity;
 import com.example.votingapp.models.Action;
 import com.parse.Parse;
 import com.parse.ParseInstallation;

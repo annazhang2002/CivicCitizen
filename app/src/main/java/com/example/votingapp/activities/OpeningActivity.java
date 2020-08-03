@@ -59,5 +59,6 @@ public class OpeningActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("frgToLoad","home");
         this.startActivity(intent);
+        finish();
     }
 }

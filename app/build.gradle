@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 30
@@ -19,6 +19,7 @@ android {
         def apikeyProperties = new Properties()
         apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
         buildConfigField("String", "GOOGLE_API_KEY", apikeyProperties['GOOGLE_API_KEY'])
+        buildConfigField("String", "GOOGLE_FCM_KEY", apikeyProperties['GOOGLE_FCM_KEY'])
         buildConfigField("String", "GOOGLE_MAPS_API_KEY", apikeyProperties['GOOGLE_MAPS_API_KEY'])
         buildConfigField("String", "DISTANCE_MATRIX_API_KEY", apikeyProperties['DISTANCE_MATRIX_API_KEY'])
         resValue "string", "GOOGLE_MAPS_API_KEY", apikeyProperties['GOOGLE_MAPS_API_KEY']
@@ -89,6 +90,14 @@ dependencies {
     implementation 'com.google.maps.android:android-maps-utils:2.0.3'
     implementation "org.permissionsdispatcher:permissionsdispatcher:$permissionDispatcherVersion"
     annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:$permissionDispatcherVersion"
+
+    // FIREBASE
+    implementation 'com.google.firebase:firebase-analytics:17.2.2'
+    implementation 'com.google.firebase:firebase-messaging:20.2.4'
+    implementation 'com.android.volley:volley:1.1.1'
+
+    // SWIPE REFRESH LAYOUT
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
 
     // PARSE NOTIFICATIONS
 //    compile 'com.parse.bolts:bolts-android:1.2.1'

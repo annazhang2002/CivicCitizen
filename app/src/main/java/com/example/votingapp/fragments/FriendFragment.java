@@ -35,10 +35,11 @@ public class FriendFragment extends Fragment {
     ListView lvSearch;
     static List<ParseUser> usersFound;
     static List<ParseUser> friends;
+    static List<ParseUser> requests;
     static SearchAdapter searchAdapter;
     static Context context;
     FrameLayout flContainer;
-    String currentFragment = "timeline";
+    static String currentFragment = "timeline";
     TextView tvTimeline;
     TextView tvFriends;
     static FragmentManager fragmentManager;
@@ -82,9 +83,11 @@ public class FriendFragment extends Fragment {
         usersFound = new ArrayList<>();
         friends = new ArrayList<>();
         actions = new ArrayList<>();
+        requests = new ArrayList<>();
         usersFound.clear();
         friends.clear();
         actions.clear();
+        requests.clear();
         svSearch = view.findViewById(R.id.svSearch);
         lvSearch = view.findViewById(R.id.lvSearch);
         tvFriends = view.findViewById(R.id.tvFriends);
@@ -96,6 +99,7 @@ public class FriendFragment extends Fragment {
         if (!returning) {
             Network.queryFriendActions(ParseUser.getCurrentUser());
             Network.queryUserFriends(ParseUser.getCurrentUser());
+            Network.queryFriendRequests(ParseUser.getCurrentUser());
         }
 
         if (currentFragment.equals("timeline")) {
@@ -105,7 +109,7 @@ public class FriendFragment extends Fragment {
             tvTimeline.setBackgroundColor(getResources().getColor(R.color.whiteBlue));
         } else {
             fragmentManager.beginTransaction().replace(R.id.flContainer,
-                    FriendUserFragment.newInstance(friends)).commit();
+                    FriendUserFragment.newInstance(friends, requests)).commit();
             tvFriends.setBackgroundColor(getResources().getColor(R.color.whiteBlue));
             tvTimeline.setBackgroundColor(getResources().getColor(R.color.lightLightBlue));
         }
@@ -114,7 +118,7 @@ public class FriendFragment extends Fragment {
         tvTimeline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currentFragment.equals("friends")) {
+                if (!currentFragment.equals("timeline")) {
                     fragmentManager.beginTransaction().setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right).replace(R.id.flContainer,
                             TimelineFragment.newInstance(actions)).commit();
                     tvFriends.setBackgroundColor(getResources().getColor(R.color.lightLightBlue));
@@ -126,9 +130,9 @@ public class FriendFragment extends Fragment {
         tvFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currentFragment.equals("timeline")) {
+                if (!currentFragment.equals("friends")) {
                     fragmentManager.beginTransaction().setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left).replace(R.id.flContainer,
-                            FriendUserFragment.newInstance(friends)).commit();
+                            FriendUserFragment.newInstance(friends, requests)).commit();
                     tvFriends.setBackgroundColor(getResources().getColor(R.color.whiteBlue));
                     tvTimeline.setBackgroundColor(getResources().getColor(R.color.lightLightBlue));
                     currentFragment = "friends";
@@ -166,6 +170,36 @@ public class FriendFragment extends Fragment {
 
     }
 
+    public static void goRequests() {
+        if (requests.size() != 0) {
+            fragmentManager.beginTransaction().replace(R.id.flContainer,
+                    FriendRequestFragment.newInstance(requests)).commit();
+            currentFragment = "requests";
+        } else {
+            fragmentManager.beginTransaction().setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right).replace(R.id.flContainer,
+                    FriendUserFragment.newInstance(friends, requests)).commit();
+            currentFragment = "friends";
+        }
+    }
+
+    public static void goRequests(String transition) {
+        if (requests.size() != 0) {
+            fragmentManager.beginTransaction().setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left).replace(R.id.flContainer,
+                    FriendRequestFragment.newInstance(requests)).commit();
+            currentFragment = "requests";
+        } else {
+            fragmentManager.beginTransaction().setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right).replace(R.id.flContainer,
+                    FriendUserFragment.newInstance(friends, requests)).commit();
+            currentFragment = "friends";
+        }
+    }
+
+
+    public static void addRequests(List<ParseUser> users) {
+        requests.clear();
+        requests.addAll(users);
+    }
+
     public static void addFriendAction(Action action) {
         actions.add(action);
         fragmentManager.beginTransaction().replace(R.id.flContainer,
@@ -196,6 +230,12 @@ public class FriendFragment extends Fragment {
     public static void refreshFriendActions() {
         actions.clear();
         Network.queryFriendActions(ParseUser.getCurrentUser());
+    }
+
+    public static void removeFriendRequest(ParseUser user) {
+        requests.remove(user);
+        friends.add(0, user);
+        goRequests();
     }
 
 }

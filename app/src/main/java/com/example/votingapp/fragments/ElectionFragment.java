@@ -1,24 +1,14 @@
 package com.example.votingapp.fragments;
 
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Parcel;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,33 +16,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.codepath.asynchttpclient.AsyncHttpClient;
-import com.codepath.asynchttpclient.RequestParams;
-import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.example.votingapp.BuildConfig;
 import com.example.votingapp.Network;
-import com.example.votingapp.ReminderBroadcast;
-import com.example.votingapp.activities.LoginActivity;
 import com.example.votingapp.activities.MainActivity;
 import com.example.votingapp.adapters.ElectionsAdapter;
-import com.example.votingapp.models.Contest;
 import com.example.votingapp.models.Election;
-import com.example.votingapp.models.User;
 import com.example.votingapp.R;
-import com.parse.ParseUser;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.Headers;
-
-import static android.content.Context.ALARM_SERVICE;
-import static androidx.core.content.ContextCompat.getSystemService;
-import static com.example.votingapp.ParseApplication.CHANNEL_ID;
 
 public class ElectionFragment extends Fragment {
 

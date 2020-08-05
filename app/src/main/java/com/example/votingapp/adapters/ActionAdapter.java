@@ -36,12 +36,19 @@ public class ActionAdapter extends RecyclerView.Adapter<ActionAdapter.ViewHolder
     List<Action> actions;
     Context context;
     FragmentManager fragmentManager;
-    ParseUser user;
+    ParseUser profileUser;
 
     public ActionAdapter(Context context, List<Action> actions, FragmentManager fragmentManager) {
         this.context = context;
         this.actions = actions;
         this.fragmentManager = fragmentManager;
+    }
+
+    public ActionAdapter(Context context, List<Action> actions, FragmentManager fragmentManager, ParseUser profileUser) {
+        this.context = context;
+        this.actions = actions;
+        this.fragmentManager = fragmentManager;
+        this.profileUser = profileUser;
     }
 
     @NonNull
@@ -70,6 +77,7 @@ public class ActionAdapter extends RecyclerView.Adapter<ActionAdapter.ViewHolder
         TextView tvDate;
         TextView tvNotes;
         ImageView ivImage;
+        ParseUser user;
 
 
         public ViewHolder(View itemView) {
@@ -160,7 +168,7 @@ public class ActionAdapter extends RecyclerView.Adapter<ActionAdapter.ViewHolder
         @Override
         public void onClick(View view) {
             Log.i(TAG, "onClick adapter action item");
-            if (!user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+            if (profileUser == null || !user.getUsername().equals(profileUser.getUsername())) {
                 MainActivity.goUserProfile(user);
             }
 

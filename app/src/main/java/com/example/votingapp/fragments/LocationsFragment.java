@@ -133,7 +133,7 @@ public class LocationsFragment extends Fragment implements PopupMenu.OnMenuItemC
             }
         });
 
-        Network.getDistancesFrom(User.getAddress(ParseUser.getCurrentUser()), filteredLocations);
+//        Network.getDistancesFrom(User.getAddress(ParseUser.getCurrentUser()), filteredLocations);
 
         getLocationPermission();
 

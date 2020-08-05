@@ -12,6 +12,8 @@ import com.example.votingapp.fragments.ElectionDetailsFragment;
 import com.example.votingapp.activities.MainActivity;
 import com.example.votingapp.fragments.ElectionFragment;
 import com.example.votingapp.fragments.FriendFragment;
+import com.example.votingapp.fragments.FriendRequestFragment;
+import com.example.votingapp.fragments.FriendUserFragment;
 import com.example.votingapp.fragments.InfoFragment;
 import com.example.votingapp.fragments.LocationsFragment;
 import com.example.votingapp.fragments.ProfileFragment;
@@ -73,6 +75,9 @@ public class Network {
                     double lng = loc.getDouble("lng");
                     location.setLatLng(lat, lng);
                     LocationsFragment.addLatLng(lat, lng, location);
+                    List<Location> locations = new ArrayList<>();
+                    locations.add(location);
+                    getDistancesFrom(User.getAddress(ParseUser.getCurrentUser()), locations);
                     Log.i(TAG, "location: " + json);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -434,9 +439,11 @@ public class Network {
             destinationString += location.getAddress() + "|";
         }
         destinationString.substring(0,destinationString.length()-1);
-        Log.i(TAG, "Network call: " + DISTANCE_MATRIX_URL + "origins=" + origin + "&destinations=" + destinationString + "&key=" + distanceMatrixApiKey);
 
-        client.get(DISTANCE_MATRIX_URL + "origins=" + origin + "&destinations=" + destinationString + "&key=" + distanceMatrixApiKey, params, new JsonHttpResponseHandler() {
+        String callString = String.format("%sunits=imperial&origins=%s&destinations=%s&key=%s", DISTANCE_MATRIX_URL, origin, destinationString, distanceMatrixApiKey);
+        Log.i(TAG, "Network call: " + callString);
+
+        client.get(callString, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 try {
@@ -461,7 +468,7 @@ public class Network {
     }
 
     public static void queryUserFriends(ParseUser currentUser) {
-        Log.i(TAG, "findFriend");
+        Log.i(TAG, "queryUserFriends");
         List<String> friendUsernames = User.getFriends(currentUser);
         ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
         query.whereContainedIn("username", friendUsernames);
@@ -473,6 +480,25 @@ public class Network {
                 }
                 if (users != null && !users.isEmpty()) {
                     FriendFragment.addUserFriends(users);
+                }
+            }
+        });
+    }
+
+    public static void queryFriendRequests(ParseUser currentUser) {
+        Log.i(TAG, "queryFriendRequests");
+        List<String> friendUsernames = User.getFriends(currentUser);
+        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+        query.whereContains("friends", currentUser.getUsername());
+        query.whereNotContainedIn("username", friendUsernames);
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> users, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting usernames", e);
+                }
+                if (users != null && !users.isEmpty()) {
+                    FriendFragment.addRequests(users);
                 }
             }
         });

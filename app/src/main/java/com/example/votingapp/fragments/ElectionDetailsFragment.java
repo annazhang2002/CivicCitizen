@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import com.example.votingapp.Network;
 import com.example.votingapp.R;
-import com.example.votingapp.ReminderBroadcast;
 import com.example.votingapp.fragments.dialogFragments.ActionCompleteFragment;
 import com.example.votingapp.models.Action;
 import com.example.votingapp.models.Contest;
@@ -155,7 +154,7 @@ public class ElectionDetailsFragment extends Fragment {
 //            long miliSecsDate = milliseconds("2020-07-21");
 
             long miliSecsDate = milliseconds(election.getElectionReminderDate());
-            scheduleNotification(miliSecsDate);
+//            scheduleNotification(miliSecsDate);
         }
 
         // when absentee deadline is held for a long time, it is striked
@@ -209,16 +208,16 @@ public class ElectionDetailsFragment extends Fragment {
     }
 
 
-    public void scheduleNotification(long millis) {
-        Log.i(TAG, "notification scheduled");
-        Intent intent = new Intent(context, ReminderBroadcast.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP,
-                millis,
-                pendingIntent);
-    }
+//    public void scheduleNotification(long millis) {
+//        Log.i(TAG, "notification scheduled");
+//        Intent intent = new Intent(context, ReminderBroadcast.class);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+//
+//        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+//        alarmManager.set(AlarmManager.RTC_WAKEUP,
+//                millis,
+//                pendingIntent);
+//    }
 
     public static long milliseconds(String date)
     {

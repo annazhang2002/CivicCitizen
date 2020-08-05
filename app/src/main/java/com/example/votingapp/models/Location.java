@@ -90,9 +90,7 @@ public class Location implements Comparable<Location>{
 
     private Integer calculateWeight() {
         long distance = distanceHome;
-//        long distance = 0;
         locationPreferWeight = User.getLocationPreference(ParseUser.getCurrentUser(), typeIndex);
-
         return (int) (distance / locationPreferWeight);
     }
 

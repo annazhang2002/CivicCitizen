@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.collection.ArraySet;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -12,7 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.votingapp.Network;
 import com.example.votingapp.R;
+import com.example.votingapp.activities.MainActivity;
 import com.example.votingapp.adapters.SearchAdapter;
 import com.parse.ParseUser;
 
@@ -23,25 +26,30 @@ public class FriendUserFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private static List<ParseUser> requests;
     static List<ParseUser> userFriends;
     private SearchAdapter searchAdapter;
     private ListView lvFriends;
     TextView tvNoFriends;
-    TextView tvFriendRequests;
+    static TextView tvFriendRequests;
 
     public FriendUserFragment() {
         // Required empty public constructor
     }
 
-    public static FriendUserFragment newInstance(List<ParseUser> friends) {
+    public static FriendUserFragment newInstance(List<ParseUser> friends, List<ParseUser> inRequests) {
         FriendUserFragment fragment = new FriendUserFragment();
         Bundle args = new Bundle();
         userFriends = new ArrayList<>();
         userFriends.clear();
         userFriends.addAll(friends);
+        requests = new ArrayList<>();
+        requests.clear();
+        requests.addAll(inRequests);
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,5 +81,18 @@ public class FriendUserFragment extends Fragment {
         } else {
             tvNoFriends.setVisibility(View.GONE);
         }
+
+        if (requests.size() == 0) {
+            tvFriendRequests.setVisibility(View.INVISIBLE);
+            tvFriendRequests.setVisibility(View.GONE);
+        } else {
+            tvFriendRequests.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FriendFragment.goRequests("left");
+                }
+            });
+        }
+
     }
 }

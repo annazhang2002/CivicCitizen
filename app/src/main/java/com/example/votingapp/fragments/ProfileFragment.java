@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.example.votingapp.MethodLibrary;
 import com.example.votingapp.Network;
 import com.example.votingapp.R;
 import com.example.votingapp.activities.EditProfileActivity;
@@ -34,6 +35,7 @@ import com.example.votingapp.adapters.CandidateAdapter;
 import com.example.votingapp.models.Action;
 import com.example.votingapp.models.Candidate;
 import com.example.votingapp.models.User;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -87,7 +89,7 @@ public class ProfileFragment extends Fragment {
         actions = new ArrayList<>();
         rvActions = view.findViewById(R.id.rvActions);
         rvActions.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new ActionAdapter(getContext(), actions, getFragmentManager());
+        adapter = new ActionAdapter(getContext(), actions, getFragmentManager(), user);
         rvActions.setAdapter(adapter);
         Network.queryUserActions(user);
 
@@ -127,7 +129,7 @@ public class ProfileFragment extends Fragment {
         else {
             tvAddress.setVisibility(View.GONE);
             tvAddressText.setVisibility(View.GONE);
-            if (User.getFriends(user).contains(user.getUsername())) {
+            if (User.getFriends(user).contains(ParseUser.getCurrentUser().getUsername())) {
                 btnEdit.setText("Poke (Remind)");
                 btnEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -154,7 +156,7 @@ public class ProfileFragment extends Fragment {
             ivBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MainActivity.goFriends("friends");
+                    MainActivity.goFriends("timeline");
                 }
             });
         }
@@ -167,7 +169,8 @@ public class ProfileFragment extends Fragment {
     }
 
     private void poke() {
-
+        MethodLibrary.testNotification();
+//        MethodLibrary.pushNotification(user.getObjectId(), ParseUser.getCurrentUser().get("name") + " poked you and wants to remind you of the upcoming election deadlines!");
     }
 
     private void friendClick() {

@@ -24,7 +24,7 @@ public class ParseApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        createNotificationChannel();
+//        createNotificationChannel();
 
         ParseObject.registerSubclass(Action.class);
 

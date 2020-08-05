@@ -17,6 +17,11 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.votingapp.fragments.dialogFragments.ComposeDialogFragment;
 import com.example.votingapp.models.Rep;
+import com.parse.FunctionCallback;
+import com.parse.Parse;
+import com.parse.ParseCloud;
+import com.parse.ParseInstallation;
+import com.parse.ParseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +32,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class MethodLibrary {
@@ -127,4 +133,70 @@ public class MethodLibrary {
         return getFormattedDate(c.toString(), DATE_OBJ_FORMAT, M_D_Y_FORMAT);
 
     }
+
+    public static void pushNotification(String receiverId, String message) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("receiverId", receiverId);
+        params.put("message", message);
+
+        try {
+            Log.i(TAG, "trying to push notification to " + receiverId + " with message :" + message + ": from " + ParseUser.getCurrentUser().getObjectId());
+            ParseCloud.callFunctionInBackground("sendPushNotification", params, new FunctionCallback<Object>() {
+                @Override
+                public void done(Object object, com.parse.ParseException e) {
+                    if (e !=  null) {
+                        Log.i(TAG, "Error with the return from parse cloud " + e.toString());
+                    } else {
+                        Log.i(TAG, "Successfully completed!");
+                    }
+
+                }
+            });
+        } catch (Exception e) {
+            Log.i(TAG, "unable to push notif: " + e);
+            e.printStackTrace();
+        }
+    }
+
+    public static void testNotification() {
+
+//        JSONObject payload = new JSONObject();
+//
+//        try {
+//            Log.i(TAG, "installation id: " + ParseInstallation.getCurrentInstallation().getInstallationId());
+//            payload.put("sender", ParseInstallation.getCurrentInstallation().getInstallationId());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        HashMap<String, String> data = new HashMap<>();
+//        data.put("customData", payload.toString());
+//
+//        ParseCloud.callFunctionInBackground("pingReply", data);
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("customData", "hello this is custom data");
+
+        try {
+            Log.i(TAG, "trying to push notification");
+            ParseCloud.callFunctionInBackground("pushChannelTest", params, new FunctionCallback<Object>() {
+                @Override
+                public void done(Object object, com.parse.ParseException e) {
+                    if (e !=  null) {
+                        Log.i(TAG, "Error with the return from parse cloud " + e.toString());
+                    } else {
+                        Log.i(TAG, "Successfully completed! " + object.toString());
+
+                    }
+
+                }
+            });
+        } catch (Exception e) {
+            Log.i(TAG, "unable to push notif: " + e);
+            e.printStackTrace();
+        }
+    }
+
+
+
 }

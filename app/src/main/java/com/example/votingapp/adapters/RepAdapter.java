@@ -91,7 +91,7 @@ public class RepAdapter extends RecyclerView.Adapter<RepAdapter.ViewHolder> {
             if (rep.getPhotoUrl() == null) {
                 Glide.with(context).load(R.drawable.default_profile).transform(new RoundedCornersTransformation(20, 0)).into(ivImage);
             } else {
-                Glide.with(context).load(rep.getPhotoUrl()).transform(new RoundedCornersTransformation(20, 0)).into(ivImage);
+                Glide.with(context).load(rep.getPhotoUrl()).placeholder(R.drawable.default_profile).transform(new RoundedCornersTransformation(20, 0)).into(ivImage);
             }
             String url = rep.getWebUrl();
             if (url != null) {

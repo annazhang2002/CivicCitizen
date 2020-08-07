@@ -1,7 +1,5 @@
-CivicCitizen - Original App FBU Engineering Project
-
+# CivicCitizen - Original App FBU Engineering Project
 ![Logo](logo.png)
-===
 
 ## Table of Contents
 1. [Overview](#Overview)

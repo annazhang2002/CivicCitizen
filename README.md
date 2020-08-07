@@ -1,4 +1,5 @@
-CivicCitizen - Original App Design Project
+CivicCitizen - Original App FBU Engineering Project
+![]
 ===
 
 ## Table of Contents
@@ -20,7 +21,8 @@ A civic engagement app that aims to increase voter turnout and help provide user
 - **Scope:** The very basic MVP is an app just provides notifications about elections the user can participate in as well as information about how to vote. Hopefully though, I can add more information about candidates running, and also other ways to engage civically like messaging representatives and voting on propositions. 
 
 ### App Demo/Walkthrough
-!(Demo)[demo.mov]
+Login and Sign Up   | Profile (Edit + Actions)
+!(Login/Signup)[gifs/signup.gif]   | !(Profile Page)[gifs/profile.gif] 
 
 ## Product Spec
 

@@ -1,5 +1,5 @@
 # CivicCitizen - Original App FBU Engineering Project
-![Logo](logo.png)
+<img src="logo.png" width="100">
 
 ## Table of Contents
 1. [Overview](#Overview)

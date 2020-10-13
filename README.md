@@ -3,6 +3,7 @@
 
 ## Table of Contents
 1. [Overview](#Overview)
+1. [Demo](#Demo)
 1. [Product Spec](#Product-Spec)
 1. [Wireframes](#Wireframes)
 2. [Schema](#Schema)
@@ -10,6 +11,9 @@
 ## Overview
 ### Description
 A civic engagement app that aims to increase voter turnout and help provide users with the information they need to make their voice heard in politics. Users can view upcoming elections, contact their local representatives, remind friends of election deadlines and find voting locations nearby. 
+
+## Demo
+[https://www.youtube.com/watch?v=H_EbKvGHCbo&feature=youtu.be](https://www.youtube.com/watch?v=H_EbKvGHCbo&feature=youtu.be)
 
 ### App Evaluation
 - **Category:** Education/Information
